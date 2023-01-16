@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import { useState } from "react";
 import Home from "./pages/Home";
 import Create from "./pages/Create";
+import MyListedItems from "./pages/MyListedItems";
 
 function App() {
   const [account, setAccount] = useState(null);
@@ -647,6 +648,11 @@ function App() {
         <div>
           <Home nft={nft} marketplace={marketplace} />
           <Create nft={nft} marketplace={marketplace} />
+          <MyListedItems
+            nft={nft}
+            marketplace={marketplace}
+            account={account}
+          />
         </div>
       )}
     </div>
