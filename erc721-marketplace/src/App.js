@@ -4,6 +4,7 @@ import { useState } from "react";
 import Home from "./pages/Home";
 import Create from "./pages/Create";
 import MyListedItems from "./pages/MyListedItems";
+import MyPurchases from "./pages/MyPurchases";
 
 function App() {
   const [account, setAccount] = useState(null);
@@ -653,6 +654,7 @@ function App() {
             marketplace={marketplace}
             account={account}
           />
+          <MyPurchases nft={nft} marketplace={marketplace} account={account} />
         </div>
       )}
     </div>
