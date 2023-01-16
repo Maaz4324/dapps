@@ -16,7 +16,9 @@ const Home = ({ marketplace, nft }) => {
         const uri = await nft.tokenURI(item.tokenId);
         const hash = uri.replace("ipfs://", "");
 
-        const response = await fetch(`https://ipfs.io/ipfs/${hash}`);
+        const response = await fetch(
+          `https://gateway.pinata.cloud/ipfs/${hash}`
+        );
         const metadata = await response.json();
         // get total price of item (item price + fee)
         const totalPrice = await marketplace.getTotalPrice(item.itemId);
@@ -60,7 +62,7 @@ const Home = ({ marketplace, nft }) => {
             <div key={idx}>
               <div className="container">
                 <img
-                  src={`https://ipfs.io/ipfs/${item.image}`}
+                  src={`https://gateway.pinata.cloud/ipfs/${item.image}`}
                   alt="not available"
                 />
                 <div>

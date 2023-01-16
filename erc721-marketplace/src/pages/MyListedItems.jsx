@@ -9,7 +9,10 @@ function renderSoldItems(items) {
         {items.map((item, idx) => (
           <div key={idx} className="overflow-hidden">
             <div>
-              <img variant="top" src={`https://ipfs.io/ipfs/${item.image}`} />
+              <img
+                variant="top"
+                src={`https://gateway.pinata.cloud/ipfs/${item.image}`}
+              />
               <div>
                 For {ethers.utils.formatEther(item.totalPrice)} ETH - Recieved{" "}
                 {ethers.utils.formatEther(item.price)} ETH
@@ -39,7 +42,9 @@ export default function MyListedItems({ marketplace, nft, account }) {
         const uri = await nft.tokenURI(i.tokenId);
         const hash = uri.replace("ipfs://", "");
 
-        const response = await fetch(`https://ipfs.io/ipfs/${hash}`);
+        const response = await fetch(
+          `https://gateway.pinata.cloud/ipfs/${hash}`
+        );
         const metadata = await response.json();
         // get total price of item (item price + fee)
         const totalPrice = await marketplace.getTotalPrice(i.itemId);
@@ -81,7 +86,10 @@ export default function MyListedItems({ marketplace, nft, account }) {
             {listedItems.map((item, idx) => (
               <div key={idx}>
                 <div>
-                  <img src={`https://ipfs.io/ipfs/${item.image}`} alt="" />
+                  <img
+                    src={`https://gateway.pinata.cloud/ipfs/${item.image}`}
+                    alt=""
+                  />
                   <div>{ethers.utils.formatEther(item.totalPrice)} ETH</div>
                 </div>
               </div>

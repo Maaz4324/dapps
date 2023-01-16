@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import { Row, Col, Card } from "react-bootstrap";
 
 export default function MyPurchases({ marketplace, nft, account }) {
   const [loading, setLoading] = useState(true);
@@ -26,7 +25,10 @@ export default function MyPurchases({ marketplace, nft, account }) {
         const uri = await nft.tokenURI(i.tokenId);
         const hash = uri.replace("ipfs://", "");
         // use uri to fetch the nft metadata stored on ipfs
-        const response = await fetch(hash);
+
+        const response = await fetch(
+          `https://gateway.pinata.cloud/ipfs/${hash}`
+        );
         const metadata = await response.json();
         // get total price of item (item price + fee)
         const totalPrice = await marketplace.getTotalPrice(i.itemId);
@@ -65,7 +67,10 @@ export default function MyPurchases({ marketplace, nft, account }) {
             {purchases.map((item, idx) => (
               <div key={idx} className="overflow-hidden">
                 <div>
-                  <img variant="top" src={item.image} />
+                  <img
+                    variant="top"
+                    src={`https://gateway.pinata.cloud/ipfs/${item.image}`}
+                  />
                   <div>{ethers.utils.formatEther(item.totalPrice)} ETH</div>
                 </div>
               </div>
