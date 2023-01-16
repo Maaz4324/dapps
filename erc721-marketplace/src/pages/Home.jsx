@@ -71,7 +71,6 @@ const Home = ({ marketplace, nft }) => {
                   Buy for {ethers.utils.formatEther(item.totalPrice)} ETH
                 </button>
               </div>
-              {/* <h1>{item.totalPriceString}</h1> */}
             </div>
           ))}
         </div>

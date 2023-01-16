@@ -15,7 +15,6 @@ const Create = ({ marketplace, nft }) => {
       try {
         const formData = new FormData();
         formData.append("file", file);
-
         const resFile = await axios({
           method: "post",
           url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
@@ -26,7 +25,6 @@ const Create = ({ marketplace, nft }) => {
             "Content-Type": "multipart/form-data",
           },
         });
-
         const ImgHash = `ipfs://${resFile.data.IpfsHash}`;
         setImage(ImgHash);
         //Take a look at your Pinata Pinned section, you will see a new file added to you list.
@@ -36,6 +34,7 @@ const Create = ({ marketplace, nft }) => {
       }
     }
   };
+
   const createNFT = async (event) => {
     event.preventDefault();
     if (!image || !price || !name || !description) return;
@@ -57,6 +56,7 @@ const Create = ({ marketplace, nft }) => {
       console.log("ipfs uri upload error: ", error);
     }
   };
+
   const mintThenList = async (res) => {
     const uri = `ipfs://${res.data.IpfsHash}`;
     // mint nft
@@ -69,6 +69,7 @@ const Create = ({ marketplace, nft }) => {
     const listingPrice = ethers.utils.parseEther(price.toString());
     await (await marketplace.makeItem(nft.address, id, listingPrice)).wait();
   };
+
   return (
     <div className="container-fluid mt-5">
       <form>
