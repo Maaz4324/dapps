@@ -71,24 +71,26 @@ export default function MyPurchases({ marketplace, nft, account }) {
             dolorum, omnis nobis, corrupti adipisci quidem vitae voluptate
             autem. Reprehenderit perspiciatis quos alias aspernatur ut.
           </H5>
-          {purchases.map((item, idx) => (
-            <PurchasesBox key={idx}>
-              <PurchasesImgCont>
-                <img
-                  variant="top"
-                  src={`https://gateway.pinata.cloud/ipfs/${item.image}`}
-                  alt=""
-                />
-              </PurchasesImgCont>
-              <ItemBoxText>
-                <H6>{item.name}</H6>
-                <Descrip>{item.description}</Descrip>
-                <Descrip>
-                  {ethers.utils.formatEther(item.totalPrice)} ETH
-                </Descrip>
-              </ItemBoxText>
-            </PurchasesBox>
-          ))}
+          <PurchasesBoxCon>
+            {purchases.map((item, idx) => (
+              <PurchasesBox key={idx}>
+                <PurchasesImgCont
+                  style={{
+                    backgroundImage: `url(${
+                      "https://gateway.pinata.cloud/ipfs/" + item.image
+                    })`,
+                  }}
+                ></PurchasesImgCont>
+                <ItemBoxText>
+                  <H6>{item.name}</H6>
+                  <Descrip>{item.description}</Descrip>
+                  <Descrip>
+                    {ethers.utils.formatEther(item.totalPrice)} ETH
+                  </Descrip>
+                </ItemBoxText>
+              </PurchasesBox>
+            ))}
+          </PurchasesBoxCon>
         </PurchasesContainer>
       ) : (
         <NoPurchases style={{ padding: "1rem 0" }}>
@@ -169,16 +171,21 @@ const NoPurchases = styled.div`
   max-width: 1047px;
   min-height: 50vh;
 `;
+const PurchasesBoxCon = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: start;
+  flex-wrap: wrap;
+`;
 
 const PurchasesImgCont = styled.div`
   width: 100%;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
-  img {
-    width: 100%;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-  }
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 100%;
 `;
 
 const H6 = styled.h6`

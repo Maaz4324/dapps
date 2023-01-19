@@ -9,12 +9,13 @@ function renderSoldItems(items) {
       <MyItems>
         {items.map((item, idx) => (
           <MyItemsBox key={idx} className="overflow-hidden">
-            <MyItemImg>
-              <img
-                variant="top"
-                src={`https://gateway.pinata.cloud/ipfs/${item.image}`}
-              />
-            </MyItemImg>
+            <MyItemImg
+              style={{
+                backgroundImage: `url(${
+                  "https://gateway.pinata.cloud/ipfs/" + item.image
+                })`,
+              }}
+            ></MyItemImg>
             <ItemBoxText>
               <H6>{item.name}</H6>
               <Descrip>{item.description}</Descrip>
@@ -97,12 +98,13 @@ export default function MyListedItems({ marketplace, nft, account }) {
             <MyItems>
               {listedItems.map((item, idx) => (
                 <MyItemsBox key={idx}>
-                  <MyItemImg>
-                    <img
-                      src={`https://gateway.pinata.cloud/ipfs/${item.image}`}
-                      alt=""
-                    />
-                  </MyItemImg>
+                  <MyItemImg
+                    style={{
+                      backgroundImage: `url(${
+                        "https://gateway.pinata.cloud/ipfs/" + item.image
+                      })`,
+                    }}
+                  ></MyItemImg>
                   <ItemBoxText>
                     <H6>{item.name}</H6>
                     <Descrip>{item.description}</Descrip>
@@ -184,11 +186,10 @@ const MyItemImg = styled.div`
   width: 100%;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
-  img {
-    width: 100%;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-  }
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 100%;
 `;
 
 const NoItem = styled.div`

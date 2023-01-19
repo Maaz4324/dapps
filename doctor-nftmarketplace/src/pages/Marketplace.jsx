@@ -42,12 +42,12 @@ function Marketplace() {
     }
   };
 
-  const NFTAddress = "";
-  const MarketplaceAddress = "";
+  const NFTAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  const MarketplaceAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
-  useEffect(() => {
-    web3Handler();
-  }, []);
+  // useEffect(() => {
+  //   web3Handler();
+  // }, []);
 
   const loadContracts = async (signer) => {
     const marketplace = new ethers.Contract(

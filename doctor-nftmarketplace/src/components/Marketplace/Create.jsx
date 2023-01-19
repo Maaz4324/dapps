@@ -38,8 +38,7 @@ const Create = ({ marketplace, nft }) => {
     }
   };
 
-  const createNFT = async (event) => {
-    event.preventDefault();
+  const createNFT = async () => {
     if (!image || !price || !name || !description) return;
     try {
       var data = JSON.stringify({ image, price, name, description });
