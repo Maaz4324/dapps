@@ -8,6 +8,8 @@ import Contact from "./pages/Contact";
 import Marketplace from "./pages/Marketplace";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SpecialOffer from "./pages/SpecialOffer";
+import Backpain from "./pages/Backpain";
+import Neckpain from "./pages/Neckpain";
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
           <Route exact path="/contact" element={<Contact />} />
           <Route exact path="/marketplace" element={<Marketplace />} />
           <Route exact path="/special" element={<SpecialOffer />} />
+          <Route exact path="/backpain" element={<Backpain />} />
+          <Route exact path="/neckpain" element={<Neckpain />} />
         </Routes>
       </div>
     </Router>

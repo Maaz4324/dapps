@@ -8,17 +8,22 @@ import headache from "../../images/headache.jpg";
 import pediatric from "../../images/pediatric.jpg";
 import pregnancy from "../../images/pregnancy.jpg";
 import headaches from "../../images/headache.jpg";
+import { Link } from "react-router-dom";
 
 function Illness() {
   return (
     <IllnessContainer>
       <Container>
-        <Box className="neckpain">
-          <H3>NECK PAIN</H3>
-        </Box>
-        <Box className="backpain">
-          <H3>BACK PAIN</H3>
-        </Box>
+        <Link to="/neckpain" style={{ textDecoration: "none" }}>
+          <Box className="neckpain">
+            <H3>NECK PAIN</H3>
+          </Box>
+        </Link>
+        <Link to="/backpain" style={{ textDecoration: "none" }}>
+          <Box className="backpain">
+            <H3>BACK PAIN</H3>
+          </Box>
+        </Link>
         <Box className="headaches">
           <H3>HEADACHES</H3>
         </Box>
@@ -150,4 +155,5 @@ const Box = styled.div`
 
 const H3 = styled.h3`
   word-wrap: break-word;
+  color: black;
 `;
