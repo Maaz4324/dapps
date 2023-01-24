@@ -188,7 +188,7 @@ const MyItemImg = styled.div`
   border-top-right-radius: 20px;
   background-position: center;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
   height: 100%;
 `;
 

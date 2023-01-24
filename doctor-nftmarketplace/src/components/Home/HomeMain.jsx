@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import bg1 from "../../images/family.jpg";
+import { Link } from "react-router-dom";
 
 function HomeMain() {
   return (
@@ -13,7 +14,9 @@ function HomeMain() {
           <Line></Line>
         </YouHead>
         <H1>DESERVE</H1>
-        <Button>NEW PATIENT SPECIAL OFFER</Button>
+        <Link to="/special">
+          <Button>NEW PATIENT SPECIAL OFFER</Button>
+        </Link>
       </MainHead>
     </HomeMainContainer>
   );

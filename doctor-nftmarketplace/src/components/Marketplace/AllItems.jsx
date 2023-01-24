@@ -6,7 +6,7 @@ const AllItems = ({ marketplace, nft }) => {
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
 
-  const loadMarketplaceItems = async () => {
+  async function loadMarketplaceItems() {
     // Load all unsold items
     const itemCount = await marketplace.itemCount();
     let items = [];
@@ -36,7 +36,7 @@ const AllItems = ({ marketplace, nft }) => {
     }
     setLoading(false);
     setItems(items);
-  };
+  }
 
   const buyMarketItem = async (item) => {
     await (
@@ -145,7 +145,7 @@ const NftImgContainer = styled.div`
   width: 100%;
   background-position: center;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
   height: 100%;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;

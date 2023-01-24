@@ -2,10 +2,11 @@ import { useState } from "react";
 import { ethers } from "ethers";
 import axios from "axios";
 import styled from "styled-components";
+import AllItems from "./AllItems";
 
 const Create = ({ marketplace, nft }) => {
   const [image, setImage] = useState("");
-  const [price, setPrice] = useState(null);
+  const [price, setPrice] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [displayImg, setDisplayImg] = useState();
@@ -38,7 +39,8 @@ const Create = ({ marketplace, nft }) => {
     }
   };
 
-  const createNFT = async () => {
+  const createNFT = async (event) => {
+    event.preventDefault();
     if (!image || !price || !name || !description) return;
     try {
       var data = JSON.stringify({ image, price, name, description });
@@ -70,6 +72,9 @@ const Create = ({ marketplace, nft }) => {
     // add nft to marketplace
     const listingPrice = ethers.utils.parseEther(price.toString());
     await (await marketplace.makeItem(nft.address, id, listingPrice)).wait();
+    setName("");
+    setPrice("");
+    setDescription("");
   };
 
   return (
@@ -100,18 +105,21 @@ const Create = ({ marketplace, nft }) => {
             type="text"
             className="textInp"
             placeholder="name"
+            value={name}
             onChange={(e) => setName(e.target.value)}
           />
           <input
             type="textarea"
             className="areaInp"
             placeholder="description"
+            value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
           <input
             type="number"
             className="numInp"
             placeholder="price in ETH"
+            value={price}
             onChange={(e) => setPrice(e.target.value)}
           />
           <Button onClick={createNFT}>Create NFT</Button>

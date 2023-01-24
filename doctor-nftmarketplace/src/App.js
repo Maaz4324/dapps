@@ -7,6 +7,7 @@ import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
 import Marketplace from "./pages/Marketplace";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import SpecialOffer from "./pages/SpecialOffer";
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
           <Route exact path="/patients" element={<Patients />} />
           <Route exact path="/blog" element={<Blog />} />
           <Route exact path="/contact" element={<Contact />} />
-          <Route exact path="/Marketplace" element={<Marketplace />} />
+          <Route exact path="/marketplace" element={<Marketplace />} />
+          <Route exact path="/special" element={<SpecialOffer />} />
         </Routes>
       </div>
     </Router>
