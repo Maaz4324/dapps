@@ -15,6 +15,7 @@
     "chai": "^4.3.7",
     "compress.js": "^1.2.2",
     "dotenv": "^16.0.3",
+    "emailjs-com": "^3.2.0",
     "ethereum-waffle": "^3.4.4",
     "ethers": "^5.7.2",
     "hardhat": "^2.12.6",

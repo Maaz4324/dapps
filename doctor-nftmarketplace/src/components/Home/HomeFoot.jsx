@@ -2,12 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import recomemded from "../../images/recomemded.png";
 import recomemdedlg from "../../images/recomemdedlg.png";
+import { Link } from "react-router-dom";
 
 function HomeFoot() {
   return (
     <HomeFootContainer>
       <NewpatientContainer>
-        <Button>New Patient Special</Button>
+        <Link to="/special">
+          <Button>NEW PATIENT SPECIAL OFFER</Button>
+        </Link>
       </NewpatientContainer>
       <FootMain>
         <FootMainContainer>

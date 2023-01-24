@@ -1,8 +1,30 @@
 import React from "react";
 import styled from "styled-components";
 import HomeFoot from "../components/Home/HomeFoot";
+import emailjs from "emailjs-com";
 
 function SpecialOffer() {
+  function sendEmail(e) {
+    e.preventDefault(); //This is important, i'm not sure why, but the email won't send without it
+
+    emailjs
+      .sendForm(
+        "service_74py0gf",
+        "template_8dq7z4s",
+        e.target,
+        "crymrBWssvyArlchr"
+      )
+      .then(
+        (result) => {
+          window.location.reload(); //This is if you still want the page to reload (since e.preventDefault() cancelled that behavior)
+        },
+        (error) => {
+          console.log(error.text);
+        }
+      );
+    alert(`Message sent!`);
+  }
+
   return (
     <SpecialOfferContainer>
       <Special>
@@ -38,18 +60,33 @@ function SpecialOffer() {
               Please fill out the form below, including all required fields, and
               we will contact you as soon as possible.
             </Para>
-            <form>
-              <input type="text" placeholder="FULL NAME" />
-              <input type="email" placeholder="EMAIL ADDRESS" />
-              <input type="number" placeholder="PHONE NUMBER" />
+            <form onSubmit={sendEmail}>
+              <input
+                type="text"
+                className="form-control"
+                id="exampleFormControlInput1"
+                name="name"
+                placeholder="FULL NAME"
+              />
+              <input
+                type="email"
+                className="form-control"
+                id="exampleFormControlInput1"
+                placeholder="EMAIL ADDRESS"
+                name="email"
+              />
+              <input type="number" name="number" placeholder="PHONE NUMBER" />
               <textarea
-                id="w3review"
-                name="w3review"
+                className="form-control"
+                id="exampleFormControlTextarea1"
+                name="message"
                 rows="7"
                 cols="50"
                 placeholder="HOW CAN WE HELP?"
               />
-              <button>SUBMIT</button>
+              <button type="submit" className="submit-btn">
+                SUBMIT
+              </button>
             </form>
           </MiddleRight>
         </SpecialMiddle>
@@ -71,6 +108,9 @@ export default SpecialOffer;
 const SpecialOfferContainer = styled.div`
   min-height: 90vh;
   padding-top: 70px;
+  @media (max-width: 991px) {
+    padding-top: 10px;
+  }
 `;
 
 const Special = styled.div`
@@ -187,9 +227,12 @@ const MiddleRight = styled.div`
     border-radius: 6px;
     border: 1px solid #d0d0d0;
   }
-  button {
+  a {
     width: 35%;
     align-self: start;
+  }
+  button {
+    width: 100%;
     padding: 10px;
     background: var(--blue);
     border: 1px solid var(--blue);
@@ -222,4 +265,5 @@ const H4 = styled.h4`
 
 const Para = styled.p`
   font-size: 17px;
+  color: var(--gray);
 `;
