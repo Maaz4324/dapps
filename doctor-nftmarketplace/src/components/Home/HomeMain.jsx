@@ -95,9 +95,13 @@ const Button = styled.button`
   padding: 10px 30px;
   background-color: var(--blue);
   border: 1px solid var(--blue);
+  font-size: 25px;
+  font-weight: bold;
+  color: white;
   &:hover {
     transition: all ease-in 0.3s;
     background-color: white;
     box-shadow: 1px 2px 5px black;
+    color: black;
   }
 `;

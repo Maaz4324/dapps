@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import expertise from "../../images/expertise.webp";
-import office from "../../images/office.jpg";
+import aboutus from "../../images/aboutus.jpg";
+import { Link } from "react-router-dom";
 
 function Chiropractor() {
   return (
@@ -55,9 +56,18 @@ function Chiropractor() {
           </Para>
         </ChiropractorLeft>
         <ChiropractorRight>
-          <RightAboutContainer>
-            <RightImg src={office} />
-          </RightAboutContainer>
+          <Link to="/us">
+            <RightAboutImg
+              style={{
+                background: `url(${aboutus})`,
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+              }}
+            >
+              <DisplayAboutTxt>ABOUT US</DisplayAboutTxt>
+            </RightAboutImg>
+          </Link>
           <OfficeHourContainer>
             <H3>OFFICE HOURS</H3>
             <Line></Line>
@@ -141,7 +151,6 @@ const RightAboutContainer = styled.div`
     }
   }
 `;
-
 const OfficeHourContainer = styled.div`
   text-align: center;
   padding: 30px 0;
@@ -154,12 +163,29 @@ const Line = styled.div`
 `;
 
 const RightImg = styled.img`
-  width: 100%;
+  width: 80%;
+  margin: 0 auto;
 `;
 
 const H1 = styled.h1``;
 
 const H4 = styled.h4``;
+
+const DisplayAboutTxt = styled.h4`
+  color: white;
+  width: 100%;
+  text-align: center;
+  padding: 5px 0;
+  background-color: #a7a7a74f;
+`;
+const RightAboutImg = styled.div`
+  width: 300px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+`;
 
 const H3 = styled.h3`
   color: var(--blue);

@@ -1,10 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import expertise from "../images/expertise.webp";
 import backpain from "../images/backpain1.jpg";
-import specialPatient from "../images/specialPatient.png";
-import { Link } from "react-router-dom";
 import HomeFoot from "../components/Home/HomeFoot";
+import OfficeHour from "../components/OfficeHour";
 
 function Backpain() {
   return (
@@ -111,46 +109,7 @@ function Backpain() {
           </Para>
           <Line></Line>
         </Left>
-        <Right>
-          <Link to="/special">
-            <ImgContainer>
-              <img src={specialPatient} alt="" />
-            </ImgContainer>
-          </Link>
-          <OfficeHourContainer>
-            <H4>OFFICE HOURS</H4>
-            <HourLine></HourLine>
-            <H5>Monday</H5>
-            <Time>
-              10:00am - 1:00pm
-              <br /> 10:00am - 1:00pm
-            </Time>
-            <HourLine></HourLine>
-            <H5>Monday</H5>
-            <Time>
-              10:00am - 1:00pm
-              <br /> 10:00am - 1:00pm
-            </Time>
-            <HourLine></HourLine>
-            <H5>Monday</H5>
-            <Time>By Appointment Only</Time>
-            <HourLine></HourLine>
-            <H5>Monday</H5>
-            <Time>
-              10:00am - 1:00pm
-              <br /> 10:00am - 1:00pm
-            </Time>
-            <HourLine></HourLine>
-            <H5>Monday</H5>
-            <Time>By Appointment Only</Time>
-            <HourLine></HourLine>
-            <H5>Monday</H5>
-            <Time>By Appointment Only</Time>
-          </OfficeHourContainer>
-          <RightAboutContainer>
-            <RightImg className="expertise" src={expertise} />
-          </RightAboutContainer>
-        </Right>
+        <OfficeHour />
       </Container>
       <HomeFoot />
     </BackpainContainer>
@@ -184,23 +143,6 @@ const Container = styled.div`
   }
 `;
 
-const Right = styled.div`
-  width: 30%;
-  text-align: center;
-  @media (max-width: 890px) {
-    width: 60%;
-  }
-`;
-
-const RightAboutContainer = styled.div`
-  width: 100%;
-`;
-
-const OfficeHourContainer = styled.div`
-  text-align: center;
-  padding: 30px 0;
-`;
-
 const ImgContainer = styled.div`
   width: 100%;
   img {
@@ -210,9 +152,9 @@ const ImgContainer = styled.div`
 
 const Left = styled.div`
   width: 70%;
-  padding-right: 30px;
   @media (max-width: 890px) {
     width: 100%;
+    padding-right: 0px;
   }
 `;
 
@@ -220,11 +162,6 @@ const Line = styled.div`
   border-bottom: 1px solid var(--lightgray);
   width: 100%;
   margin: 20px auto;
-`;
-const HourLine = styled.div`
-  border-bottom: 1px solid var(--lightgray);
-  width: 60%;
-  margin: 0px auto;
 `;
 
 const H1 = styled.h1`
@@ -235,25 +172,8 @@ const H3 = styled.h3`
   margin: 20px 0;
   color: var(--headgray);
 `;
-const H4 = styled.h4`
-  margin: 20px 0;
-  color: var(--blue);
-`;
 
 const Para = styled.p`
   margin: 20px 0;
   color: var(--gray);
-`;
-const Time = styled.p`
-  /* line-height: 100%; */
-  color: var(--gray);
-`;
-
-const H5 = styled.h5`
-  font-size: 17px;
-  color: var(--headgray);
-`;
-
-const RightImg = styled.img`
-  width: 60%;
 `;
