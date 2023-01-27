@@ -16,6 +16,7 @@ import Pregnancy from "./pages/Pregnancy";
 import Wellness from "./pages/Wellness";
 import ScrollToTop from "./components/ScrollToTop";
 import Meet from "./pages/about/Meet";
+import Testimonials from "./components/Testimonials";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route exact path="/pregnancy" element={<Pregnancy />} />
           <Route exact path="/wellness" element={<Wellness />} />
           <Route exact path="/us" element={<Meet />} />
+          <Route exact path="/testimonials" element={<Testimonials />} />
         </Routes>
       </div>
     </Router>

@@ -80,14 +80,29 @@ const Top = styled.div`
   align-items: center;
   justify-content: start;
   margin-bottom: 20px;
+  @media (max-width: 700px) {
+    flex-direction: column;
+  }
 `;
 
 const Left = styled.div`
   width: 70%;
   padding-right: 30px;
+  @media (max-width: 700px) {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 00px;
+  }
   img {
     width: 100%;
     border-radius: 50%;
+    @media (max-width: 700px) {
+      margin-bottom: 40px;
+      width: 100%;
+      max-width: 350px;
+    }
   }
 `;
 
