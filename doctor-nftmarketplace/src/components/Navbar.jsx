@@ -28,9 +28,6 @@ function Navbar() {
       <NavLinks>
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
           <div className="container-fluid">
-            {/* <Link className="navbar-brand" to="#">
-              Navbar
-            </Link> */}
             <button
               className="navbar-toggler"
               type="button"
@@ -52,15 +49,61 @@ function Navbar() {
                     HOME
                   </Link>
                 </li>
-                <li className="nav-item">
-                  <Link className="nav-link" aria-current="page" to="/us">
+                <li className="nav-item dropdown">
+                  <a
+                    className="nav-link dropdown-toggle"
+                    href="#"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
                     ABOUT
-                  </Link>
+                  </a>
+                  <ul className="dropdown-menu">
+                    <li>
+                      <Link className="dropdown-item" to="/us">
+                        MEET THE TEAM
+                      </Link>
+                    </li>
+                    <li>
+                      <a className="dropdown-item" href="#">
+                        TESTIMONIALS
+                      </a>
+                    </li>
+                    <li>
+                      <a className="dropdown-item" href="#">
+                        OFFICE TOUR
+                      </a>
+                    </li>
+                  </ul>
                 </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/patients">
+                <li className="nav-item dropdown">
+                  <a
+                    className="nav-link dropdown-toggle"
+                    href="#"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
                     PATIENTS
-                  </Link>
+                  </a>
+                  <ul className="dropdown-menu">
+                    <li>
+                      <a className="dropdown-item" href="#">
+                        PATIENT PAPERWORK
+                      </a>
+                    </li>
+                    <li>
+                      <a className="dropdown-item" href="#">
+                        PRODUCTS
+                      </a>
+                    </li>
+                    <li>
+                      <a className="dropdown-item" href="#">
+                        WHAT TO EXPECT
+                      </a>
+                    </li>
+                  </ul>
                 </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="/blog">
@@ -199,7 +242,8 @@ const NavLinks = styled.div`
     }
   }
   .nav-link {
-    font-size: 18px;
+    font-size: 16px;
+    margin: 0 5px;
     font-weight: 500;
     color: white;
     &:hover {

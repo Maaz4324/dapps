@@ -73,6 +73,7 @@ const H1 = styled.h1`
 
 const H3 = styled.h3`
   font-size: 70px;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
   @media (max-width: 480px) {
     font-size: 50px;
   }
