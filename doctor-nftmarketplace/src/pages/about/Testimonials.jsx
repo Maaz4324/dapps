@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import HomeFoot from "./Home/HomeFoot";
-import OfficeHour from "./OfficeHour";
+import HomeFoot from "../../components/Home/HomeFoot";
+import OfficeHour from "../../components/OfficeHour";
 
 function Testimonials() {
   return (

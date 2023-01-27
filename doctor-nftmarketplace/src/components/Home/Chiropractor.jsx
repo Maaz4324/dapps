@@ -56,7 +56,7 @@ function Chiropractor() {
           </Para>
         </ChiropractorLeft>
         <ChiropractorRight>
-          <Link to="/us">
+          <Link to="/us" style={{ textDecoration: "none" }}>
             <RightAboutImg
               style={{
                 background: `url(${aboutus})`,

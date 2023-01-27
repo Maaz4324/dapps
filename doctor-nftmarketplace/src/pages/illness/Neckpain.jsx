@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import neckpain from "../images/neckpain2.jpg";
-import HomeFoot from "../components/Home/HomeFoot";
-import OfficeHour from "../components/OfficeHour";
+import neckpain from "../../images/neckpain2.jpg";
+import HomeFoot from "../../components/Home/HomeFoot";
+import OfficeHour from "../../components/OfficeHour";
 
 function Neckpain() {
   return (

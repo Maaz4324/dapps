@@ -1,22 +1,22 @@
 import "./App.css";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
-import About from "./pages/About";
 import Patients from "./pages/Patients";
 import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
 import Marketplace from "./pages/Marketplace";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SpecialOffer from "./pages/SpecialOffer";
-import Backpain from "./pages/Backpain";
-import Neckpain from "./pages/Neckpain";
-import Headache from "./pages/Headache";
-import Pediatric from "./pages/Pediatric";
-import Pregnancy from "./pages/Pregnancy";
-import Wellness from "./pages/Wellness";
+import Backpain from "./pages/illness/Backpain";
+import Neckpain from "./pages/illness/Neckpain";
+import Headache from "./pages/illness/Headache";
+import Pediatric from "./pages/illness/Pediatric";
+import Pregnancy from "./pages/illness/Pregnancy";
+import Wellness from "./pages/illness/Wellness";
 import ScrollToTop from "./components/ScrollToTop";
 import Meet from "./pages/about/Meet";
-import Testimonials from "./components/Testimonials";
+import Testimonials from "./pages/about/Testimonials";
+import Tour from "./pages/about/Tour";
 
 function App() {
   return (
@@ -39,6 +39,7 @@ function App() {
           <Route exact path="/wellness" element={<Wellness />} />
           <Route exact path="/us" element={<Meet />} />
           <Route exact path="/testimonials" element={<Testimonials />} />
+          <Route exact path="/office-tour" element={<Tour />} />
         </Routes>
       </div>
     </Router>

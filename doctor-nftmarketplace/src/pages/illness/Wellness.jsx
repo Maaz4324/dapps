@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import wellness from "../images/wellness1.jpg";
-import HomeFoot from "../components/Home/HomeFoot";
-import OfficeHour from "../components/OfficeHour";
+import wellness from "../../images/wellness1.jpg";
+import HomeFoot from "../../components/Home/HomeFoot";
+import OfficeHour from "../../components/OfficeHour";
 
 function Wellness() {
   return (

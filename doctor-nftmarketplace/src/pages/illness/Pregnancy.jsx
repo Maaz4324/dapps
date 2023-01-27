@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import HomeFoot from "../components/Home/HomeFoot";
-import OfficeHour from "../components/OfficeHour";
+import HomeFoot from "../../components/Home/HomeFoot";
+import OfficeHour from "../../components/OfficeHour";
 
 function Pregnancy() {
   return (

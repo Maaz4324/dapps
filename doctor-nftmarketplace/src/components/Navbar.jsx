@@ -71,9 +71,9 @@ function Navbar() {
                       </Link>
                     </li>
                     <li>
-                      <a className="dropdown-item" href="#">
+                      <Link className="dropdown-item" to="/office-tour">
                         OFFICE TOUR
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </li>
@@ -96,11 +96,6 @@ function Navbar() {
                     <li>
                       <a className="dropdown-item" href="#">
                         PRODUCTS
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        WHAT TO EXPECT
                       </a>
                     </li>
                   </ul>

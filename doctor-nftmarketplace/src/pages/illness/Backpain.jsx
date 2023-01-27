@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import backpain from "../images/backpain1.jpg";
-import HomeFoot from "../components/Home/HomeFoot";
-import OfficeHour from "../components/OfficeHour";
+import backpain from "../../images/backpain1.jpg";
+import HomeFoot from "../../components/Home/HomeFoot";
+import OfficeHour from "../../components/OfficeHour";
 
 function Backpain() {
   return (

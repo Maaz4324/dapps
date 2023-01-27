@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import headache1 from "../images/headache1.jpg";
-import HomeFoot from "../components/Home/HomeFoot";
-import OfficeHour from "../components/OfficeHour";
+import headache1 from "../../images/headache1.jpg";
+import HomeFoot from "../../components/Home/HomeFoot";
+import OfficeHour from "../../components/OfficeHour";
 
 function Headache() {
   return (

@@ -4,7 +4,6 @@ import AboutDocs from "../../components/AboutDocs";
 import HomeFoot from "../../components/Home/HomeFoot";
 import MeetAccor from "../../components/MeetAccor";
 import OfficeHour from "../../components/OfficeHour";
-import SpecialOffer from "../SpecialOffer";
 
 function Meet() {
   const accordionData = [
