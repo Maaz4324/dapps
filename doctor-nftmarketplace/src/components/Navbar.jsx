@@ -94,9 +94,9 @@ function Navbar() {
                       </a>
                     </li>
                     <li>
-                      <a className="dropdown-item" href="#">
+                      <Link className="dropdown-item" to="/products">
                         PRODUCTS
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </li>

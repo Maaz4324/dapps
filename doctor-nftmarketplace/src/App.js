@@ -17,6 +17,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import Meet from "./pages/about/Meet";
 import Testimonials from "./pages/about/Testimonials";
 import Tour from "./pages/about/Tour";
+import Products from "./pages/patients/Products";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
           <Route exact path="/us" element={<Meet />} />
           <Route exact path="/testimonials" element={<Testimonials />} />
           <Route exact path="/office-tour" element={<Tour />} />
+          <Route exact path="/products" element={<Products />} />
         </Routes>
       </div>
     </Router>
