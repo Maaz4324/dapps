@@ -1,49 +1,60 @@
 import React from "react";
 import styled from "styled-components";
-import office from "../../images/office.jpg";
 import wellness from "../../images/wellness.jpg";
 import neckpain from "../../images/neckpain.jpg";
 import backpain from "../../images/backpain.jpg";
-import headache from "../../images/headache.jpg";
 import pediatric from "../../images/pediatric.jpg";
 import pregnancy from "../../images/pregnancy.jpg";
 import headaches from "../../images/headache.jpg";
 import { Link } from "react-router-dom";
+import Fade from "react-reveal/Fade";
 
 function Illness() {
   return (
     <IllnessContainer>
       <Container>
-        <Link to="/neckpain" style={{ textDecoration: "none" }}>
-          <Box className="neckpain">
-            <H3>NECK PAIN</H3>
-          </Box>
-        </Link>
-        <Link to="/backpain" style={{ textDecoration: "none" }}>
-          <Box className="backpain">
-            <H3>BACK PAIN</H3>
-          </Box>
-        </Link>
-        <Link to="/headache" style={{ textDecoration: "none" }}>
-          <Box className="headaches">
-            <H3>HEADACHES</H3>
-          </Box>
-        </Link>
-        <Link to="/pediatric" style={{ textDecoration: "none" }}>
-          <Box className="pediatric">
-            <H3>PEDIATRIC CARE</H3>
-          </Box>
-        </Link>
-        <Link to="/pregnancy" style={{ textDecoration: "none" }}>
-          <Box className="pregnancy">
-            <H3>PREGNANCY</H3>
-          </Box>
-        </Link>
-        <Link to="/wellness" style={{ textDecoration: "none" }}>
-          <Box className="wellness">
-            <H3>WELLNESS</H3>
-          </Box>
-        </Link>
+        <Fade left>
+          <Link to="/neckpain" style={{ textDecoration: "none" }}>
+            <Box className="neckpain">
+              <H3>NECK PAIN</H3>
+            </Box>
+          </Link>
+        </Fade>
+        <Fade left>
+          <Link to="/backpain" style={{ textDecoration: "none" }}>
+            <Box className="backpain">
+              <H3>BACK PAIN</H3>
+            </Box>
+          </Link>
+        </Fade>
+        <Fade left>
+          <Link to="/headache" style={{ textDecoration: "none" }}>
+            <Box className="headaches">
+              <H3>HEADACHES</H3>
+            </Box>
+          </Link>
+        </Fade>
+        <Fade left>
+          <Link to="/pediatric" style={{ textDecoration: "none" }}>
+            <Box className="pediatric">
+              <H3>PEDIATRIC CARE</H3>
+            </Box>
+          </Link>
+        </Fade>
+        <Fade left>
+          <Link to="/pregnancy" style={{ textDecoration: "none" }}>
+            <Box className="pregnancy">
+              <H3>PREGNANCY</H3>
+            </Box>
+          </Link>
+        </Fade>
+        <Fade left>
+          <Link to="/wellness" style={{ textDecoration: "none" }}>
+            <Box className="wellness">
+              <H3>WELLNESS</H3>
+            </Box>
+          </Link>
+        </Fade>
       </Container>
     </IllnessContainer>
   );

@@ -4,6 +4,7 @@ import AboutDocs from "../../components/AboutDocs";
 import HomeFoot from "../../components/Home/HomeFoot";
 import MeetAccor from "../../components/MeetAccor";
 import OfficeHour from "../../components/OfficeHour";
+import Fade from "react-reveal/Fade";
 
 function Meet() {
   const accordionData = [
@@ -42,32 +43,35 @@ function Meet() {
       <Container>
         <Left>
           <Top>
-            <H1>MEET THE TEAM</H1>
-            <Para>
-              Drs. Sherry and Richard met in their first day of orientation in
-              graduate school and felt led to one another to work towards God's
-              purpose for their lives, together. They married on July 11th, 2014
-              and are so excited to work together to achieve their passion of
-              working with all the families in the community, beginning with
-              yours!
-              <br />
-              <br />
-              At New Leaf Chiropractic, we are on a mission to restore the
-              health of our community through Specific, Scientific,
-              Neurologically based, Chiropractic care.
-              <br />
-              <br />
-              Our goal is to deliver a natural, drug free answer to common
-              health issues that plague our community. We believe that everyone
-              has the right to be healthy and we want to see everyone reach
-              their full, God-given, health potential.
-              <br />
-              <br />
-              We utilize state-of-the-art technology, along with the most
-              cutting-edge chiropractic techniques to provide you, your family,
-              and the community with a natural, drug-free approach to health
-              issues.
-            </Para>
+            <Fade big cascade>
+              <H1>MEET THE TEAM</H1>
+              <Para>
+                Drs. Sherry and Richard met in their first day of orientation in
+                graduate school and felt led to one another to work towards
+                God's purpose for their lives, together. They married on July
+                11th, 2014 and are so excited to work together to achieve their
+                passion of working with all the families in the community,
+                beginning with yours!
+                <br />
+                <br />
+                At New Leaf Chiropractic, we are on a mission to restore the
+                health of our community through Specific, Scientific,
+                Neurologically based, Chiropractic care.
+                <br />
+                <br />
+                Our goal is to deliver a natural, drug free answer to common
+                health issues that plague our community. We believe that
+                everyone has the right to be healthy and we want to see everyone
+                reach their full, God-given, health potential.
+                <br />
+                <br />
+                We utilize state-of-the-art technology, along with the most
+                cutting-edge chiropractic techniques to provide you, your
+                family, and the community with a natural, drug-free approach to
+                health issues.
+              </Para>
+            </Fade>
+
             <AboutAccordion>
               {accordionData.map(({ title, content }) => (
                 <MeetAccor title={title} content={content} />
@@ -76,15 +80,25 @@ function Meet() {
           </Top>
           <Middle>
             <hr />
-            <AboutDocs />
+            <Fade left>
+              <AboutDocs />
+            </Fade>
             <hr />
-            <AboutDocs />
+            <Fade left>
+              <AboutDocs />
+            </Fade>
             <hr />
-            <AboutDocs />
+            <Fade left>
+              <AboutDocs />
+            </Fade>
             <hr />
-            <AboutDocs />
+            <Fade left>
+              <AboutDocs />
+            </Fade>
             <hr />
-            <AboutDocs />
+            <Fade left>
+              <AboutDocs />
+            </Fade>
           </Middle>
           <Bottom></Bottom>
         </Left>
@@ -99,6 +113,9 @@ export default Meet;
 
 const MeetContainer = styled.div`
   padding-top: 90px;
+  @media (max-width: 990px) {
+    padding-top: 20px;
+  }
 `;
 
 const Container = styled.div`

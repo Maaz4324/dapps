@@ -2,18 +2,25 @@ import React from "react";
 import styled from "styled-components";
 import bg1 from "../../images/family.jpg";
 import { Link } from "react-router-dom";
+import Fade from "react-reveal/Fade";
 
 function HomeMain() {
   return (
     <HomeMainContainer>
       <MainHead>
-        <H2>GET THE LIFE</H2>
+        <Fade cascade>
+          <H2>GET THE LIFE</H2>
+        </Fade>
         <YouHead>
+          {/* <Fade cascade> */}
           <Line></Line>
           <H3>you</H3>
           <Line></Line>
+          {/* </Fade> */}
         </YouHead>
-        <H1>DESERVE</H1>
+        <Fade cascade>
+          <H1>DESERVE</H1>
+        </Fade>
         <Link to="/special">
           <Button>NEW PATIENT SPECIAL OFFER</Button>
         </Link>
@@ -52,7 +59,7 @@ const MainHead = styled.div`
 `;
 
 const H2 = styled.h2`
-  font-size: 80px;
+  font-size: 70px;
   @media (max-width: 480px) {
     font-size: 60px;
   }
@@ -62,7 +69,7 @@ const H2 = styled.h2`
 `;
 
 const H1 = styled.h1`
-  font-size: 100px;
+  font-size: 80px;
   @media (max-width: 480px) {
     font-size: 70px;
   }
@@ -72,8 +79,8 @@ const H1 = styled.h1`
 `;
 
 const H3 = styled.h3`
-  font-size: 70px;
-  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  font-size: 50px;
+  font-family: "Cedarville Cursive", cursive;
   @media (max-width: 480px) {
     font-size: 50px;
   }
@@ -88,8 +95,8 @@ const YouHead = styled.div`
   justify-content: center;
 `;
 const Line = styled.div`
-  border-top: 1px solid white;
-  width: 30%;
+  border-top: 3px solid white;
+  width: 20%;
 `;
 
 const Button = styled.button`

@@ -151,16 +151,23 @@ const AccordionTitle = styled.div`
 const Content = styled.div`
   background-color: white;
   padding: 10px;
+  p {
+    color: var(--gray);
+  }
 `;
 
 const H3 = styled.h3`
   font-size: 16px;
   font-weight: 700;
+  color: var(--headgray);
 `;
 
 const H1 = styled.h1`
   font-size: 23px;
   font-weight: 700;
+  color: var(--headgray);
 `;
 
-const Bio = styled.p``;
+const Bio = styled.p`
+  color: var(--gray);
+`;

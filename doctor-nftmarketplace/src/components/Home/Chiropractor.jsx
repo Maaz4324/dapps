@@ -3,13 +3,16 @@ import styled from "styled-components";
 import expertise from "../../images/expertise.webp";
 import aboutus from "../../images/aboutus.jpg";
 import { Link } from "react-router-dom";
+import Fade from "react-reveal/Fade";
 
 function Chiropractor() {
   return (
     <ChiropractorContainer>
       <Container>
         <ChiropractorLeft>
-          <H1>CHIROPRACTOR MIAMI FL</H1>
+          <Fade big cascade>
+            <H1>CHIROPRACTOR MIAMI FL</H1>
+          </Fade>
           <iframe
             className="ytframe"
             width="560"
@@ -20,40 +23,44 @@ function Chiropractor() {
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
           ></iframe>
-          <Para>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat
-            quisquam voluptate, numquam, laboriosam aperiam laborum tempore
-            optio laudantium voluptatum ea, voluptatem atque modi molestiae
-            deserunt! Earum quisquam tenetur repellendus expedita eaque
-            inventore deleniti. Earum. Lorem ipsum dolor sit, amet consectetur
-            adipisicing elit. Perspiciatis dolorem libero tempora molestias
-            nulla cum, sit ea inventore minus consequuntur dolore ex incidunt
-            perferendis nihil quis odio eos cumque fugit quibusdam aspernatur
-            quos exercitationem labore ab quisquam. Earum temporibus quibusdam
-            laudantium, ea eligendi dolore hic, adipisci perferendis corrupti
-            aspernatur eveniet, quisquam vitae omnis delectus enim aut minus
-            soluta! Praesentium, sunt autem? Excepturi quae minima dolorum
-            voluptatum blanditiis earum iusto nostrum at impedit tempore!
-            Suscipit, magni dolore ipsam voluptatibus magnam maiores reiciendis
-            officia ut dolorum quod quas fugit voluptatum ullam eum tempora
-            repellendus a recusandae, nisi itaque. Magnam tenetur in cupiditate?
-          </Para>
-          <H4>WELCOME TO NEW LIVING FORWARD</H4>
-          <Para>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos ipsam
-            recusandae, saepe assumenda delectus suscipit, placeat maiores
-            obcaecati dolorem eligendi magni optio labore ab? Soluta reiciendis
-            repellat nesciunt officiis. Suscipit atque iste veniam illum
-            accusantium hic repellendus consequatur officiis laboriosam
-            laudantium, obcaecati, et explicabo quibusdam. Reprehenderit harum
-            cum sint, ipsa molestiae quis, assumenda quo, quas provident
-            repellat accusamus odit magni culpa eligendi laudantium error quasi.
-            Dolor aspernatur aperiam est, expedita dolores molestiae
-            consequuntur voluptate eligendi dignissimos obcaecati culpa odio
-            sapiente accusantium voluptatem minima inventore cum iste? Suscipit
-            explicabo, esse deserunt iusto enim possimus soluta? Iusto neque
-            eligendi officiis ut ullam.
-          </Para>
+
+          <Fade big cascade>
+            <Para>
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat
+              quisquam voluptate, numquam, laboriosam aperiam laborum tempore
+              optio laudantium voluptatum ea, voluptatem atque modi molestiae
+              deserunt! Earum quisquam tenetur repellendus expedita eaque
+              inventore deleniti. Earum. Lorem ipsum dolor sit, amet consectetur
+              adipisicing elit. Perspiciatis dolorem libero tempora molestias
+              nulla cum, sit ea inventore minus consequuntur dolore ex incidunt
+              perferendis nihil quis odio eos cumque fugit quibusdam aspernatur
+              quos exercitationem labore ab quisquam. Earum temporibus quibusdam
+              laudantium, ea eligendi dolore hic, adipisci perferendis corrupti
+              aspernatur eveniet, quisquam vitae omnis delectus enim aut minus
+              soluta! Praesentium, sunt autem? Excepturi quae minima dolorum
+              voluptatum blanditiis earum iusto nostrum at impedit tempore!
+              Suscipit, magni dolore ipsam voluptatibus magnam maiores
+              reiciendis officia ut dolorum quod quas fugit voluptatum ullam eum
+              tempora repellendus a recusandae, nisi itaque. Magnam tenetur in
+              cupiditate?
+            </Para>
+            <H4>WELCOME TO NEW LIVING FORWARD</H4>
+            <Para>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos
+              ipsam recusandae, saepe assumenda delectus suscipit, placeat
+              maiores obcaecati dolorem eligendi magni optio labore ab? Soluta
+              reiciendis repellat nesciunt officiis. Suscipit atque iste veniam
+              illum accusantium hic repellendus consequatur officiis laboriosam
+              laudantium, obcaecati, et explicabo quibusdam. Reprehenderit harum
+              cum sint, ipsa molestiae quis, assumenda quo, quas provident
+              repellat accusamus odit magni culpa eligendi laudantium error
+              quasi. Dolor aspernatur aperiam est, expedita dolores molestiae
+              consequuntur voluptate eligendi dignissimos obcaecati culpa odio
+              sapiente accusantium voluptatem minima inventore cum iste?
+              Suscipit explicabo, esse deserunt iusto enim possimus soluta?
+              Iusto neque eligendi officiis ut ullam.
+            </Para>
+          </Fade>
         </ChiropractorLeft>
         <ChiropractorRight>
           <Link to="/us" style={{ textDecoration: "none" }}>
@@ -137,7 +144,14 @@ const ChiropractorLeft = styled.div`
   }
 `;
 
-const ChiropractorRight = styled.div``;
+const ChiropractorRight = styled.div`
+  @media (max-width: 1047px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+`;
 
 const RightAboutContainer = styled.div`
   display: flex;

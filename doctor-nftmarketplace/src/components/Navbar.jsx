@@ -18,10 +18,18 @@ function Navbar() {
         <MediaContainer>
           <H3>(423) 4243-646</H3>
           <Media>
-            <MediaImg src={facebook} />
-            <MediaImg src={instagram} />
-            <MediaImg src={youtube} />
-            <MediaImg src={twitter} />
+            <a href="https://facebook.com" target="_blank">
+              <MediaImg src={facebook} />
+            </a>
+            <a href="https://twitter.com/home" target="_blank">
+              <MediaImg src={instagram} />
+            </a>
+            <a href="https://twitter.com/home" target="_blank">
+              <MediaImg src={youtube} />
+            </a>
+            <a href="https://twitter.com/home" target="_blank">
+              <MediaImg src={twitter} />
+            </a>
           </Media>
         </MediaContainer>
       </MediaLinks>
@@ -120,10 +128,18 @@ function Navbar() {
                 <MediaContainerExpanded>
                   <H3>(423) 4243-646</H3>
                   <Media>
-                    <MediaImg src={facebook} />
-                    <MediaImg src={instagram} />
-                    <MediaImg src={youtube} />
-                    <MediaImg src={twitter} />
+                    <a href="https://facebook.com" target="_blank">
+                      <MediaImg src={facebook} />
+                    </a>
+                    <a href="https://twitter.com/home" target="_blank">
+                      <MediaImg src={instagram} />
+                    </a>
+                    <a href="https://twitter.com/home" target="_blank">
+                      <MediaImg src={youtube} />
+                    </a>
+                    <a href="https://twitter.com/home" target="_blank">
+                      <MediaImg src={twitter} />
+                    </a>
                   </Media>
                 </MediaContainerExpanded>
               </ul>
@@ -158,6 +174,7 @@ const MediaContainer = styled.div`
 `;
 const MediaContainerExpanded = styled.div`
   display: none;
+  margin-top: 20px;
   @media (max-width: 991px) {
     display: flex;
     align-items: center;
@@ -166,12 +183,16 @@ const MediaContainerExpanded = styled.div`
   @media (max-width: 590px) {
     flex-direction: column;
     align-items: start;
-    margin-top: 10px;
   }
 `;
 const H3 = styled.h3`
   font-size: 20px;
   margin-right: 30px;
+  font-weight: bolder;
+  color: var(--headgray);
+  @media (max-width: 600px) {
+    margin-right: 0;
+  }
 `;
 const Media = styled.div``;
 
@@ -201,12 +222,12 @@ const NavLogo = styled.div`
 `;
 
 const MediaImg = styled.img`
-  width: 18%;
+  width: 15%;
   cursor: pointer;
   padding: 0 2px;
   &:hover {
     transition: all ease 0.3s;
-    background-color: var(--blue);
+    box-shadow: 2px 3px 10px var(--blue);
   }
 `;
 

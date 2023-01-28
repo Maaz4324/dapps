@@ -70,4 +70,7 @@ const AccordionTitle = styled.div`
 const Content = styled.div`
   background-color: white;
   padding: 10px;
+  p {
+    color: var(--gray);
+  }
 `;

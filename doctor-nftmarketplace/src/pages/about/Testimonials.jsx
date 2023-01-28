@@ -59,6 +59,9 @@ export default Testimonials;
 
 const TestimonialContainer = styled.div`
   padding-top: 70px;
+  @media (max-width: 990px) {
+    padding-top: 20px;
+  }
 `;
 
 const Container = styled.div`
