@@ -213,6 +213,10 @@ function Page2() {
               <label htmlFor="Signature">
                 *Patient or Authorized Person's Signature:
               </label>
+              <Span>
+                Please sign in the box below using your mouse, touch screen, or
+                touchpad.
+              </Span>
               <SignatureCanvas
                 ref={sigCanvas}
                 penColor="green"
@@ -229,11 +233,116 @@ function Page2() {
               </Span>
             </Insection>
             <TodayDate>
-              <Span>*Today's date:</Span>
+              <Span>*Date completed:</Span>
               <input type="date" />
             </TodayDate>
           </Inputs>
         </Social>
+        <Xray>
+          <h5>X-RAY AUTHORIZATION</h5>
+          <Inputs>
+            <Span>
+              AS YOUR HEALTHCARE PROVIDER, WE ARE LEGALLY RESPONSIBLE FOR YOUR
+              CHIROPRACTIC RECORDS. WE MUST MAINTAIN A RECORD OF YOUR X-RAYS IN
+              OUR FILES. AT YOUR REQUEST, WE WILL PROVIDE YOU WITH A COPY OF
+              YOUR X-RAYS IN OUR FILES. THE FEE FOR COPYING YOUR X-RAYS ON A
+              DISC IS $15.00. THIS FEE MUST BE PAID IN ADVANCE.
+              <br />
+              <br />
+              DIGITAL X-RAYS ON CD WILL BE AVAILABLE WITHIN 72 HOURS OF
+              PREPAYMENT ON ANY REGULAR PRACTICE HOUR DAYS. X-RAYS ARE UTILIZED
+              IN THIS OFFICE TO HELP LOCATE AND ANALYZE VERTEBRAL SUBLUXATIONS.
+              THESE X-RAYS ARE NOT USED TO INVESTIGATE FOR MEDICAL PATHOLOGY.
+              THE DOCTORS OF NEW LEAF CHIROPRACTIC DO NOT DIAGNOSE OR TREAT
+              MEDICAL CONDITIONS; HOWEVER, IF ANY ABNORMALITIS ARE FOUND, WE
+              WILL BRING IT TO YOUR ATTENTION SO THAT YOU CAN SEEK MEDICAL
+              ADVICE.
+            </Span>
+            <br />
+            <br />
+            <Span style={{ fontWeight: 700 }}>
+              BY SIGNING BELOW YOU ARE AGREEING TO THE ABOVE TERMS AND
+              CONDITIONS.
+            </Span>
+
+            <Insection>
+              <label htmlFor="Signature">*Signature:</label>
+              <Span>
+                Please sign in the box below using your mouse, touch screen, or
+                touchpad.
+              </Span>
+              <SignatureCanvas
+                ref={sigCanvas}
+                penColor="green"
+                style={{ background: "gray" }}
+                canvasProps={{
+                  width: 600,
+                  height: 200,
+                  className: "sigCanvas",
+                }}
+              />
+              <button onClick={clear}>Clear</button>
+              <Span>
+                I accept that this is the legal representation of my signature.
+              </Span>
+            </Insection>
+            <TodayDate>
+              <Span>*Date:</Span>
+              <input type="date" />
+            </TodayDate>
+          </Inputs>
+        </Xray>
+
+        <Female>
+          <h5>FEMALE PATIENTS ONLY:</h5>
+          <Inputs>
+            <Span>
+              TO THE BEST OF MY KNOWLEDGE, I BELIEVE I AM NOT PREGNANT AT THE
+              TIME X-RAYS ARE TAKEN AT NEW LEAF CHIROPRACTIC
+            </Span>
+
+            <TodayDate>
+              <Span>*The first day of my last menstrual cycle was on:</Span>
+              <input type="date" />
+            </TodayDate>
+
+            <Span>
+              BY MY SIGNATURE BELOW I AM ACKNOWLEDGING THAT THE DOCTOR AND OR A
+              MEMBER OF THE STAFF HAS DISCUSSED WITH ME THE HAZARDOUS EFFECTS OF
+              IONIZATION TO AN UNBORN CHILD, AND I HAVE CONVEYED MY
+              UNDERSTANDING OF THE RISKS ASSOCIATED WITH EXPOSURE TO X-RAYS.
+              AFTER CAREFUL CONSIDERATION I THEREFORE, DO HEREBY CONSENT TO HAVE
+              THE DIAGNOSTIC X-RAY EXAMINATION THE DOCTOR HAS DEEMED NECESSARY
+              IN MY CASE.
+            </Span>
+
+            <Insection>
+              <label htmlFor="Signature">*Signature:</label>
+              <Span>
+                Please sign in the box below using your mouse, touch screen, or
+                touchpad.
+              </Span>
+              <SignatureCanvas
+                ref={sigCanvas}
+                penColor="green"
+                style={{ background: "gray" }}
+                canvasProps={{
+                  width: 600,
+                  height: 200,
+                  className: "sigCanvas",
+                }}
+              />
+              <button onClick={clear}>Clear</button>
+              <Span>
+                I accept that this is the legal representation of my signature.
+              </Span>
+            </Insection>
+            <TodayDate>
+              <Span>*Date:</Span>
+              <input type="date" />
+            </TodayDate>
+          </Inputs>
+        </Female>
       </Container>
     </Page2Container>
   );
@@ -293,6 +402,24 @@ const History = styled.div`
 `;
 
 const Social = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px 0;
+  width: 100%;
+`;
+
+const Xray = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px 0;
+  width: 100%;
+`;
+
+const Female = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: center;
