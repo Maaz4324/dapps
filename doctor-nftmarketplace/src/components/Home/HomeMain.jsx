@@ -12,11 +12,9 @@ function HomeMain() {
           <H2>GET THE LIFE</H2>
         </Fade>
         <YouHead>
-          {/* <Fade cascade> */}
           <Line></Line>
           <H3>you</H3>
           <Line></Line>
-          {/* </Fade> */}
         </YouHead>
         <Fade cascade>
           <H1>DESERVE</H1>
