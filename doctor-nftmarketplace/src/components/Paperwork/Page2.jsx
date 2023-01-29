@@ -492,6 +492,9 @@ const Insection = styled.div`
     border: 2px dashed black;
     background: var(--lightgray);
     margin: 7px 0;
+    @media (max-width: 683px) {
+      width: 100%;
+    }
   }
   button {
     padding: 3px 7px;

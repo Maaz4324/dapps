@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import HomeMain from "../../components/Home/HomeMain";
 import FormHead from "../../components/Paperwork/FormHead";
 import Page1 from "../../components/Paperwork/Page1";
 import Page2 from "../../components/Paperwork/Page2";
+import Page3 from "../../components/Paperwork/Page3";
 import Meet from "../about/Meet";
 import Tour from "../about/Tour";
 
@@ -31,7 +31,7 @@ function Paperwork() {
         <FormHead />
         {page === 1 && <Page1 />}
         {page === 2 && <Page2 />}
-        {page === 3 && <HomeMain />}
+        {page === 3 && <Page3 />}
         {page === 4 && <Meet />}
         {page === 5 && <Tour />}
         <BtnsContainer>
