@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
+import SignatureCanvas from "react-signature-canvas";
 
 function Page2() {
+  const sigCanvas = useRef();
+
+  const clear = () => sigCanvas.current.clear();
+
   return (
     <Page2Container>
       <Container>
@@ -191,6 +196,42 @@ function Page2() {
               </label>
               <textarea name="hobbies" cols="30" rows="5"></textarea>
             </Insection>
+            <hr />
+            <Span style={{ fontSize: 14 }}>
+              I hereby authorize payment to be made directly to New Leaf
+              Chiropractic for all benefits which may be payable under a
+              healthcare plan or from any other collateral sources. I authorize
+              utilization of this application or copies thereof for the purpose
+              of processing claims and effecting payments, and further
+              acknowledge that this assignment of benefits does not in any way
+              relieve me of payment liability and that I will remain financially
+              responsible to New Leaf Chiropractic for any and all services I
+              receive at this office.
+            </Span>
+
+            <Insection>
+              <label htmlFor="Signature">
+                *Patient or Authorized Person's Signature:
+              </label>
+              <SignatureCanvas
+                ref={sigCanvas}
+                penColor="green"
+                style={{ background: "gray" }}
+                canvasProps={{
+                  width: 600,
+                  height: 200,
+                  className: "sigCanvas",
+                }}
+              />
+              <button onClick={clear}>Clear</button>
+              <Span>
+                I accept that this is the legal representation of my signature.
+              </Span>
+            </Insection>
+            <TodayDate>
+              <Span>*Today's date:</Span>
+              <input type="date" />
+            </TodayDate>
           </Inputs>
         </Social>
       </Container>
@@ -320,7 +361,29 @@ const Insection = styled.div`
     padding: 7px;
     width: 100%;
   }
+  .sigCanvas {
+    border: 2px dashed black;
+    background: var(--lightgray);
+    margin: 7px 0;
+  }
+  button {
+    padding: 3px 7px;
+  }
 `;
+
+const TodayDate = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  padding: 20px 0;
+  input {
+    width: 100%;
+    padding: 7px;
+  }
+`;
+
 const H5 = styled.h5``;
 
 const Span = styled.span``;
