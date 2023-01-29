@@ -4,8 +4,8 @@ import FormHead from "../../components/Paperwork/FormHead";
 import Page1 from "../../components/Paperwork/Page1";
 import Page2 from "../../components/Paperwork/Page2";
 import Page3 from "../../components/Paperwork/Page3";
-import Meet from "../about/Meet";
-import Tour from "../about/Tour";
+import Page4 from "../../components/Paperwork/Page4";
+import Page5 from "../../components/Paperwork/Page5";
 
 function Paperwork() {
   const [page, setPage] = useState(1);
@@ -32,8 +32,8 @@ function Paperwork() {
         {page === 1 && <Page1 />}
         {page === 2 && <Page2 />}
         {page === 3 && <Page3 />}
-        {page === 4 && <Meet />}
-        {page === 5 && <Tour />}
+        {page === 4 && <Page4 />}
+        {page === 5 && <Page5 />}
         <BtnsContainer>
           <Button onClick={prevPage}>Previous page</Button>
           <Button onClick={nextPage}>Next page</Button>

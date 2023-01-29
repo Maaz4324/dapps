@@ -211,14 +211,6 @@ const Insection = styled.div`
     width: 100%;
     padding: 7px;
   }
-  textarea {
-    width: 100%;
-    padding: 7px;
-  }
-  select {
-    padding: 7px;
-    width: 100%;
-  }
   .sigCanvas {
     border: 2px dashed black;
     background: var(--lightgray);
