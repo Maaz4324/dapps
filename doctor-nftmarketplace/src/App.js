@@ -1,7 +1,6 @@
 import "./App.css";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
-import Patients from "./pages/Patients";
 import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
 import Marketplace from "./pages/Marketplace";
@@ -18,6 +17,7 @@ import Meet from "./pages/about/Meet";
 import Testimonials from "./pages/about/Testimonials";
 import Tour from "./pages/about/Tour";
 import Products from "./pages/patients/Products";
+import Paperwork from "./pages/patients/Paperwork";
 
 function App() {
   return (
@@ -27,7 +27,6 @@ function App() {
         <ScrollToTop />
         <Routes>
           <Route exact path="/" element={<Home />} />
-          <Route exact path="/patients" element={<Patients />} />
           <Route exact path="/blog" element={<Blog />} />
           <Route exact path="/contact" element={<Contact />} />
           <Route exact path="/marketplace" element={<Marketplace />} />
@@ -42,6 +41,7 @@ function App() {
           <Route exact path="/testimonials" element={<Testimonials />} />
           <Route exact path="/office-tour" element={<Tour />} />
           <Route exact path="/products" element={<Products />} />
+          <Route exact path="/filloutForm" element={<Paperwork />} />
         </Routes>
       </div>
     </Router>

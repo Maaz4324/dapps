@@ -97,9 +97,13 @@ function Navbar() {
                   </a>
                   <ul className="dropdown-menu">
                     <li>
-                      <a className="dropdown-item" href="#">
+                      <Link
+                        className="dropdown-item"
+                        to="/filloutForm"
+                        target="_blank"
+                      >
                         PATIENT PAPERWORK
-                      </a>
+                      </Link>
                     </li>
                     <li>
                       <Link className="dropdown-item" to="/products">
