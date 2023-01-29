@@ -1,17 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import HomeMain from "../../components/Home/HomeMain";
 import FormHead from "../../components/Paperwork/FormHead";
 import Page1 from "../../components/Paperwork/Page1";
+import Page2 from "../../components/Paperwork/Page2";
+import Meet from "../about/Meet";
+import Tour from "../about/Tour";
 
 function Paperwork() {
+  const [page, setPage] = useState(1);
+
+  function nextPage() {
+    if (page > 0 && page < 5) {
+      setPage(page + 1);
+    }
+    console.log(page);
+  }
+
+  function prevPage() {
+    if (page > 1 && page <= 5) {
+      setPage(page - 1);
+      console.log(page);
+    }
+    console.log(page);
+  }
+
   return (
     <PaperworkContainer>
       <Container>
         <FormHead />
-        <Page1 />
+        {page === 1 && <Page1 />}
+        {page === 2 && <Page2 />}
+        {page === 3 && <HomeMain />}
+        {page === 4 && <Meet />}
+        {page === 5 && <Tour />}
         <BtnsContainer>
-          <Button>Previous page</Button>
-          <Button>Next page</Button>
+          <Button onClick={prevPage}>Previous page</Button>
+          <Button onClick={nextPage}>Next page</Button>
         </BtnsContainer>
       </Container>
     </PaperworkContainer>
