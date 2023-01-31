@@ -514,44 +514,6 @@
         "NFT"
       ]
     },
-    "E:\\dapps\\dapp29\\dapps\\doctor-nftmarketplace\\contracts\\Marketplace.sol": {
-      "lastModificationDate": 1674158105873,
-      "contentHash": "dcd7751fa46a051e7f1ad53a2746216e",
-      "sourceName": "contracts/Marketplace.sol",
-      "solcConfig": {
-        "version": "0.8.9",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol",
-        "../node_modules/@openzeppelin/contracts/security/ReentrancyGuard.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.9"
-      ],
-      "artifacts": [
-        "Marketplace"
-      ]
-    },
     "E:\\dapps\\dapp29\\dapps\\doctor-nftmarketplace\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\IERC721.sol": {
       "lastModificationDate": 1674161443558,
       "contentHash": "eb7e61db29f31d88b3c1cef1b063d338",
@@ -990,10 +952,10 @@
         "ERC721URIStorage"
       ]
     },
-    "E:\\dapps\\dapp29\\dapps\\doctor-nftmarketplace\\contracts\\NFT.sol": {
-      "lastModificationDate": 1674158105873,
-      "contentHash": "6dc17d166541036ee53281b297129532",
-      "sourceName": "contracts/NFT.sol",
+    "E:\\dapps\\dapp29\\dapps\\doctor-nftmarketplace\\contracts\\Pass.sol": {
+      "lastModificationDate": 1675179373102,
+      "contentHash": "50ff4c674d69e3b3760bed77bfd526dd",
+      "sourceName": "contracts/Pass.sol",
       "solcConfig": {
         "version": "0.8.9",
         "settings": {
@@ -1017,14 +979,12 @@
           }
         }
       },
-      "imports": [
-        "../node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol"
-      ],
+      "imports": [],
       "versionPragmas": [
         "^0.8.9"
       ],
       "artifacts": [
-        "NFT"
+        "Pass"
       ]
     }
   }
