@@ -18,6 +18,7 @@ import Testimonials from "./pages/about/Testimonials";
 import Tour from "./pages/about/Tour";
 import Products from "./pages/patients/Products";
 import Paperwork from "./pages/patients/Paperwork";
+import AdminPortal from "./pages/AdminPortal";
 
 function App() {
   return (
@@ -42,6 +43,11 @@ function App() {
           <Route exact path="/office-tour" element={<Tour />} />
           <Route exact path="/products" element={<Products />} />
           <Route exact path="/filloutForm" element={<Paperwork />} />
+          <Route
+            exact
+            path="/marketplace/admin-portal"
+            element={<AdminPortal />}
+          />
         </Routes>
       </div>
     </Router>

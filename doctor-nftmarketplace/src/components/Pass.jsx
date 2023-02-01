@@ -4,13 +4,15 @@ import { ethers } from "ethers";
 import pass from "../contracts/Pass.sol/Pass.json";
 
 function Marketplace() {
+  const [currentAcc, setCurrentAcc] = useState();
   const [alreadyBuyer, setAlreadyBuyer] = useState();
   const [passId, setPassId] = useState();
 
   const web3Handler = async () => {
-    await window.ethereum.request({
+    const account = await window.ethereum.request({
       method: "eth_requestAccounts",
     });
+    setCurrentAcc(account[0]);
   };
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -49,7 +51,8 @@ function Marketplace() {
           method: "eth_requestAccounts",
         });
         const currentAccPass = await passContract.buyerPass(account[0]);
-        if (currentAccPass.toString() == 0) {
+        console.log(currentAccPass.toString());
+        if (currentAccPass.toString() === 0) {
           setAlreadyBuyer(false);
         }
         if (currentAccPass.toString() == 1) {
@@ -69,6 +72,7 @@ function Marketplace() {
       }
     }
     showBuyerPass();
+    // eslint-disable-next-line
   }, []);
 
   return (

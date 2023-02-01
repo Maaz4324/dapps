@@ -5,7 +5,6 @@ import Pass from "../components/Pass";
 import PassNoWallet from "../components/PassNoWallet";
 import { Modal } from "@mui/material";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import metamaskLogo from "../images/metamask.svg";
 
@@ -62,7 +61,11 @@ function Marketplace() {
           >
             <Box sx={style}>
               <MetaMaskContainer>
-                <a href="https://metamask.io/download/" target="_blank">
+                <a
+                  href="https://metamask.io/download/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   <img src={metamaskLogo} alt="" />
                 </a>
               </MetaMaskContainer>
@@ -71,7 +74,11 @@ function Marketplace() {
               </Typography>
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                 To buy passes you must have a wallet. Download{" "}
-                <a href="https://metamask.io/download/" target="_blank">
+                <a
+                  href="https://metamask.io/download/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   here
                 </a>
               </Typography>

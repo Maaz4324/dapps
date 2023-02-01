@@ -39,12 +39,12 @@ contract Pass{
     function destroyPass(address _buyer) public onlyOwner{
         require(buyerPass[_buyer]!=0, "not a buyer");
         if(buyerPass[_buyer]==1){
-            require(duration[_buyer]+0<block.timestamp, "not yet");
+            require(duration[_buyer]+94608000<block.timestamp, "not yet");
             buyerPass[_buyer]=0;
             uint256 i = buyerIndex[_buyer];
         delete allBuyers[i];
         }else if(buyerPass[_buyer]==2){
-            require(duration[_buyer]+17<block.timestamp, "not yet");
+            require(duration[_buyer]+157680000<block.timestamp, "not yet");
             buyerPass[_buyer]=0;
             uint256 i = buyerIndex[_buyer];
         delete allBuyers[i];
@@ -53,6 +53,8 @@ contract Pass{
         }
     }
 
-
+    function showAllBuyers() public view returns(address[] memory){
+        return allBuyers;
+    }
 
 }
