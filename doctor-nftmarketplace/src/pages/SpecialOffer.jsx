@@ -7,21 +7,14 @@ function SpecialOffer() {
   function sendEmail(e) {
     e.preventDefault(); //This is important, i'm not sure why, but the email won't send without it
 
-    emailjs
-      .sendForm(
-        "service_74py0gf",
-        "template_8dq7z4s",
-        e.target,
-        "crymrBWssvyArlchr"
-      )
-      .then(
-        (result) => {
-          window.location.reload(); //This is if you still want the page to reload (since e.preventDefault() cancelled that behavior)
-        },
-        (error) => {
-          console.log(error.text);
-        }
-      );
+    emailjs.sendForm("SERVICE_ID", "TEMPLATE_ID", e.target, "KEY").then(
+      (result) => {
+        window.location.reload(); //This is if you still want the page to reload (since e.preventDefault() cancelled that behavior)
+      },
+      (error) => {
+        console.log(error.text);
+      }
+    );
     alert(`Message sent!`);
   }
 

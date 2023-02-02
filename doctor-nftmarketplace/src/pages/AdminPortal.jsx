@@ -3,7 +3,7 @@ import Admin from "../components/AdminPortal/Admin";
 import NoAdmin from "../components/AdminPortal/NoAdmin";
 
 function AdminPortal() {
-  const [isAdmin, setIsAdmin] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   return (
     <div>
