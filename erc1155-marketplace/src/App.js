@@ -4,13 +4,8 @@ import { ethers } from "ethers";
 import axios from "axios";
 import Nft from "./contracts/AwesomeGame.sol/AwesomeGame.json";
 import Market from "./contracts/AwesomeGameMarket.sol/AwesomeGameMarket.json";
-// const express = require("express");
-// const cors = require("cors");
-// const app = express();
 
 function App() {
-  // app.use(express.json());
-  // app.use(cors());
   const [connect, setConnect] = useState("Connect wallet");
   const [name, setName] = useState();
   const [price, setPrice] = useState();
@@ -30,8 +25,8 @@ function App() {
   const nftAbi = Nft.abi;
   const marketAbi = Market.abi;
 
-  const nftAddress = "0xa82fF9aFd8f496c3d6ac40E2a0F282E47488CFc9";
-  const marketAddress = "0x1613beB3B2C4f22Ee086B2b38C1476A3cE7f78E8";
+  const nftAddress = "0x998abeb3E57409262aE5b751f60747921B33613E";
+  const marketAddress = "0x70e0bA845a1A0F2DA3359C97E0285013525FFC49";
 
   const nft = new ethers.Contract(nftAddress, nftAbi, signer);
   const market = new ethers.Contract(marketAddress, marketAbi, signer);
@@ -79,6 +74,7 @@ function App() {
         },
         data: data,
       };
+      console.log("error");
       const res = await axios(config);
       mintThenList(res);
     } catch (error) {
@@ -95,7 +91,7 @@ function App() {
       await (await nft.setApprovalForAll(market.address, true)).wait();
       console.log("working1");
       // add nft to marketplace
-      const listingPrice = ethers.utils.parseEther(price.toString());
+      const listingPrice = price.toString() * 1000000000000000000;
       console.log(listingPrice.toString());
       await (
         await market.makeItem(uri, listingPrice.toString(), nft.address)
@@ -111,20 +107,17 @@ function App() {
     console.log(itemCount.toString());
     let items = [];
     for (let i = 0; i < itemCount.toString(); i++) {
-      console.log(i);
       const item = await market.items(i);
-      // // get uri url from nft contract
+      console.log(item);
+      // get uri url from nft contract
       let totalPrice = item.price.toString();
       const uri = await item.uri;
-      console.log(uri);
       const hash = uri.replace("ipfs://", "");
+      console.log(uri);
 
-      const response = await fetch(`https://ipfs.io/ipfs/${hash}`);
-      console.log(response);
+      const response = await fetch(`https://gateway.pinata.cloud/ipfs/${hash}`);
       const metadata = await response.json();
-      // // get total price of item (item price + fee)
-      // // Add item to items array
-      console.log("error");
+      // Add item to items array
       items.push({
         totalPrice,
         itemId: i,
@@ -166,7 +159,7 @@ function App() {
             <div key={idx}>
               <div className="container">
                 <img
-                  src={`https://gateway.pinata.cloud/ipfs/${item.image}`}
+                  src={`https://ipfs.io/ipfs/${item.image}`}
                   alt="not available"
                 />
                 <div>

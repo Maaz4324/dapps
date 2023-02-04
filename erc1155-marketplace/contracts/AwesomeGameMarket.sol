@@ -26,8 +26,8 @@ contract AwesomeGameMarket is ReentrancyGuard, ERC1155Holder{
 
     function makeItem(string memory _uri, uint256 _price, ERC1155 _nft) public {
         require(msg.sender==owner, "only owner can call");
-        require(itemCount<=5, "Can only make limited amount of token");
-        _nft.safeTransferFrom(msg.sender, address(this), itemCount, 1000000000000000000, "0x");
+        require(itemCount<=4, "Can only make limited amount of token");
+        _nft.safeTransferFrom(msg.sender, address(this), itemCount, _nft.balanceOf(msg.sender, itemCount), "0x");
         items[itemCount] = Item(1,_price, _nft, _uri);
         ++itemCount;
     }
