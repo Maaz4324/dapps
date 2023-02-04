@@ -13,6 +13,7 @@ contract AwesomeGame is ERC1155 {
 
     
     mapping (uint256 => string) _tokenURIs;
+    uint public tokenCount;
     address owner;
 
     constructor() ERC1155("https://awesomegame.com/assets/{id}.json") {
@@ -22,6 +23,7 @@ contract AwesomeGame is ERC1155 {
         _mint(msg.sender, SWORD, 1000, "");
         _mint(msg.sender, SHIELD, 1000, "");
         _mint(msg.sender, CROWN, 1, "");
+        tokenCount = 5;
     }
 
     modifier onlyOwner{
@@ -32,7 +34,7 @@ contract AwesomeGame is ERC1155 {
     function uri(uint256 tokenId) override public view returns (string memory) { 
         return(_tokenURIs[tokenId]); 
     } 
-    function setTokenUri(uint256 tokenId, string memory tokenURI) external  onlyOwner{
+    function _setTokenUri(uint256 tokenId, string memory tokenURI) external  onlyOwner{
          _tokenURIs[tokenId] = tokenURI; 
     } 
 }

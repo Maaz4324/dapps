@@ -1,12 +1,21 @@
 const hre = require("hardhat");
 
 async function main() {
-  const Erc1155 = await hre.ethers.getContractFactory("Erc1155");
-  const erc1155 = await Erc1155.deploy();
+  const AwesomeGame = await hre.ethers.getContractFactory("AwesomeGame");
+  const awesomeGame = await AwesomeGame.deploy();
 
-  await lock.deployed();
+  await awesomeGame.deployed();
 
-  console.log(`Erc1155 is deployed to ${erc1155.address}`);
+  console.log(`AwesomeGame is deployed to ${awesomeGame.address}`);
+
+  const AwesomeGameMarket = await hre.ethers.getContractFactory(
+    "AwesomeGameMarket"
+  );
+  const awesomeGameMarket = await AwesomeGameMarket.deploy();
+
+  await awesomeGameMarket.deployed();
+
+  console.log(`AwesomeGameMarket is deployed to ${awesomeGameMarket.address}`);
 }
 
 main().catch((error) => {
