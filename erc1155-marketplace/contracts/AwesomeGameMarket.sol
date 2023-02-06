@@ -18,14 +18,8 @@ contract AwesomeGameMarket is ReentrancyGuard, ERC1155Holder{
         uint price;
         ERC1155 nft;
     }
-
     
-    struct Ownership{
-        address holder;
-        uint256 amountHold;
-    }
-    
-    mapping(uint256=>mapping(uint256=>Ownership)) ownersList;
+    mapping(uint256=>mapping(uint256=>address)) ownersList;
 
     mapping(uint => Item) public items;
 
@@ -37,15 +31,16 @@ contract AwesomeGameMarket is ReentrancyGuard, ERC1155Holder{
     }
 
     function PurchaseItem(uint _tokenId, ERC1155 _nft, uint256 _amount) public payable nonReentrant{
+        require(_nft.balanceOf(address(this), _tokenId) >= _amount, "Not much tokens left");
         Item storage item = items[_tokenId];
         require(msg.value==item.price*_amount, "insufficient amount");
         owner.transfer(item.price*_amount);
-        _nft.safeTransferFrom(address(this), msg.sender, _tokenId, 1, "0x");
+        _nft.safeTransferFrom(address(this), msg.sender, _tokenId, _amount, "0x");
         ++item.owners;
-        ownersList[_tokenId][item.owners] = Ownership(msg.sender, _amount);
+        ownersList[_tokenId][item.owners] = msg.sender;
     }
     
-    function viewOwnerslist(uint _tokenId, uint _owner) public view returns(Ownership memory){
+    function viewOwnerslist(uint _tokenId, uint _owner) public view returns(address){
         return ownersList[_tokenId][_owner];
     }
 }
