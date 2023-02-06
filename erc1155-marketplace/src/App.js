@@ -7,9 +7,9 @@ import Market from "./contracts/AwesomeGameMarket.sol/AwesomeGameMarket.json";
 
 function App() {
   const [connect, setConnect] = useState("Connect wallet");
-  const [name, setName] = useState();
+  const [amount, setAmount] = useState();
+  const [link, setLink] = useState();
   const [price, setPrice] = useState();
-  const [image, setImage] = useState();
   const [items, setItems] = useState([]);
 
   async function connectwallet() {
@@ -25,108 +25,83 @@ function App() {
   const nftAbi = Nft.abi;
   const marketAbi = Market.abi;
 
-  const nftAddress = "0x998abeb3E57409262aE5b751f60747921B33613E";
-  const marketAddress = "0x70e0bA845a1A0F2DA3359C97E0285013525FFC49";
+  const nftAddress = "0x922D6956C99E12DFeB3224DEA977D0939758A1Fe";
+  const marketAddress = "0x5081a39b8A5f0E35a8D959395a630b68B74Dd30f";
 
   const nft = new ethers.Contract(nftAddress, nftAbi, signer);
   const market = new ethers.Contract(marketAddress, marketAbi, signer);
 
-  const uploadToIPFS = async (event) => {
-    event.preventDefault();
-    const file = event.target.files[0];
-    if (file) {
-      try {
-        const formData = new FormData();
-        formData.append("file", file);
-        const resFile = await axios({
-          method: "post",
-          url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
-          data: formData,
-          headers: {
-            pinata_api_key: `69ddf0c1ea1284373b8c`,
-            pinata_secret_api_key: `d219acbd820dccb31fe547c00a03d9423907e62118337b2189d24a657514140b`,
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        const ImgHash = `ipfs://${resFile.data.IpfsHash}`;
-        setImage(ImgHash);
-        console.log(ImgHash);
-        //Take a look at your Pinata Pinned section, you will see a new file added to you list.
-      } catch (error) {
-        console.log("Error sending File to IPFS: ");
-        console.log(error);
-      }
-    }
-  };
-
   const createNFT = async (event) => {
     event.preventDefault();
-    if (!image || !price || !name) return;
+    if (!link || !price || !amount) return;
     try {
-      var data = JSON.stringify({ image, price, name });
-      var config = {
-        method: "post",
-        url: "https://api.pinata.cloud/pinning/pinJSONToIPFS",
-        headers: {
-          pinata_api_key: `69ddf0c1ea1284373b8c`,
-          pinata_secret_api_key: `d219acbd820dccb31fe547c00a03d9423907e62118337b2189d24a657514140b`,
-          "Content-Type": "application/json",
-        },
-        data: data,
-      };
-      console.log("error");
-      const res = await axios(config);
-      mintThenList(res);
+      await nft.mint(amount);
+      const tokenCount = await nft.tokenCount();
+      await nft.setTokenUri(
+        tokenCount.toString(),
+        `https://ipfs.io/ipfs/bafybeiervg2zyavw3lc5tg3pu5wr4dwxxclzmcxzfgw3br52suvrzercme/${tokenCount.toString()}.json`
+      );
+      console.log("link success");
+      await (await nft.setApprovalForAll(market.address, true)).wait();
+      const listingPrice = price.toString() * 1000000000000000000;
+      await (await market.makeItem(listingPrice.toString(), nftAddress)).wait();
     } catch (error) {
       console.log("ipfs uri upload error: ", error);
-    }
-  };
 
-  const mintThenList = async (res) => {
-    try {
-      const uri = `ipfs://${res.data.IpfsHash}`;
-      console.log(uri);
-
-      // approve marketplace to spend nft
-      await (await nft.setApprovalForAll(market.address, true)).wait();
-      console.log("working1");
-      // add nft to marketplace
-      const listingPrice = price.toString() * 1000000000000000000;
-      console.log(listingPrice.toString());
-      await (
-        await market.makeItem(uri, listingPrice.toString(), nft.address)
-      ).wait();
-    } catch (err) {
-      console.log(err);
+      if (error.toString().includes("Ownable: caller is not the owner")) {
+        alert("Only owner can call this function.");
+      }
     }
   };
 
   const loadMarketplaceItems = async () => {
     // Load all unsold items
     const itemCount = await market.itemCount();
-    console.log(itemCount.toString());
     let items = [];
     for (let i = 0; i < itemCount.toString(); i++) {
       const item = await market.items(i);
-      console.log(item);
-      // get uri url from nft contract
-      let totalPrice = item.price.toString();
-      const uri = await item.uri;
-      const hash = uri.replace("ipfs://", "");
-      console.log(uri);
 
-      const response = await fetch(`https://gateway.pinata.cloud/ipfs/${hash}`);
+      let totalPrice = item.price.toString();
+      const uri = `https://ipfs.io/ipfs/bafybeiervg2zyavw3lc5tg3pu5wr4dwxxclzmcxzfgw3br52suvrzercme/${i}.json`;
+
+      const response = await fetch(`${uri}`);
       const metadata = await response.json();
-      // Add item to items array
+      console.log(item.owners.toString());
+
+      let arr = [];
+      let ownersArr = [];
+      for (let j = 1; j < item.owners.toString(); j++) {
+        let ownersList = await market.viewOwnerslist(i, j);
+        arr.push(ownersList);
+      }
+      function removeDuplicates(array) {
+        ownersArr.push(array.filter((a, b) => array.indexOf(a) === b));
+      }
+      removeDuplicates(arr);
+
       items.push({
         totalPrice,
         itemId: i,
-        owners: item.owners.toString(),
+        owners: ownersArr[0].length + 1,
         name: metadata.name,
         image: metadata.image.replace("ipfs://", ""),
+        ownersArray: ownersArr[0].toString(),
       });
     }
     setItems(items);
+  };
+
+  const buyMarketItem = async (item) => {
+    console.log(item.itemId);
+    console.log(nft.address);
+    console.log(item.totalPrice);
+    let value = item.totalPrice / 1000000000000000000;
+    await (
+      await market.PurchaseItem(item.itemId, nftAddress, {
+        value: ethers.utils.parseEther(value.toString()),
+      })
+    ).wait();
+    loadMarketplaceItems();
   };
 
   useEffect(() => {
@@ -136,20 +111,26 @@ function App() {
   return (
     <div className="App">
       <button onClick={connectwallet}>{connect}</button>
+
       <div className="create">
         <input
           type="text"
-          onChange={(e) => setName(e.target.value)}
-          placeholder="name"
-          defaultValue={name}
+          onChange={(e) => setAmount(e.target.value)}
+          placeholder="Amount of token"
+          defaultValue={amount}
         />
         <input
-          type="price"
+          type="number"
           onChange={(e) => setPrice(e.target.value)}
-          placeholder="Prie"
+          placeholder="Price"
           defaultValue={price}
         />
-        <input type="file" onChange={uploadToIPFS} />
+        <input
+          type="text"
+          onChange={(e) => setLink(e.target.value)}
+          placeholder="URI link"
+          defaultValue={link}
+        />
         <button onClick={createNFT}>Create NFT</button>
       </div>
 
@@ -163,10 +144,11 @@ function App() {
                   alt="not available"
                 />
                 <div>
-                  <h1>{item.name}</h1>
-                  <h2>{item.owners}</h2>
+                  <h1>Name - {item.name}</h1>
+                  <h2>{item.owners} owners</h2>
+                  <h2>{item.ownersArray}</h2>
                 </div>
-                <button>
+                <button onClick={() => buyMarketItem(item)}>
                   Buy for {ethers.utils.formatEther(item.totalPrice)} ETH
                 </button>
               </div>
