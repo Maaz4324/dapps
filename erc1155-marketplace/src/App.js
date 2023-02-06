@@ -11,6 +11,7 @@ function App() {
   const [link, setLink] = useState();
   const [price, setPrice] = useState();
   const [items, setItems] = useState([]);
+  const [holdAmount, setHoldAmount] = useState();
 
   async function connectwallet() {
     await window.ethereum.request({
@@ -25,8 +26,8 @@ function App() {
   const nftAbi = Nft.abi;
   const marketAbi = Market.abi;
 
-  const nftAddress = "0x922D6956C99E12DFeB3224DEA977D0939758A1Fe";
-  const marketAddress = "0x5081a39b8A5f0E35a8D959395a630b68B74Dd30f";
+  const nftAddress = "0x9A676e781A523b5d0C0e43731313A708CB607508";
+  const marketAddress = "0x0B306BF915C4d645ff596e518fAf3F9669b97016";
 
   const nft = new ethers.Contract(nftAddress, nftAbi, signer);
   const market = new ethers.Contract(marketAddress, marketAbi, signer);
@@ -70,8 +71,9 @@ function App() {
 
       let arr = [];
       let ownersArr = [];
-      for (let j = 1; j < item.owners.toString(); j++) {
+      for (let j = 1; j <= item.owners.toString(); j++) {
         let ownersList = await market.viewOwnerslist(i, j);
+        console.log(ownersList);
         arr.push(ownersList);
       }
       function removeDuplicates(array) {
@@ -96,9 +98,12 @@ function App() {
     console.log(nft.address);
     console.log(item.totalPrice);
     let value = item.totalPrice / 1000000000000000000;
+    console.log(value);
+    console.log(holdAmount);
+    let totalCost = value * holdAmount;
     await (
-      await market.PurchaseItem(item.itemId, nftAddress, {
-        value: ethers.utils.parseEther(value.toString()),
+      await market.PurchaseItem(item.itemId, nftAddress, holdAmount, {
+        value: ethers.utils.parseEther(totalCost.toString()),
       })
     ).wait();
     loadMarketplaceItems();
@@ -148,6 +153,12 @@ function App() {
                   <h2>{item.owners} owners</h2>
                   <h2>{item.ownersArray}</h2>
                 </div>
+                <input
+                  type="number"
+                  onChange={(e) => setHoldAmount(e.target.value)}
+                  placeholder="Amount"
+                  defaultValue={holdAmount}
+                />
                 <button onClick={() => buyMarketItem(item)}>
                   Buy for {ethers.utils.formatEther(item.totalPrice)} ETH
                 </button>
