@@ -648,7 +648,7 @@ function App() {
       ) : (
         <div>
           <Home nft={nft} marketplace={marketplace} />
-          <Create nft={nft} marketplace={marketplace} />
+          {/* <Create nft={nft} marketplace={marketplace} /> */}
           <MyListedItems
             nft={nft}
             marketplace={marketplace}

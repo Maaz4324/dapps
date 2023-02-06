@@ -113,6 +113,7 @@ function App() {
 
   return (
     <div className="App">
+      <h1>ERC 1155</h1>
       <button onClick={connectwallet}>{connect}</button>
 
       <div className="create">
