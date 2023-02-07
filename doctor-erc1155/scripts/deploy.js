@@ -13,9 +13,7 @@ async function main() {
 
   await passMarket.deployed();
 
-  console.log(
-    `PassMarket is deployed to ${awesomeGapassMarketmeMarket.address}`
-  );
+  console.log(`PassMarket is deployed to ${passMarket.address}`);
 }
 
 main().catch((error) => {

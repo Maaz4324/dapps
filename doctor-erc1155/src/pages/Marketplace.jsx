@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import HomeFoot from "../components/Home/HomeFoot";
 import Pass from "../components/Pass";
+import PassWallet from "../components/PassWallet";
 import { Modal } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -44,7 +45,7 @@ function Marketplace() {
       {walletAvailable ? (
         <div>
           {" "}
-          <Pass />
+          <PassWallet />
           <HomeFoot />
         </div>
       ) : (

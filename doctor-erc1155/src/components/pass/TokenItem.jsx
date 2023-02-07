@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import metamask from "../../images/metamask.svg";
+import TokenItemWallet from "./TokenItemWallet";
 
 function TokenItem({ id }) {
   const [item, setItem] = useState([]);
@@ -40,7 +40,7 @@ function TokenItem({ id }) {
   return (
     <TokenItemContainer>
       {walletAvailable ? (
-        <div>Wallet available</div>
+        <TokenItemWallet id={id} />
       ) : (
         <div>
           {item.map((parts, idx) => (
