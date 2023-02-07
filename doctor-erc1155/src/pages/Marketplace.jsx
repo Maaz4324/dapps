@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import HomeFoot from "../components/Home/HomeFoot";
 import Pass from "../components/Pass";
-import PassNoWallet from "../components/PassNoWallet";
 import { Modal } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -23,8 +22,6 @@ const style = {
   alignItems: "center",
   justifyContent: "center",
   flexDirection: "column",
-  // backgroundColor: "black",
-  // color: "white",
 };
 
 function Marketplace() {
@@ -52,7 +49,7 @@ function Marketplace() {
         </div>
       ) : (
         <div>
-          <PassNoWallet />
+          <Pass />
           <Modal
             open={open}
             onClose={handleClose}

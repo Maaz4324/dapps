@@ -13,7 +13,7 @@ import Pediatric from "./pages/illness/Pediatric";
 import Pregnancy from "./pages/illness/Pregnancy";
 import Wellness from "./pages/illness/Wellness";
 import ScrollToTop from "./components/ScrollToTop";
-import Bronze from "./components/pass/Bronze";
+import TokenItem from "./components/pass/TokenItem";
 import Meet from "./pages/about/Meet";
 import Testimonials from "./pages/about/Testimonials";
 import Tour from "./pages/about/Tour";
@@ -43,7 +43,9 @@ function App() {
           <Route exact path="/office-tour" element={<Tour />} />
           <Route exact path="/products" element={<Products />} />
           <Route exact path="/filloutForm" element={<Paperwork />} />
-          <Route exact path="/marketplace/bronze" element={<Bronze />} />
+          <Route exact path="/marketplace/0" element={<TokenItem id={0} />} />
+          <Route exact path="/marketplace/1" element={<TokenItem id={1} />} />
+          <Route exact path="/marketplace/2" element={<TokenItem id={2} />} />
         </Routes>
       </div>
     </Router>

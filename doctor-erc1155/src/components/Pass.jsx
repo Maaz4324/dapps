@@ -1,82 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import { ethers } from "ethers";
-import pass from "../contracts/Pass.sol/Pass.json";
+import HomeFoot from "./Home/HomeFoot";
+import { Link } from "react-router-dom";
 
-function Marketplace() {
-  const [currentAcc, setCurrentAcc] = useState();
-  const [alreadyBuyer, setAlreadyBuyer] = useState();
-  const [passId, setPassId] = useState();
-
-  const web3Handler = async () => {
-    const account = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
-    setCurrentAcc(account[0]);
-  };
-
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
-
-  const contractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
-
-  const abi = pass.abi;
-
-  const passContract = new ethers.Contract(contractAddress, abi, signer);
-
-  async function purchasePass(_id) {
-    try {
-      const passPrice = await passContract.passes(_id);
-      await passContract.buyPass(_id, {
-        value: ethers.utils.parseEther(passPrice.toString()),
-      });
-    } catch (error) {
-      if (error.toString().includes("You aleady have pass")) {
-        alert("You're already holding a pass. Please wait until it expires.");
-      }
-      if (error.toString().includes("user rejected transaction")) {
-        alert(
-          "You stopped the purchase. Please click on the get pass button again to continue."
-        );
-      } else {
-        alert("Facing error puchasing the pass.");
-      }
-    }
+function Pass() {
+  function downloadWallet() {
+    alert("Please download metamask to continue...");
   }
-
-  useEffect(() => {
-    async function showBuyerPass() {
-      try {
-        const account = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        const currentAccPass = await passContract.buyerPass(account[0]);
-        console.log(currentAccPass.toString());
-        if (currentAccPass.toString() === 0) {
-          setAlreadyBuyer(false);
-        }
-        if (currentAccPass.toString() == 1) {
-          setAlreadyBuyer(true);
-          setPassId(" a basic pass holder for 3 years");
-        }
-        if (currentAccPass.toString() == 2) {
-          setAlreadyBuyer(true);
-          setPassId(" a standard pass holder for 5 years");
-        }
-        if (currentAccPass.toString() == 3) {
-          setAlreadyBuyer(true);
-          setPassId(" a premium pass holder for lifetime");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    showBuyerPass();
-    // eslint-disable-next-line
-  }, []);
-
   return (
-    <MarketplaceContainer>
+    <PassContainer>
       <Container>
         <h1>BUY PASSES TO GET FREE SERVICES</h1>
         <p>
@@ -85,40 +17,42 @@ function Marketplace() {
           dolores beatae consectetur minima illo, sed quis maxime quisquam modi,
           tempore at.
         </p>
-        {alreadyBuyer ? (
-          <h6>You're already {passId}, thanks :).</h6>
-        ) : (
-          <div></div>
-        )}
-        <Button onClick={web3Handler}>Connect Metamask</Button>
-        <Pass>
+        <Button onClick={downloadWallet}>Connect Metamask</Button>
+        <PassC>
           <PassCard>
             <div className="bronze"></div>
             <h5 className="name">Bronze</h5>
             <p className="price">3Eth</p>
-            <button onClick={() => purchasePass(1)}>GET PASS</button>
+            <Link to="/marketplace/0" style={{ width: "100%" }}>
+              <button>GET PASS</button>
+            </Link>
           </PassCard>
           <PassCard>
             <div className="silver"></div>
             <h5 className="name">Silver</h5>
             <p className="price">5Eth</p>
-            <button onClick={() => purchasePass(2)}>GET PASS</button>
+            <Link to="/marketplace/1" style={{ width: "100%" }}>
+              <button>GET PASS</button>
+            </Link>
           </PassCard>
           <PassCard>
             <div className="gold"></div>
             <h5 className="name">Gold</h5>
             <p className="price">10Eth</p>
-            <button onClick={() => purchasePass(3)}>GET PASS</button>
+            <Link to="/marketplace/2" style={{ width: "100%" }}>
+              <button>GET PASS</button>
+            </Link>
           </PassCard>
-        </Pass>
+        </PassC>
       </Container>
-    </MarketplaceContainer>
+      <HomeFoot />
+    </PassContainer>
   );
 }
 
-export default Marketplace;
+export default Pass;
 
-const MarketplaceContainer = styled.div`
+const PassContainer = styled.div`
   width: 100%;
   min-height: 100vh;
   padding-top: 90px;
@@ -153,7 +87,7 @@ const Container = styled.div`
   }
 `;
 
-const Pass = styled.div`
+const PassC = styled.div`
   display: flex;
   align-items: center;
   width: 70%;
@@ -182,7 +116,7 @@ const PassCard = styled.div`
   }
   div {
     width: 100%;
-    min-height: 30vh;
+    height: 30vh;
     margin-bottom: 14px;
   }
   .bronze {
