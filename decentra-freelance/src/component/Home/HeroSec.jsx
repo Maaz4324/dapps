@@ -15,6 +15,7 @@ function HeroSec() {
         build the future.
       </h5>
       <button>Start Now</button>
+      <button className="connectBtn">Connect</button>
       <img
         src={blob1}
         className="blob1"
@@ -73,9 +74,19 @@ const Wrapper = styled.section`
     font-weight: 900;
     word-break: normal;
     z-index: 100;
+    @media (max-width: 810px) {
+      font-size: 80px;
+    }
+    @media (max-width: 540px) {
+      font-size: 60px;
+    }
+    @media (max-width: 400px) {
+      font-size: 40px;
+    }
   }
   h5 {
     z-index: 100;
+    padding: 0 10px;
   }
   .outline {
     -webkit-text-stroke-width: 1px;
@@ -95,6 +106,19 @@ const Wrapper = styled.section`
       left: 60%;
       width: 300px;
     }
+    @media (max-width: 910px) {
+      top: 10%;
+      left: 50%;
+    }
+    @media (max-width: 720px) {
+      top: 6%;
+      left: 40%;
+    }
+    @media (max-width: 520px) {
+      top: 20%;
+      left: 50%;
+      width: 150px;
+    }
   }
   .blob2 {
     width: 800px;
@@ -105,6 +129,26 @@ const Wrapper = styled.section`
     @media (max-width: 1080px) {
       top: 20%;
       left: 10%;
+    }
+    @media (max-width: 910px) {
+      top: 10%;
+      left: 20%;
+      width: 500px;
+    }
+    @media (max-width: 720px) {
+      top: 6%;
+      left: 10%;
+      width: 400px;
+    }
+    @media (max-width: 490px) {
+      top: 10%;
+      left: 20%;
+      width: 300px;
+    }
+    @media (max-width: 400px) {
+      top: 10%;
+      left: 0%;
+      width: 300px;
     }
   }
   .blob3 {
@@ -117,6 +161,10 @@ const Wrapper = styled.section`
       top: 40%;
       left: 6%;
     }
+    @media (max-width: 720px) {
+      left: 0%;
+      width: 300px;
+    }
   }
   .blob4 {
     width: 300px;
@@ -127,6 +175,29 @@ const Wrapper = styled.section`
     @media (max-width: 1080px) {
       top: 70%;
       left: 6%;
+    }
+    @media (max-width: 720px) {
+      top: 50%;
+      left: 3%;
+      width: 100px;
+    }
+  }
+  .connectBtn {
+    display: none;
+    margin: 0 10px;
+    padding: 10px 40px;
+    background: var(--primary);
+    font-size: 20px;
+    border-radius: 24px;
+    border: 0;
+    cursor: pointer;
+    &:hover {
+      transition: all 0.3s;
+      background: var(--primaryLight);
+      color: var(--text);
+    }
+    @media (max-width: 600px) {
+      display: block;
     }
   }
 `;

@@ -89,6 +89,9 @@ const Card = styled.section`
     grid-row: 1/2;
     width: 60px;
     margin: auto;
+    @media (max-width: 320px) {
+      width: 40px;
+    }
   }
 `;
 
@@ -97,4 +100,7 @@ const CategoryContainer = styled.section`
   grid-template-columns: auto auto;
   grid-gap: 20px;
   padding: 30px 0;
+  @media (max-width: 670px) {
+    grid-template-columns: auto;
+  }
 `;
