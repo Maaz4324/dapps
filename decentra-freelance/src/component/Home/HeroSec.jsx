@@ -90,6 +90,11 @@ const Wrapper = styled.section`
   .blob1 {
     top: 30%;
     left: 60%;
+    @media (max-width: 1080px) {
+      top: 10%;
+      left: 60%;
+      width: 300px;
+    }
   }
   .blob2 {
     width: 800px;
@@ -97,6 +102,10 @@ const Wrapper = styled.section`
     left: 16%;
     z-index: 2;
     max-height: 98vh;
+    @media (max-width: 1080px) {
+      top: 20%;
+      left: 10%;
+    }
   }
   .blob3 {
     width: 500px;
@@ -104,6 +113,10 @@ const Wrapper = styled.section`
     left: 5%;
     z-index: 3;
     max-height: 65vh;
+    @media (max-width: 1080px) {
+      top: 40%;
+      left: 6%;
+    }
   }
   .blob4 {
     width: 300px;
@@ -111,5 +124,9 @@ const Wrapper = styled.section`
     left: 3%;
     z-index: 3;
     max-height: 35vh;
+    @media (max-width: 1080px) {
+      top: 70%;
+      left: 6%;
+    }
   }
 `;

@@ -72,7 +72,7 @@ const Right = styled.section`
   }
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: center;
   padding: 0 10px;
 `;
 
