@@ -2,7 +2,9 @@
 
 :root {
   --text: rgba(0, 0, 0, 0.67);
-  --primary: #43ffff;
+  --primary: rgb(95, 211, 243);
+  --primaryLight: #80ffff;
+  --gray: rgb(75, 75, 75);
   --bg: linear-gradient(30deg, #101015, #1a1c35, #181a3d);
 }
 
