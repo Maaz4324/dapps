@@ -2,12 +2,14 @@ import "./App.css";
 import styled from "styled-components";
 import Navbar from "./component/Navbar";
 import Home from "./pages/Home";
+import Foot from "./component/Foot";
 
 function App() {
   return (
     <Wrapper>
       <Navbar />
       <Home />
+      <Foot />
     </Wrapper>
   );
 }

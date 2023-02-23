@@ -66,6 +66,10 @@ const Card = styled.section`
   border-radius: 20px;
   border: 2px solid var(--gray);
   cursor: pointer;
+  &:hover {
+    transition: all 0.3s;
+    background: #17171a;
+  }
   h3 {
     font-size: 30px;
     margin: auto 0;

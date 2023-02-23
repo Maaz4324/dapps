@@ -71,6 +71,7 @@ const Wrapper = styled.section`
 const Container = styled.section`
   display: grid;
   grid-template-columns: 30% 40% 30%;
+  padding: 0 40px;
   @media (max-width: 1080px) {
     grid-template-columns: 20% 45% 35%;
     button {
