@@ -2,16 +2,17 @@ import React from "react";
 import styled from "styled-components";
 import search from "../images/search.svg";
 import chat from "../images/chat.svg";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   function closeNav() {
     document.getElementById("mySidebar").style.width = "0";
-    // document.getElementById("main").style.marginLeft = "0";
+    document.getElementById("main").style.marginLeft = "0";
   }
 
   function openNav() {
     document.getElementById("mySidebar").style.width = "250px";
-    // document.getElementById("main").style.marginLeft = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
   }
   return (
     <Wrapper>
@@ -25,9 +26,9 @@ function Navbar() {
         </Search>
         <Right>
           <img src={chat} alt="chat on skillswap - skill swap" />
-          <a href="#">
+          <Link to="/selling">
             <h4>Get hired</h4>
-          </a>
+          </Link>
           <button>Connect</button>
         </Right>
         <Collapse className="collapse">

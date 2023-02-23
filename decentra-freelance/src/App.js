@@ -3,14 +3,21 @@ import styled from "styled-components";
 import Navbar from "./component/Navbar";
 import Home from "./pages/Home";
 import Foot from "./component/Foot";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Selling from "./pages/Selling";
 
 function App() {
   return (
-    <Wrapper>
-      <Navbar />
-      <Home />
-      <Foot />
-    </Wrapper>
+    <Router>
+      <Wrapper>
+        <Navbar />
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route exact path="/selling" element={<Selling />} />
+        </Routes>
+        <Foot />
+      </Wrapper>
+    </Router>
   );
 }
 
