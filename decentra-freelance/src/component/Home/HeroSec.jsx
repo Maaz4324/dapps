@@ -15,7 +15,6 @@ function HeroSec() {
         build the future.
       </h5>
       <button>Start Now</button>
-      <button className="connectBtn">Connect</button>
       <img
         src={blob1}
         className="blob1"
@@ -180,24 +179,6 @@ const Wrapper = styled.section`
       top: 50%;
       left: 3%;
       width: 100px;
-    }
-  }
-  .connectBtn {
-    display: none;
-    margin: 0 10px;
-    padding: 10px 40px;
-    background: var(--primary);
-    font-size: 20px;
-    border-radius: 24px;
-    border: 0;
-    cursor: pointer;
-    &:hover {
-      transition: all 0.3s;
-      background: var(--primaryLight);
-      color: var(--text);
-    }
-    @media (max-width: 600px) {
-      display: block;
     }
   }
 `;

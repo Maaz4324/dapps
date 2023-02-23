@@ -4,6 +4,15 @@ import search from "../images/search.svg";
 import chat from "../images/chat.svg";
 
 function Navbar() {
+  function closeNav() {
+    document.getElementById("mySidebar").style.width = "0";
+    // document.getElementById("main").style.marginLeft = "0";
+  }
+
+  function openNav() {
+    document.getElementById("mySidebar").style.width = "250px";
+    // document.getElementById("main").style.marginLeft = "250px";
+  }
   return (
     <Wrapper>
       <Container>
@@ -13,36 +22,34 @@ function Navbar() {
         <Search>
           <img src={search} alt="search on skillswap - skill swap" />
           <input type="text" placeholder="Search for the services" />
-          {/* <button>categories</button> */}
         </Search>
         <Right>
-          <svg
-            width="25px"
-            height="25px"
-            viewBox="0 0 1024 1024"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="#ffffff"
-            className="search-svg"
-          >
-            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-            <g
-              id="SVGRepo_tracerCarrier"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></g>
-            <g id="SVGRepo_iconCarrier">
-              <path
-                fill="#ffffff"
-                d="m795.904 750.72 124.992 124.928a32 32 0 0 1-45.248 45.248L750.656 795.904a416 416 0 1 1 45.248-45.248zM480 832a352 352 0 1 0 0-704 352 352 0 0 0 0 704z"
-              ></path>
-            </g>
-          </svg>
           <img src={chat} alt="chat on skillswap - skill swap" />
           <a href="#">
             <h4>Get hired</h4>
           </a>
           <button>Connect</button>
         </Right>
+        <Collapse className="collapse">
+          <div id="mySidebar" className="sidebar">
+            <a
+              href="javascript:void(0)"
+              className="closebtn"
+              onClick={closeNav}
+            >
+              ×
+            </a>
+            <button className="connect">Connect</button>
+            <a href="#">Get hired</a>
+            <a href="#">Chat</a>
+          </div>
+
+          <div id="main">
+            <button className="openbtn" onClick={openNav}>
+              ☰
+            </button>
+          </div>
+        </Collapse>
       </Container>
     </Wrapper>
   );
@@ -58,6 +65,7 @@ const Wrapper = styled.section`
   top: 0;
   width: 100%;
   z-index: 9999;
+  border: 2px solid transparentd red;
 `;
 
 const Container = styled.section`
@@ -71,7 +79,11 @@ const Container = styled.section`
   }
   @media (max-width: 930px) {
     grid-template-columns: 20% 80%;
+    grid-template-rows: auto auto;
     padding: 0 30px;
+  }
+  @media (max-width: 600px) {
+    grid-template-columns: 50% 50%;
   }
 `;
 
@@ -105,18 +117,16 @@ const Right = styled.section`
     }
   }
 
-  .search-svg {
-    display: none;
-    @media (max-width: 930px) {
-      display: block;
-    }
-  }
   display: flex;
   align-items: center;
   justify-content: end;
   padding: 0 10px;
   outline: none;
   border: 0;
+
+  @media (max-width: 930px) {
+    display: none;
+  }
 `;
 
 const Search = styled.section`
@@ -129,7 +139,11 @@ const Search = styled.section`
   border: 0.6px solid var(--gray);
   border-radius: 10px;
   @media (max-width: 930px) {
-    display: none;
+    grid-row: 2/3;
+    grid-column: 1/3;
+    margin-top: 6px;
+    background: transparent;
+    backdrop-filter: blur(10px);
   }
   img {
     width: 25px;
@@ -150,4 +164,78 @@ const Logo = styled.section`
   display: flex;
   align-items: center;
   justify-content: start;
+`;
+
+const Collapse = styled.section`
+  display: none;
+  .sidebar {
+    height: 100vh;
+    width: 0;
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    right: 0;
+    background-color: rgba(14, 13, 22, 0.929);
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+  }
+
+  .sidebar a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #ffffff;
+    display: block;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+  }
+
+  .sidebar a:hover {
+    color: #f1f1f1;
+  }
+
+  .sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+
+  .openbtn {
+    font-size: 25px;
+    cursor: pointer;
+    background-color: #ffffff00;
+    color: rgb(255, 255, 255);
+    padding: 10px 15px;
+    border: none;
+  }
+
+  .openbtn:hover {
+    background-color: #02020246;
+  }
+
+  #main {
+    transition: margin-left 0.5s;
+    float: right;
+  }
+  .connect {
+    margin: 10px 30px;
+    padding: 6px 20px;
+    background: var(--primary);
+    font-size: 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    &:hover {
+      transition: all 0.3s;
+      background: var(--primaryLight);
+      color: var(--text);
+    }
+  }
+
+  @media (max-width: 930px) {
+    display: block;
+  }
 `;
