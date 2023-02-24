@@ -18,7 +18,9 @@ function Navbar() {
     <Wrapper>
       <Container>
         <Logo>
-          <h2>SkillSwap</h2>
+          <Link to="/">
+            <h2>SkillSwap</h2>
+          </Link>
         </Logo>
         <Search>
           <img src={search} alt="search on skillswap - skill swap" />
@@ -166,6 +168,12 @@ const Logo = styled.section`
   display: flex;
   align-items: center;
   justify-content: start;
+  Link {
+    text-decoration: none;
+  }
+  h2 {
+    color: white;
+  }
 `;
 
 const Collapse = styled.section`

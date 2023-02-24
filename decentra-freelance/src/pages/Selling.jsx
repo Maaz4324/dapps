@@ -1,14 +1,74 @@
-import React from "react";
 import styled from "styled-components";
+import React, { useEffect, useState } from "react";
+import { useStorageUpload } from "@thirdweb-dev/react";
+import { MediaRenderer } from "@thirdweb-dev/react";
 
 function Selling() {
+  const [data, setData] = useState(null);
+  const [pic, setPic] = useState();
+  const [name, setName] = useState();
+  const [country, setCountry] = useState();
+  const [description, setDescription] = useState();
+  const [url, setUrl] = useState();
+  const [skill, setSkill] = useState();
+  const { mutateAsync: upload } = useStorageUpload();
+
+  async function uploadFileToNFTStorage() {
+    // Get any data that you want to upload
+    const dataToUpload = [
+      {
+        name: "hamed",
+        age: 22,
+      },
+      {
+        name: "maaz",
+        age: 19,
+      },
+    ];
+
+    // And upload the data with the upload function
+    const uris = await upload({ data: dataToUpload });
+    console.log(uris);
+  }
+
+  // async function uploadFileToNFTStorage(e) {
+  // console.log("working");
+  // try {
+  //   const file = event.target.files[0];
+  //   const reader = new FileReader();
+  //   reader.onload = async () => {
+  //     const data = JSON.parse(reader.result);
+  //     const { cid } = await ipfs.add(JSON.stringify(data));
+  //     console.log(`JSON file uploaded with CID: ${cid}`);
+  //   };
+  //   reader.readAsText(file);
+  // } catch (e) {
+  //   console.error(e);
+  // }
+  // }
+
   return (
     <Wrapper>
       <Container>
-        <form action="submit">
-          <input type="file" required />
-          <input type="text" placeholder="Full name" required />
-          <select name="country" required>
+        <form>
+          <input
+            type="file"
+            required
+            onChange={(e) => setPic(e.target.files[0])}
+          />
+          {/* <MediaRenderer src="ipfs://Qmbp2uUqZuMX7VVrDu8TMXgAWUG8m6hLqCQeo1smabFyVK/1" /> */}
+          <input
+            type="text"
+            placeholder="Full name"
+            required
+            onChange={(e) => setName(e.target.value)}
+          />
+          <select
+            name="country"
+            onChange={(e) => setCountry(e.target.value)}
+            defaultValue={country}
+            required
+          >
             <option value="">Country...</option>
             <option value="AF">Afghanistan</option>
             <option value="AL">Albania</option>
@@ -264,17 +324,36 @@ function Selling() {
             rows="10"
             placeholder="Something about yourself"
             required
+            onChange={(e) => setDescription(e.target.value)}
           ></textarea>
-          <input type="url" required />
+          <input type="url" required onChange={(e) => setUrl(e.target.value)} />
           <textarea
             name="skill"
             cols="30"
             rows="10"
             placeholder="skills"
             required
+            onChange={(e) => setSkill(e.target.value)}
           />
-          <input type="submit" value="Submit" required />
+          <input
+            type="submit"
+            value="Submit"
+            required
+            onClick={uploadFileToNFTStorage}
+          />
+          <button onClick={uploadFileToNFTStorage}>Submit</button>
         </form>
+        <div>
+          {data && (
+            <div>
+              <p>Name: {data.name}</p>
+              <p>description: {data.des}</p>
+              <p>url: {data.social}</p>
+              <p>skill: {data.skill}</p>
+              <p>country: {data.country}</p>
+            </div>
+          )}
+        </div>
       </Container>
     </Wrapper>
   );
