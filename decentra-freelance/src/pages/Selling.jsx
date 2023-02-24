@@ -52,7 +52,7 @@ function Selling() {
     console.log("working");
     try {
       // We define metadata for an NFT
-      const metadata = {
+      const data = {
         name: name,
         description: description,
         country: country,
@@ -62,7 +62,7 @@ function Selling() {
         image: img,
       };
       // Here we get the IPFS URI of where our metadata has been uploaded
-      const uri = await storage.upload(metadata);
+      const uri = await storage.upload((prevData) => [...prevData, data]);
       const url = await storage.resolveScheme(uri);
       // This will log a URL like https://gateway.ipfscdn.io/ipfs/QmWgbcjKWCXhaLzMz4gNBxQpAHktQK6MkLvBkKXbsoWEEy/0
       console.log(url);
