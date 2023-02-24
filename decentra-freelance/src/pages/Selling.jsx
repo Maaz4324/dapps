@@ -2,6 +2,8 @@ import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import { useStorageUpload } from "@thirdweb-dev/react";
 import { MediaRenderer } from "@thirdweb-dev/react";
+import { ThirdwebStorage } from "@thirdweb-dev/storage";
+import axios from "axios";
 
 function Selling() {
   const [data, setData] = useState(null);
@@ -9,54 +11,72 @@ function Selling() {
   const [name, setName] = useState();
   const [country, setCountry] = useState();
   const [description, setDescription] = useState();
-  const [url, setUrl] = useState();
+  const [urlS, setUrl] = useState();
   const [skill, setSkill] = useState();
   const { mutateAsync: upload } = useStorageUpload();
+  const storage = new ThirdwebStorage();
+  const [img, setImg] = useState();
 
-  async function uploadFileToNFTStorage() {
-    // Get any data that you want to upload
-    const dataToUpload = [
-      {
-        name: "hamed",
-        age: 22,
-      },
-      {
-        name: "maaz",
-        age: 19,
-      },
-    ];
+  const uploadToIPFS = async (event) => {
+    event.preventDefault();
+    const file = event.target.files[0];
+    if (file) {
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        console.log("working1");
+        const resFile = await axios({
+          method: "post",
+          url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
+          data: formData,
+          headers: {
+            pinata_api_key: `83828a285ed6ac100f38`,
+            pinata_secret_api_key: `0a87dafa6567074b4754a03e10341a813b8fe372f86e12d559a66a61b14398eb`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log("working2");
+        const ImgHash = `ipfs://${resFile.data.IpfsHash}`;
+        setImg(ImgHash);
+        console.log(ImgHash);
+        //Take a look at your Pinata Pinned section, you will see a new file added to you list.
+      } catch (error) {
+        console.log("Error sending File to IPFS: ");
+        console.log(error);
+      }
+    }
+  };
 
-    // And upload the data with the upload function
-    const uris = await upload({ data: dataToUpload });
-    console.log(uris);
+  async function uploadFileToNFTStorage(e) {
+    e.preventDefault();
+    console.log("working");
+    try {
+      // We define metadata for an NFT
+      const metadata = {
+        name: name,
+        description: description,
+        country: country,
+        urlS: urlS,
+        skill: skill,
+        // Here we add a file into the image property of our metadata
+        image: img,
+      };
+      // Here we get the IPFS URI of where our metadata has been uploaded
+      const uri = await storage.upload(metadata);
+      const url = await storage.resolveScheme(uri);
+      // This will log a URL like https://gateway.ipfscdn.io/ipfs/QmWgbcjKWCXhaLzMz4gNBxQpAHktQK6MkLvBkKXbsoWEEy/0
+      console.log(url);
+    } catch (e) {
+      console.error(e);
+    }
   }
-
-  // async function uploadFileToNFTStorage(e) {
-  // console.log("working");
-  // try {
-  //   const file = event.target.files[0];
-  //   const reader = new FileReader();
-  //   reader.onload = async () => {
-  //     const data = JSON.parse(reader.result);
-  //     const { cid } = await ipfs.add(JSON.stringify(data));
-  //     console.log(`JSON file uploaded with CID: ${cid}`);
-  //   };
-  //   reader.readAsText(file);
-  // } catch (e) {
-  //   console.error(e);
-  // }
-  // }
 
   return (
     <Wrapper>
       <Container>
         <form>
-          <input
-            type="file"
-            required
-            onChange={(e) => setPic(e.target.files[0])}
-          />
-          {/* <MediaRenderer src="ipfs://Qmbp2uUqZuMX7VVrDu8TMXgAWUG8m6hLqCQeo1smabFyVK/1" /> */}
+          <input type="file" required onChange={uploadToIPFS} />
+          {/* <MediaRenderer src="ipfs://QmYaA3vHR4EGJBWGLZXmx6B3DeFFcZSuCnNMGFpCnvJEHD/0" /> */}
           <input
             type="text"
             placeholder="Full name"
@@ -335,12 +355,12 @@ function Selling() {
             required
             onChange={(e) => setSkill(e.target.value)}
           />
-          <input
+          {/* <input
             type="submit"
             value="Submit"
             required
             onClick={uploadFileToNFTStorage}
-          />
+          /> */}
           <button onClick={uploadFileToNFTStorage}>Submit</button>
         </form>
         <div>
