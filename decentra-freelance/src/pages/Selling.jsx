@@ -6,22 +6,43 @@ import { ThirdwebStorage } from "@thirdweb-dev/storage";
 import axios from "axios";
 
 function Selling() {
+  const storage = new ThirdwebStorage();
   const [data, setData] = useState(null);
   const [name, setName] = useState();
   const [country, setCountry] = useState();
   const [description, setDescription] = useState();
   const [urlS, setUrl] = useState();
   const [skill, setSkill] = useState();
+  const [skillArr, setSkillArr] = useState([]);
   const [lang, setLang] = useState();
-  const storage = new ThirdwebStorage();
+  const [langArr, setLangArr] = useState();
   const [img, setImg] = useState();
   const [gigImg, setGigImg] = useState();
   const [gigHead, setGigHead] = useState();
   const [gigDescrip, setGigDescrip] = useState();
   const [gigCategory, setGigCategory] = useState();
   const [gigKeywords, setGigKeywords] = useState();
+  const [gigKeywordsArr, setGigKeywordsArr] = useState();
   const [gigPrice, setGigPrice] = useState();
   const [gigOffer, setGigOffer] = useState();
+
+  const handleKeyDown = (event, Arr) => {
+    if (event.key === "Enter") {
+      console.log(Arr);
+      if (Arr == "setSkillArr") {
+        setSkillArr(skill.split("\n"));
+        console.log(skillArr);
+      }
+      if (Arr == "setLangArr") {
+        setLangArr(lang.split("\n"));
+        console.log(langArr);
+      }
+      if (Arr == "setGigKeywordsArr") {
+        setGigKeywordsArr(gigKeywords.split("\n"));
+        console.log(gigKeywordsArr);
+      }
+    }
+  };
 
   async function uploadToIPFS(event, setPic) {
     console.log(setPic);
@@ -56,11 +77,12 @@ function Selling() {
       } catch (error) {
         console.log("Error sending File to IPFS: ");
         console.log(error);
+        alert("Error sending file to IPFS");
       }
     }
   }
 
-  async function uploadFileToNFTStorage(e) {
+  async function uploadFileToStorage(e) {
     e.preventDefault();
     console.log("working");
     try {
@@ -70,9 +92,9 @@ function Selling() {
         description: description,
         country: country,
         urlS: urlS,
-        skill: skill,
+        skill: skillArr,
         image: img,
-        language: lang,
+        language: langArr,
       };
       const gig = {
         gigImg: gigImg,
@@ -81,7 +103,7 @@ function Selling() {
         gigCategory: gigCategory,
         gigPrice: gigPrice,
         gigOffer: gigOffer,
-        gigKeywords: gigKeywords,
+        gigKeywords: gigKeywordsArr,
       };
       // Here we get the IPFS URI of where our metadata has been uploaded
       const uri = await storage.upload({ profile: profile, gig: gig });
@@ -89,16 +111,17 @@ function Selling() {
       console.log(url);
     } catch (e) {
       console.error(e);
+      alert("Error sending file to IPFS");
     }
   }
 
   useEffect(() => {
     async function retriveData() {
       const response = await fetch(
-        `https://gateway.ipfscdn.io/ipfs/QmaHaPkh2y2tyNPLA1tf93osGPXzNZW5QSXNxGv42tQdWa/0`
+        `https://gateway.ipfscdn.io/ipfs/QmeNtyo3L3qW9s2ebYJvdW59PvSmYEpVp2WzXEahBXzacw/0`
       );
       const metadata = await response.json();
-      console.log(metadata.gig.gigImg);
+      console.log(metadata.profile.skill);
     }
     retriveData();
   }, []);
@@ -107,12 +130,7 @@ function Selling() {
     <Wrapper>
       <Container>
         <h2>About yourself</h2>
-        <form>
-          <input
-            type="file"
-            required
-            onChange={(event) => uploadToIPFS(event, "setImg")}
-          />
+        <form onSubmit={uploadFileToStorage}>
           <input
             type="text"
             placeholder="Full name"
@@ -390,6 +408,8 @@ function Selling() {
             placeholder="skills"
             required
             onChange={(e) => setSkill(e.target.value)}
+            value={skill}
+            onKeyDown={(event) => handleKeyDown(event, "setSkillArr")}
           />
           <textarea
             name="language"
@@ -398,15 +418,18 @@ function Selling() {
             placeholder="Languages you can speak"
             required
             onChange={(e) => setLang(e.target.value)}
+            onKeyDown={(event) => handleKeyDown(event, "setLangArr")}
           />
-          <button onClick={uploadFileToNFTStorage}>Submit</button>
-        </form>
-        <h2>Your service</h2>
-        <form>
           <input
             type="file"
             required
-            onChange={(event) => uploadToIPFS(event, "setGigImg")}
+            onChange={(event) => uploadToIPFS(event, "setImg")}
+          />
+          <h2>Your service</h2>
+          <input
+            type="file"
+            required
+            onChange={(event) => uploadToIPFS(event, setGigImg)}
           />
           <input
             type="text"
@@ -454,12 +477,16 @@ function Selling() {
             required
             onChange={(e) => setGigOffer(e.target.value)}
           ></textarea>
-          <input
-            type="text"
+          <textarea
+            name="keyword"
+            cols="30"
+            rows="10"
             placeholder="Keywords"
             required
             onChange={(e) => setGigKeywords(e.target.value)}
+            onKeyDown={(event) => handleKeyDown(event, "setGigKeywordsArr")}
           />
+          <input type="submit" />
         </form>
       </Container>
     </Wrapper>
