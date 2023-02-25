@@ -16,6 +16,12 @@ function Selling() {
   const storage = new ThirdwebStorage();
   const [img, setImg] = useState();
   const [gigImg, setGigImg] = useState();
+  const [gigTitle, setGigTitle] = useState();
+  const [gigDescrip, setGigDescrip] = useState();
+  const [gigCategory, setGigCategory] = useState();
+  const [gigKeywords, setGigKeywords] = useState();
+  const [gigPrice, setGigPrice] = useState();
+  const [gigOffer, setGigOffer] = useState();
 
   async function uploadToIPFS(event, setPic) {
     console.log(setPic);
@@ -68,8 +74,17 @@ function Selling() {
         image: img,
         language: lang,
       };
+      const gig = {
+        gigImg: gigImg,
+        gigTitle: gigTitle,
+        gigDescription: gigDescrip,
+        gigCategory: gigCategory,
+        gigPrice: gigPrice,
+        gigOffer: gigOffer,
+        gigKeywords: gigKeywords,
+      };
       // Here we get the IPFS URI of where our metadata has been uploaded
-      const uri = await storage.upload({ profile: profile, gig: "yo yo" });
+      const uri = await storage.upload({ profile: profile, gig: gig });
       const url = await storage.resolveScheme(uri);
       console.log(url);
     } catch (e) {
@@ -382,6 +397,55 @@ function Selling() {
             type="file"
             required
             onChange={(event) => uploadToIPFS(event, "setGigImg")}
+          />
+          <input
+            type="text"
+            maxLength="70"
+            placeholder="Title"
+            required
+            onClick={(e) => setGigTitle(e.target.value)}
+          />
+          <textarea
+            name="gigDes"
+            cols="30"
+            rows="10"
+            placeholder="Gig Description"
+            required
+            onChange={(e) => setGigDescrip(e.target.value)}
+          ></textarea>{" "}
+          <select
+            name="gig category"
+            onChange={(e) => setGigCategory(e.target.value)}
+            defaultValue={gigCategory}
+            required
+          >
+            <option value="">Category...</option>
+            <option value="Programming & Tech">Programming & Tech</option>
+            <option value="Video and Animation">Video and Animation</option>
+            <option value="Design & Creative">Design & Creative</option>
+            <option value="Digital Marketing">Digital Marketing</option>
+            <option value="Writing & Translation">Writing & Translation</option>
+            <option value="Music & Audio">Music & Audio</option>
+            <option value="Video & Animation">Video & Animation</option>
+            <option value="Development & IT">Development & IT</option>
+            <option value="Finance & Accounting">Finance & Accounting</option>
+          </select>
+          <input
+            type="number"
+            placeholder="Price"
+            onChange={(e) => setGigPrice(e.target.value)}
+          />
+          <textarea
+            name="offer"
+            cols="30"
+            rows="10"
+            placeholder="Gig offer"
+            onChange={(e) => setGigOffer(e.target.value)}
+          ></textarea>
+          <input
+            type="text"
+            placeholder="Keywords"
+            onChange={(e) => setGigKeywords(e.target.value)}
           />
         </form>
       </Container>
