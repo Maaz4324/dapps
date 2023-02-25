@@ -36,7 +36,7 @@ function Navbar() {
         <Collapse className="collapse">
           <div id="mySidebar" className="sidebar">
             <a
-              href="javascript:void(0)"
+              // href="javascript:void(0)"
               className="closebtn"
               onClick={closeNav}
             >

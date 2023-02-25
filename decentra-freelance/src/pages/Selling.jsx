@@ -7,17 +7,18 @@ import axios from "axios";
 
 function Selling() {
   const [data, setData] = useState(null);
-  const [pic, setPic] = useState();
   const [name, setName] = useState();
   const [country, setCountry] = useState();
   const [description, setDescription] = useState();
   const [urlS, setUrl] = useState();
   const [skill, setSkill] = useState();
-  const { mutateAsync: upload } = useStorageUpload();
+  const [lang, setLang] = useState();
   const storage = new ThirdwebStorage();
   const [img, setImg] = useState();
+  const [gigImg, setGigImg] = useState();
 
-  const uploadToIPFS = async (event) => {
+  async function uploadToIPFS(event, setPic) {
+    console.log(setPic);
     event.preventDefault();
     const file = event.target.files[0];
     if (file) {
@@ -37,7 +38,13 @@ function Selling() {
         });
         console.log("working2");
         const ImgHash = `ipfs://${resFile.data.IpfsHash}`;
-        setImg(ImgHash);
+        if (setPic == "setGigImg") {
+          setGigImg(ImgHash);
+        }
+        if (setPic == "setImg") {
+          setImg(ImgHash);
+        }
+        // functionFromString(ImgHash);
         console.log(ImgHash);
         //Take a look at your Pinata Pinned section, you will see a new file added to you list.
       } catch (error) {
@@ -45,26 +52,25 @@ function Selling() {
         console.log(error);
       }
     }
-  };
+  }
 
   async function uploadFileToNFTStorage(e) {
     e.preventDefault();
     console.log("working");
     try {
       // We define metadata for an NFT
-      const data = {
+      const profile = {
         name: name,
         description: description,
         country: country,
         urlS: urlS,
         skill: skill,
-        // Here we add a file into the image property of our metadata
         image: img,
+        language: lang,
       };
       // Here we get the IPFS URI of where our metadata has been uploaded
-      const uri = await storage.upload((prevData) => [...prevData, data]);
+      const uri = await storage.upload({ profile: profile, gig: "yo yo" });
       const url = await storage.resolveScheme(uri);
-      // This will log a URL like https://gateway.ipfscdn.io/ipfs/QmWgbcjKWCXhaLzMz4gNBxQpAHktQK6MkLvBkKXbsoWEEy/0
       console.log(url);
     } catch (e) {
       console.error(e);
@@ -74,9 +80,13 @@ function Selling() {
   return (
     <Wrapper>
       <Container>
+        <h2>About yourself</h2>
         <form>
-          <input type="file" required onChange={uploadToIPFS} />
-          {/* <MediaRenderer src="ipfs://QmYaA3vHR4EGJBWGLZXmx6B3DeFFcZSuCnNMGFpCnvJEHD/0" /> */}
+          <input
+            type="file"
+            required
+            onChange={(event) => uploadToIPFS(event, "setImg")}
+          />
           <input
             type="text"
             placeholder="Full name"
@@ -355,25 +365,25 @@ function Selling() {
             required
             onChange={(e) => setSkill(e.target.value)}
           />
-          {/* <input
-            type="submit"
-            value="Submit"
+          <textarea
+            name="language"
+            cols="30"
+            rows="10"
+            placeholder="Languages you can speak"
             required
-            onClick={uploadFileToNFTStorage}
-          /> */}
+            onChange={(e) => setLang(e.target.value)}
+          />
+
           <button onClick={uploadFileToNFTStorage}>Submit</button>
         </form>
-        <div>
-          {data && (
-            <div>
-              <p>Name: {data.name}</p>
-              <p>description: {data.des}</p>
-              <p>url: {data.social}</p>
-              <p>skill: {data.skill}</p>
-              <p>country: {data.country}</p>
-            </div>
-          )}
-        </div>
+        <h2>Your service</h2>
+        <form>
+          <input
+            type="file"
+            required
+            onChange={(event) => uploadToIPFS(event, "setGigImg")}
+          />
+        </form>
       </Container>
     </Wrapper>
   );
