@@ -16,7 +16,7 @@ function Selling() {
   const storage = new ThirdwebStorage();
   const [img, setImg] = useState();
   const [gigImg, setGigImg] = useState();
-  const [gigTitle, setGigTitle] = useState();
+  const [gigHead, setGigHead] = useState();
   const [gigDescrip, setGigDescrip] = useState();
   const [gigCategory, setGigCategory] = useState();
   const [gigKeywords, setGigKeywords] = useState();
@@ -76,7 +76,7 @@ function Selling() {
       };
       const gig = {
         gigImg: gigImg,
-        gigTitle: gigTitle,
+        gigHead: gigHead,
         gigDescription: gigDescrip,
         gigCategory: gigCategory,
         gigPrice: gigPrice,
@@ -91,6 +91,17 @@ function Selling() {
       console.error(e);
     }
   }
+
+  useEffect(() => {
+    async function retriveData() {
+      const response = await fetch(
+        `https://gateway.ipfscdn.io/ipfs/QmaHaPkh2y2tyNPLA1tf93osGPXzNZW5QSXNxGv42tQdWa/0`
+      );
+      const metadata = await response.json();
+      console.log(metadata.gig.gigImg);
+    }
+    retriveData();
+  }, []);
 
   return (
     <Wrapper>
@@ -388,7 +399,6 @@ function Selling() {
             required
             onChange={(e) => setLang(e.target.value)}
           />
-
           <button onClick={uploadFileToNFTStorage}>Submit</button>
         </form>
         <h2>Your service</h2>
@@ -403,7 +413,7 @@ function Selling() {
             maxLength="70"
             placeholder="Title"
             required
-            onClick={(e) => setGigTitle(e.target.value)}
+            onChange={(e) => setGigHead(e.target.value)}
           />
           <textarea
             name="gigDes"
@@ -434,17 +444,20 @@ function Selling() {
             type="number"
             placeholder="Price"
             onChange={(e) => setGigPrice(e.target.value)}
+            required
           />
           <textarea
             name="offer"
             cols="30"
             rows="10"
             placeholder="Gig offer"
+            required
             onChange={(e) => setGigOffer(e.target.value)}
           ></textarea>
           <input
             type="text"
             placeholder="Keywords"
+            required
             onChange={(e) => setGigKeywords(e.target.value)}
           />
         </form>
