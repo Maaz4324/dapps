@@ -18,7 +18,7 @@ function Navbar() {
     <Wrapper>
       <Container>
         <Logo>
-          <Link to="/">
+          <Link to="/" style={{ textDecoration: "none" }}>
             <h2>SkillSwap</h2>
           </Link>
         </Logo>
