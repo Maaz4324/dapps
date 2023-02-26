@@ -5,7 +5,6 @@ import { categoryData } from "../../assets/category";
 function Category() {
   return (
     <Wrapper>
-      <div className="seperator"></div>
       <Container>
         <h1>Browse talent by category</h1>
         <h5>Get some Inspirations from 1800+ skills</h5>
@@ -35,13 +34,6 @@ const Wrapper = styled.section`
   min-height: 100vh;
   background: linear-gradient(to right, #111118, #161727, #1a1c35);
   padding-top: 40px;
-  .seperator {
-    width: 100%;
-    height: 5vh;
-    position: absolute;
-    top: 107%;
-    backdrop-filter: blur(30px);
-  }
 `;
 const Container = styled.section`
   min-height: 100vh;
