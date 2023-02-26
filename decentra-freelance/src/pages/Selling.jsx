@@ -303,7 +303,8 @@ const Wrapper = styled.div`
   width: 100%;
   min-height: 100vh;
   color: white;
-  padding-top: 20px;
+  padding-top: 72px;
+ background: linear-gradient(to right, #111118, #161727, #1a1c35);
   @media (max-width: 930px) {
     padding-top: 60px;
   }
