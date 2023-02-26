@@ -11,7 +11,7 @@ function Category() {
         <h5>Get some Inspirations from 1800+ skills</h5>
         <CategoryContainer>
           {categoryData.map((data, idx) => (
-            <Card>
+            <Card key={idx}>
               <img src={data.img} alt="" />
               <h3>{data.head}</h3>
               <p>

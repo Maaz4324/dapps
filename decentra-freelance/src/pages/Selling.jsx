@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import { useStorageUpload } from "@thirdweb-dev/react";
+import { countriesData } from "../assets/countries";
 import { MediaRenderer } from "@thirdweb-dev/react";
 import { ThirdwebStorage } from "@thirdweb-dev/storage";
 import axios from "axios";
 
 function Selling() {
   const storage = new ThirdwebStorage();
-  const [data, setData] = useState(null);
   const [name, setName] = useState();
   const [country, setCountry] = useState();
   const [description, setDescription] = useState();
@@ -25,21 +25,19 @@ function Selling() {
   const [gigKeywordsArr, setGigKeywordsArr] = useState();
   const [gigPrice, setGigPrice] = useState();
   const [gigOffer, setGigOffer] = useState();
+  const [firstPage, setFirstPage] = useState(true);
 
   const handleKeyDown = (event, Arr) => {
     if (event.key === "Enter") {
       console.log(Arr);
       if (Arr == "setSkillArr") {
         setSkillArr(skill.split("\n"));
-        console.log(skillArr);
       }
       if (Arr == "setLangArr") {
         setLangArr(lang.split("\n"));
-        console.log(langArr);
       }
       if (Arr == "setGigKeywordsArr") {
         setGigKeywordsArr(gigKeywords.split("\n"));
-        console.log(gigKeywordsArr);
       }
     }
   };
@@ -64,7 +62,7 @@ function Selling() {
           },
         });
         console.log("working2");
-        const ImgHash = `ipfs://${resFile.data.IpfsHash}`;
+        const ImgHash = `${resFile.data.IpfsHash}`;
         if (setPic == "setGigImg") {
           setGigImg(ImgHash);
         }
@@ -118,10 +116,10 @@ function Selling() {
   useEffect(() => {
     async function retriveData() {
       const response = await fetch(
-        `https://gateway.ipfscdn.io/ipfs/QmeNtyo3L3qW9s2ebYJvdW59PvSmYEpVp2WzXEahBXzacw/0`
+        `https://gateway.ipfscdn.io/ipfs/QmccaMTWFLn1TPS3Povw6GPHBHUhSjRMcnPmocEMQjdcBr/0`
       );
       const metadata = await response.json();
-      console.log(metadata.profile.skill);
+      // console.log(metadata.gig);
     }
     retriveData();
   }, []);
@@ -129,364 +127,170 @@ function Selling() {
   return (
     <Wrapper>
       <Container>
-        <h2>About yourself</h2>
         <form onSubmit={uploadFileToStorage}>
-          <input
-            type="text"
-            placeholder="Full name"
-            required
-            onChange={(e) => setName(e.target.value)}
-          />
-          <select
-            name="country"
-            onChange={(e) => setCountry(e.target.value)}
-            defaultValue={country}
-            required
-          >
-            <option value="">Country...</option>
-            <option value="AF">Afghanistan</option>
-            <option value="AL">Albania</option>
-            <option value="DZ">Algeria</option>
-            <option value="AS">American Samoa</option>
-            <option value="AD">Andorra</option>
-            <option value="AG">Angola</option>
-            <option value="AI">Anguilla</option>
-            <option value="AG">Antigua &amp; Barbuda</option>
-            <option value="AR">Argentina</option>
-            <option value="AA">Armenia</option>
-            <option value="AW">Aruba</option>
-            <option value="AU">Australia</option>
-            <option value="AT">Austria</option>
-            <option value="AZ">Azerbaijan</option>
-            <option value="BS">Bahamas</option>
-            <option value="BH">Bahrain</option>
-            <option value="BD">Bangladesh</option>
-            <option value="BB">Barbados</option>
-            <option value="BY">Belarus</option>
-            <option value="BE">Belgium</option>
-            <option value="BZ">Belize</option>
-            <option value="BJ">Benin</option>
-            <option value="BM">Bermuda</option>
-            <option value="BT">Bhutan</option>
-            <option value="BO">Bolivia</option>
-            <option value="BL">Bonaire</option>
-            <option value="BA">Bosnia &amp; Herzegovina</option>
-            <option value="BW">Botswana</option>
-            <option value="BR">Brazil</option>
-            <option value="BC">British Indian Ocean Ter</option>
-            <option value="BN">Brunei</option>
-            <option value="BG">Bulgaria</option>
-            <option value="BF">Burkina Faso</option>
-            <option value="BI">Burundi</option>
-            <option value="KH">Cambodia</option>
-            <option value="CM">Cameroon</option>
-            <option value="CA">Canada</option>
-            <option value="IC">Canary Islands</option>
-            <option value="CV">Cape Verde</option>
-            <option value="KY">Cayman Islands</option>
-            <option value="CF">Central African Republic</option>
-            <option value="TD">Chad</option>
-            <option value="CD">Channel Islands</option>
-            <option value="CL">Chile</option>
-            <option value="CN">China</option>
-            <option value="CI">Christmas Island</option>
-            <option value="CS">Cocos Island</option>
-            <option value="CO">Colombia</option>
-            <option value="CC">Comoros</option>
-            <option value="CG">Congo</option>
-            <option value="CK">Cook Islands</option>
-            <option value="CR">Costa Rica</option>
-            <option value="CT">Cote D'Ivoire</option>
-            <option value="HR">Croatia</option>
-            <option value="CU">Cuba</option>
-            <option value="CB">Curacao</option>
-            <option value="CY">Cyprus</option>
-            <option value="CZ">Czech Republic</option>
-            <option value="DK">Denmark</option>
-            <option value="DJ">Djibouti</option>
-            <option value="DM">Dominica</option>
-            <option value="DO">Dominican Republic</option>
-            <option value="TM">East Timor</option>
-            <option value="EC">Ecuador</option>
-            <option value="EG">Egypt</option>
-            <option value="SV">El Salvador</option>
-            <option value="GQ">Equatorial Guinea</option>
-            <option value="ER">Eritrea</option>
-            <option value="EE">Estonia</option>
-            <option value="ET">Ethiopia</option>
-            <option value="FA">Falkland Islands</option>
-            <option value="FO">Faroe Islands</option>
-            <option value="FJ">Fiji</option>
-            <option value="FI">Finland</option>
-            <option value="FR">France</option>
-            <option value="GF">French Guiana</option>
-            <option value="PF">French Polynesia</option>
-            <option value="FS">French Southern Ter</option>
-            <option value="GA">Gabon</option>
-            <option value="GM">Gambia</option>
-            <option value="GE">Georgia</option>
-            <option value="DE">Germany</option>
-            <option value="GH">Ghana</option>
-            <option value="GI">Gibraltar</option>
-            <option value="GB">Great Britain</option>
-            <option value="GR">Greece</option>
-            <option value="GL">Greenland</option>
-            <option value="GD">Grenada</option>
-            <option value="GP">Guadeloupe</option>
-            <option value="GU">Guam</option>
-            <option value="GT">Guatemala</option>
-            <option value="GN">Guinea</option>
-            <option value="GY">Guyana</option>
-            <option value="HT">Haiti</option>
-            <option value="HW">Hawaii</option>
-            <option value="HN">Honduras</option>
-            <option value="HK">Hong Kong</option>
-            <option value="HU">Hungary</option>
-            <option value="IS">Iceland</option>
-            <option value="IN">India</option>
-            <option value="ID">Indonesia</option>
-            <option value="IA">Iran</option>
-            <option value="IQ">Iraq</option>
-            <option value="IR">Ireland</option>
-            <option value="IM">Isle of Man</option>
-            <option value="IL">Israel</option>
-            <option value="IT">Italy</option>
-            <option value="JM">Jamaica</option>
-            <option value="JP">Japan</option>
-            <option value="JO">Jordan</option>
-            <option value="KZ">Kazakhstan</option>
-            <option value="KE">Kenya</option>
-            <option value="KI">Kiribati</option>
-            <option value="NK">Korea North</option>
-            <option value="KS">Korea South</option>
-            <option value="KW">Kuwait</option>
-            <option value="KG">Kyrgyzstan</option>
-            <option value="LA">Laos</option>
-            <option value="LV">Latvia</option>
-            <option value="LB">Lebanon</option>
-            <option value="LS">Lesotho</option>
-            <option value="LR">Liberia</option>
-            <option value="LY">Libya</option>
-            <option value="LI">Liechtenstein</option>
-            <option value="LT">Lithuania</option>
-            <option value="LU">Luxembourg</option>
-            <option value="MO">Macau</option>
-            <option value="MK">Macedonia</option>
-            <option value="MG">Madagascar</option>
-            <option value="MY">Malaysia</option>
-            <option value="MW">Malawi</option>
-            <option value="MV">Maldives</option>
-            <option value="ML">Mali</option>
-            <option value="MT">Malta</option>
-            <option value="MH">Marshall Islands</option>
-            <option value="MQ">Martinique</option>
-            <option value="MR">Mauritania</option>
-            <option value="MU">Mauritius</option>
-            <option value="ME">Mayotte</option>
-            <option value="MX">Mexico</option>
-            <option value="MI">Midway Islands</option>
-            <option value="MD">Moldova</option>
-            <option value="MC">Monaco</option>
-            <option value="MN">Mongolia</option>
-            <option value="MS">Montserrat</option>
-            <option value="MA">Morocco</option>
-            <option value="MZ">Mozambique</option>
-            <option value="MM">Myanmar</option>
-            <option value="NA">Nambia</option>
-            <option value="NU">Nauru</option>
-            <option value="NP">Nepal</option>
-            <option value="AN">Netherland Antilles</option>
-            <option value="NL">Netherlands (Holland, Europe)</option>
-            <option value="NV">Nevis</option>
-            <option value="NC">New Caledonia</option>
-            <option value="NZ">New Zealand</option>
-            <option value="NI">Nicaragua</option>
-            <option value="NE">Niger</option>
-            <option value="NG">Nigeria</option>
-            <option value="NW">Niue</option>
-            <option value="NF">Norfolk Island</option>
-            <option value="NO">Norway</option>
-            <option value="OM">Oman</option>
-            <option value="PK">Pakistan</option>
-            <option value="PW">Palau Island</option>
-            <option value="PS">Palestine</option>
-            <option value="PA">Panama</option>
-            <option value="PG">Papua New Guinea</option>
-            <option value="PY">Paraguay</option>
-            <option value="PE">Peru</option>
-            <option value="PH">Philippines</option>
-            <option value="PO">Pitcairn Island</option>
-            <option value="PL">Poland</option>
-            <option value="PT">Portugal</option>
-            <option value="PR">Puerto Rico</option>
-            <option value="QA">Qatar</option>
-            <option value="ME">Republic of Montenegro</option>
-            <option value="RS">Republic of Serbia</option>
-            <option value="RE">Reunion</option>
-            <option value="RO">Romania</option>
-            <option value="RU">Russia</option>
-            <option value="RW">Rwanda</option>
-            <option value="NT">St Barthelemy</option>
-            <option value="EU">St Eustatius</option>
-            <option value="HE">St Helena</option>
-            <option value="KN">St Kitts-Nevis</option>
-            <option value="LC">St Lucia</option>
-            <option value="MB">St Maarten</option>
-            <option value="PM">St Pierre &amp; Miquelon</option>
-            <option value="VC">St Vincent &amp; Grenadines</option>
-            <option value="SP">Saipan</option>
-            <option value="SO">Samoa</option>
-            <option value="AS">Samoa American</option>
-            <option value="SM">San Marino</option>
-            <option value="ST">Sao Tome &amp; Principe</option>
-            <option value="SA">Saudi Arabia</option>
-            <option value="SN">Senegal</option>
-            <option value="RS">Serbia</option>
-            <option value="SC">Seychelles</option>
-            <option value="SL">Sierra Leone</option>
-            <option value="SG">Singapore</option>
-            <option value="SK">Slovakia</option>
-            <option value="SI">Slovenia</option>
-            <option value="SB">Solomon Islands</option>
-            <option value="OI">Somalia</option>
-            <option value="ZA">South Africa</option>
-            <option value="ES">Spain</option>
-            <option value="LK">Sri Lanka</option>
-            <option value="SD">Sudan</option>
-            <option value="SR">Suriname</option>
-            <option value="SZ">Swaziland</option>
-            <option value="SE">Sweden</option>
-            <option value="CH">Switzerland</option>
-            <option value="SY">Syria</option>
-            <option value="TA">Tahiti</option>
-            <option value="TW">Taiwan</option>
-            <option value="TJ">Tajikistan</option>
-            <option value="TZ">Tanzania</option>
-            <option value="TH">Thailand</option>
-            <option value="TG">Togo</option>
-            <option value="TK">Tokelau</option>
-            <option value="TO">Tonga</option>
-            <option value="TT">Trinidad &amp; Tobago</option>
-            <option value="TN">Tunisia</option>
-            <option value="TR">Turkey</option>
-            <option value="TU">Turkmenistan</option>
-            <option value="TC">Turks &amp; Caicos Is</option>
-            <option value="TV">Tuvalu</option>
-            <option value="UG">Uganda</option>
-            <option value="UA">Ukraine</option>
-            <option value="AE">United Arab Emirates</option>
-            <option value="GB">United Kingdom</option>
-            <option value="US">United States of America</option>
-            <option value="UY">Uruguay</option>
-            <option value="UZ">Uzbekistan</option>
-            <option value="VU">Vanuatu</option>
-            <option value="VS">Vatican City State</option>
-            <option value="VE">Venezuela</option>
-            <option value="VN">Vietnam</option>
-            <option value="VB">Virgin Islands (Brit)</option>
-            <option value="VA">Virgin Islands (USA)</option>
-            <option value="WK">Wake Island</option>
-            <option value="WF">Wallis &amp; Futana Is</option>
-            <option value="YE">Yemen</option>
-            <option value="ZR">Zaire</option>
-            <option value="ZM">Zambia</option>
-            <option value="ZW">Zimbabwe</option>
-          </select>
-          <textarea
-            name="description"
-            cols="30"
-            rows="10"
-            placeholder="Something about yourself"
-            required
-            onChange={(e) => setDescription(e.target.value)}
-          ></textarea>
-          <input type="url" required onChange={(e) => setUrl(e.target.value)} />
-          <textarea
-            name="skill"
-            cols="30"
-            rows="10"
-            placeholder="skills"
-            required
-            onChange={(e) => setSkill(e.target.value)}
-            value={skill}
-            onKeyDown={(event) => handleKeyDown(event, "setSkillArr")}
-          />
-          <textarea
-            name="language"
-            cols="30"
-            rows="10"
-            placeholder="Languages you can speak"
-            required
-            onChange={(e) => setLang(e.target.value)}
-            onKeyDown={(event) => handleKeyDown(event, "setLangArr")}
-          />
-          <input
-            type="file"
-            required
-            onChange={(event) => uploadToIPFS(event, "setImg")}
-          />
-          <h2>Your service</h2>
-          <input
-            type="file"
-            required
-            onChange={(event) => uploadToIPFS(event, setGigImg)}
-          />
-          <input
-            type="text"
-            maxLength="70"
-            placeholder="Title"
-            required
-            onChange={(e) => setGigHead(e.target.value)}
-          />
-          <textarea
-            name="gigDes"
-            cols="30"
-            rows="10"
-            placeholder="Gig Description"
-            required
-            onChange={(e) => setGigDescrip(e.target.value)}
-          ></textarea>{" "}
-          <select
-            name="gig category"
-            onChange={(e) => setGigCategory(e.target.value)}
-            defaultValue={gigCategory}
-            required
-          >
-            <option value="">Category...</option>
-            <option value="Programming & Tech">Programming & Tech</option>
-            <option value="Video and Animation">Video and Animation</option>
-            <option value="Design & Creative">Design & Creative</option>
-            <option value="Digital Marketing">Digital Marketing</option>
-            <option value="Writing & Translation">Writing & Translation</option>
-            <option value="Music & Audio">Music & Audio</option>
-            <option value="Video & Animation">Video & Animation</option>
-            <option value="Development & IT">Development & IT</option>
-            <option value="Finance & Accounting">Finance & Accounting</option>
-          </select>
-          <input
-            type="number"
-            placeholder="Price"
-            onChange={(e) => setGigPrice(e.target.value)}
-            required
-          />
-          <textarea
-            name="offer"
-            cols="30"
-            rows="10"
-            placeholder="Gig offer"
-            required
-            onChange={(e) => setGigOffer(e.target.value)}
-          ></textarea>
-          <textarea
-            name="keyword"
-            cols="30"
-            rows="10"
-            placeholder="Keywords"
-            required
-            onChange={(e) => setGigKeywords(e.target.value)}
-            onKeyDown={(event) => handleKeyDown(event, "setGigKeywordsArr")}
-          />
-          <input type="submit" />
+          {firstPage ? (
+            <ProfileContainer>
+              <h2>About yourself</h2>
+              <label>Full name</label>
+              <input
+                type="text"
+                placeholder="Full name"
+                required
+                onChange={(e) => setName(e.target.value)}
+              />
+              <label>Upload your profile</label>
+              <div>
+                <img
+                  src={`https://gateway.ipfscdn.io/ipfs/${img}`}
+                  alt="skill swap user profile"
+                />
+              </div>
+              <input
+                type="file"
+                required
+                onChange={(event) => uploadToIPFS(event, "setImg")}
+              />
+              <label>Country</label>
+              <select
+                name="country"
+                onChange={(e) => setCountry(e.target.value)}
+                defaultValue={country}
+                required
+              >
+                <option value="">Country...</option>
+                {countriesData.map((data, idx) => (
+                  <option key={idx} value={data.code}>
+                    {data.name}
+                  </option>
+                ))}
+              </select>
+              <label>Describe yourself</label>
+              <textarea
+                name="description"
+                cols="30"
+                rows="10"
+                placeholder="Something about yourself"
+                required
+                onChange={(e) => setDescription(e.target.value)}
+              ></textarea>
+              <label>Your social media or website link</label>
+              <input
+                type="url"
+                placeholder="Website link"
+                required
+                onChange={(e) => setUrl(e.target.value)}
+              />
+              <label>
+                Type your skills, after each skill press 'enter' on your
+                keyboard
+              </label>
+              <textarea
+                name="skill"
+                cols="30"
+                rows="10"
+                placeholder="skills"
+                required
+                onChange={(e) => setSkill(e.target.value)}
+                value={skill}
+                onKeyDown={(event) => handleKeyDown(event, "setSkillArr")}
+              />
+              <label>
+                What languages do you speak, again after each word press 'enter'
+                on your keyboard
+              </label>
+              <textarea
+                name="language"
+                cols="30"
+                rows="10"
+                placeholder="Languages you can speak"
+                required
+                onChange={(e) => setLang(e.target.value)}
+                onKeyDown={(event) => handleKeyDown(event, "setLangArr")}
+              />
+              <button onClick={() => setFirstPage(false)}>Next page</button>
+            </ProfileContainer>
+          ) : (
+            <GigContainer>
+              <h2>Your service</h2>
+              <label>Upload your gig picture</label>
+              <img
+                src={`https://gateway.ipfscdn.io/ipfs/${gigImg}`}
+                // alt="skill swap gig profile"
+              />
+              <input
+                type="file"
+                required
+                onChange={(event) => uploadToIPFS(event, "setGigImg")}
+              />
+              <label>Set your gig title in under 70 characters</label>
+              <input
+                type="text"
+                maxLength="70"
+                placeholder="Title"
+                required
+                onChange={(e) => setGigHead(e.target.value)}
+              />
+              <label>Describe your gig</label>
+              <textarea
+                name="gigDes"
+                cols="30"
+                rows="10"
+                placeholder="Gig Description"
+                required
+                onChange={(e) => setGigDescrip(e.target.value)}
+              ></textarea>
+              <label>Set the category</label>
+              <select
+                name="gig category"
+                onChange={(e) => setGigCategory(e.target.value)}
+                defaultValue={gigCategory}
+                required
+              >
+                <option value="">Category...</option>
+                <option value="Programming & Tech">Programming & Tech</option>
+                <option value="Video and Animation">Video and Animation</option>
+                <option value="Design & Creative">Design & Creative</option>
+                <option value="Digital Marketing">Digital Marketing</option>
+                <option value="Writing & Translation">
+                  Writing & Translation
+                </option>
+                <option value="Music & Audio">Music & Audio</option>
+                <option value="Video & Animation">Video & Animation</option>
+                <option value="Development & IT">Development & IT</option>
+                <option value="Finance & Accounting">
+                  Finance & Accounting
+                </option>
+              </select>
+              <label>What are you offering in this gig</label>
+              <textarea
+                name="offer"
+                cols="30"
+                rows="10"
+                placeholder="Gig offer"
+                required
+                onChange={(e) => setGigOffer(e.target.value)}
+              ></textarea>
+              <label>Set the price</label>
+              <input
+                type="number"
+                placeholder="Price"
+                onChange={(e) => setGigPrice(e.target.value)}
+                required
+              />
+              <label>Set the keywords to help buyer find your gig</label>
+              <textarea
+                name="keyword"
+                cols="30"
+                rows="10"
+                placeholder="Keywords"
+                required
+                onChange={(e) => setGigKeywords(e.target.value)}
+                onKeyDown={(event) => handleKeyDown(event, "setGigKeywordsArr")}
+              />
+              <button onClick={() => setFirstPage(true)}>Previous page</button>
+              <input type="submit" />
+            </GigContainer>
+          )}
         </form>
       </Container>
     </Wrapper>
@@ -498,9 +302,73 @@ export default Selling;
 const Wrapper = styled.div`
   width: 100%;
   min-height: 100vh;
-  background: var(--bg);
   color: white;
-  padding-top: 72px;
+  padding-top: 20px;
+  @media (max-width: 930px) {
+    padding-top: 60px;
+  }
 `;
 
-const Container = styled.div``;
+const Container = styled.div`
+  display: flex;
+  width: 98%;
+  max-width: 747px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 40px 0;
+  margin-bottom: 30px;
+  background: var(--darkBg);
+  h2 {
+    font-size: 40px;
+  }
+  input,
+  textarea,
+  select {
+    width: 95%;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 7px;
+    outline: none;
+    border: 0;
+    margin: 4px 0;
+    @media (max-width: 747px) {
+      width: 90%;
+    }
+  }
+  label {
+    margin-top: 30px;
+  }
+  form {
+    width: 100%;
+    button {
+      width: 30%;
+      margin: 10px 0;
+      padding: 7px 20px;
+      float: right;
+    }
+  }
+`;
+
+const ProfileContainer = styled.div`
+  display: flex;
+  text-align: start;
+  flex-direction: column;
+  width: 80%;
+  @media (max-width: 747px) {
+    width: 99%;
+  }
+  margin: 0 auto;
+`;
+
+const GigContainer = styled.div`
+  display: flex;
+  text-align: start;
+  flex-direction: column;
+  width: 80%;
+  @media (max-width: 747px) {
+    width: 99%;
+  }
+  margin: 0 auto;
+`;
