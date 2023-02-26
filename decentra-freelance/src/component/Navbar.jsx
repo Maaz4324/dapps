@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import search from "../images/search.svg";
 import chat from "../images/chat.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ethers } from "ethers";
+import SkillSwap from "../artifacts/contracts/SkillSwap.sol/SkillSwap.json";
 
 function Navbar() {
+  const navigate = useNavigate();
+  const [connectBtn, setConnectBtn] = useState("Connect");
+
   function closeNav() {
     document.getElementById("mySidebar").style.width = "0";
     document.getElementById("main").style.marginLeft = "0";
@@ -14,6 +19,43 @@ function Navbar() {
     document.getElementById("mySidebar").style.width = "250px";
     document.getElementById("main").style.marginLeft = "250px";
   }
+
+  async function connectWallet() {
+    if (window.ethereum) {
+      const account = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+
+      const abi = SkillSwap.abi;
+
+      const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+
+      const skillswap = new ethers.Contract(contractAddress, abi, signer);
+      const noOfuser = await skillswap.noOfSellers();
+      // console.log(noOfuser.toString());
+      for (let index = 1; index <= noOfuser.toString(); index++) {
+        const user = await skillswap.sellerProfile(index);
+        if (user.seller.toLowerCase() == account[0]) {
+          setConnectBtn(account[0].substring(0, 10) + "...");
+        } else {
+          setConnectBtn("Connected");
+        }
+      }
+    } else {
+      alert("please install metamask wallet");
+    }
+  }
+
+  async function goToSell() {
+    if (!window.ethereum) {
+      alert("Please download metamask wallet to continue.");
+    } else {
+      navigate("/selling", { replace: true });
+    }
+  }
+
   return (
     <Wrapper>
       <Container>
@@ -28,10 +70,15 @@ function Navbar() {
         </Search>
         <Right>
           <img src={chat} alt="chat on skillswap - skill swap" />
-          <Link to="/selling">
-            <h4>Get hired</h4>
-          </Link>
-          <button>Connect</button>
+          {/* <Link to="/selling"> */}
+          <h4
+            onClick={goToSell}
+            style={{ cursor: "pointer", textDecoration: "underline" }}
+          >
+            Get hired
+          </h4>
+          {/* </Link> */}
+          <button onClick={connectWallet}>{connectBtn}</button>
         </Right>
         <Collapse className="collapse">
           <div id="mySidebar" className="sidebar">
@@ -42,7 +89,9 @@ function Navbar() {
             >
               ×
             </a>
-            <button className="connect">Connect</button>
+            <button className="connect" onClick={connectWallet}>
+              {connectBtn}
+            </button>
             <a href="#">Get hired</a>
             <a href="#">Chat</a>
           </div>

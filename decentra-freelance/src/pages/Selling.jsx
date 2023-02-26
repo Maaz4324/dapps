@@ -5,6 +5,8 @@ import { countriesData } from "../assets/countries";
 import { MediaRenderer } from "@thirdweb-dev/react";
 import { ThirdwebStorage } from "@thirdweb-dev/storage";
 import axios from "axios";
+import { ethers } from "ethers";
+import SkillSwap from "../artifacts/contracts/SkillSwap.sol/SkillSwap.json";
 
 function Selling() {
   const storage = new ThirdwebStorage();
@@ -26,6 +28,37 @@ function Selling() {
   const [gigPrice, setGigPrice] = useState();
   const [gigOffer, setGigOffer] = useState();
   const [firstPage, setFirstPage] = useState(true);
+  const [displayProfile, setDisplayProfile] = useState([]);
+  const [displayGig, setDisplayGig] = useState([]);
+  const [userLogin, setUserLogin] = useState(false);
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+
+  const abi = SkillSwap.abi;
+
+  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+
+  const skillswap = new ethers.Contract(contractAddress, abi, signer);
+
+  async function loadUser() {
+    const account = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+
+    const noOfuser = await skillswap.noOfSellers();
+    // console.log(noOfuser.toString());
+    for (let index = 1; index <= noOfuser.toString(); index++) {
+      const user = await skillswap.sellerProfile(index);
+      if (user.seller.toLowerCase() == account[0]) {
+        setUserLogin(true);
+        const response = await fetch(user.uri);
+        const metadata = await response.json();
+        setDisplayProfile([metadata.profile]);
+        setDisplayGig([metadata.gig]);
+      }
+    }
+  }
 
   const handleKeyDown = (event, Arr) => {
     if (event.key === "Enter") {
@@ -107,6 +140,11 @@ function Selling() {
       const uri = await storage.upload({ profile: profile, gig: gig });
       const url = await storage.resolveScheme(uri);
       console.log(url);
+      const profileSet = await skillswap.setProfile(url);
+      console.log(
+        "🚀 ~ file: Selling.jsx:136 ~ uploadFileToStorage ~ profileSet:",
+        profileSet
+      );
     } catch (e) {
       console.error(e);
       alert("Error sending file to IPFS");
@@ -114,185 +152,223 @@ function Selling() {
   }
 
   useEffect(() => {
-    async function retriveData() {
-      const response = await fetch(
-        `https://gateway.ipfscdn.io/ipfs/QmccaMTWFLn1TPS3Povw6GPHBHUhSjRMcnPmocEMQjdcBr/0`
-      );
-      const metadata = await response.json();
-      // console.log(metadata.gig);
-    }
-    retriveData();
+    loadUser();
+    // eslint-disable-next-line
   }, []);
 
   return (
     <Wrapper>
-      <Container>
-        <form onSubmit={uploadFileToStorage}>
-          {firstPage ? (
-            <ProfileContainer>
-              <h2>About yourself</h2>
-              <label>Full name</label>
-              <input
-                type="text"
-                placeholder="Full name"
-                required
-                onChange={(e) => setName(e.target.value)}
+      {userLogin ? (
+        <Container>
+          {displayProfile.map((profileData, idx) => (
+            <div key={idx}>
+              <h1>Profile</h1>
+              <img
+                src={`https://gateway.ipfscdn.io/ipfs/${profileData.image}`}
+                alt=""
               />
-              <label>Upload your profile</label>
-              <div>
+              <h3>{profileData.name}</h3>
+              <h5>{profileData.description}</h5>
+              <ul>
+                <li>{profileData.country}</li>
+                <li>{profileData.urlS}</li>
+                <li>{profileData.skill}</li>
+                <li>{profileData.language}</li>
+              </ul>
+            </div>
+          ))}
+          {displayGig.map((gigData, idx) => (
+            <div key={idx}>
+              <h1>Gig</h1>
+              <div style={{ width: "50%" }}>
                 <img
-                  src={`https://gateway.ipfscdn.io/ipfs/${img}`}
-                  alt="skill swap user profile"
+                  style={{ width: "100%" }}
+                  src={`https://gateway.ipfscdn.io/ipfs/${gigData.gigImg}`}
+                  alt=""
                 />
               </div>
-              <input
-                type="file"
-                required
-                onChange={(event) => uploadToIPFS(event, "setImg")}
-              />
-              <label>Country</label>
-              <select
-                name="country"
-                onChange={(e) => setCountry(e.target.value)}
-                defaultValue={country}
-                required
-              >
-                <option value="">Country...</option>
-                {countriesData.map((data, idx) => (
-                  <option key={idx} value={data.code}>
-                    {data.name}
+              <h2>{gigData.gigHead}</h2>
+              <p>{gigData.gigDescription}</p>
+              <p>Offer: {gigData.gigOffer}</p>
+              <p>Price: {gigData.gigPrice}</p>
+            </div>
+          ))}
+        </Container>
+      ) : (
+        <Container>
+          <form onSubmit={uploadFileToStorage}>
+            {firstPage ? (
+              <ProfileContainer>
+                <h2>About yourself</h2>
+                <label>Full name</label>
+                <input
+                  type="text"
+                  placeholder="Full name"
+                  required
+                  onChange={(e) => setName(e.target.value)}
+                />
+                <label>Upload your profile</label>
+                <div>
+                  <img
+                    src={`https://gateway.ipfscdn.io/ipfs/${img}`}
+                    alt="skill swap user profile"
+                  />
+                </div>
+                <input
+                  type="file"
+                  required
+                  onChange={(event) => uploadToIPFS(event, "setImg")}
+                />
+                <label>Country</label>
+                <select
+                  name="country"
+                  onChange={(e) => setCountry(e.target.value)}
+                  defaultValue={country}
+                  required
+                >
+                  <option value="">Country...</option>
+                  {countriesData.map((data, idx) => (
+                    <option key={idx} value={data.code}>
+                      {data.name}
+                    </option>
+                  ))}
+                </select>
+                <label>Describe yourself</label>
+                <textarea
+                  name="description"
+                  cols="30"
+                  rows="10"
+                  placeholder="Something about yourself"
+                  required
+                  onChange={(e) => setDescription(e.target.value)}
+                ></textarea>
+                <label>Your social media or website link</label>
+                <input
+                  type="url"
+                  placeholder="Website link"
+                  required
+                  onChange={(e) => setUrl(e.target.value)}
+                />
+                <label>
+                  Type your skills, after each skill press 'enter' on your
+                  keyboard
+                </label>
+                <textarea
+                  name="skill"
+                  cols="30"
+                  rows="10"
+                  placeholder="skills"
+                  required
+                  onChange={(e) => setSkill(e.target.value)}
+                  value={skill}
+                  onKeyDown={(event) => handleKeyDown(event, "setSkillArr")}
+                />
+                <label>
+                  What languages do you speak, again after each word press
+                  'enter' on your keyboard
+                </label>
+                <textarea
+                  name="language"
+                  cols="30"
+                  rows="10"
+                  placeholder="Languages you can speak"
+                  required
+                  onChange={(e) => setLang(e.target.value)}
+                  onKeyDown={(event) => handleKeyDown(event, "setLangArr")}
+                />
+                <button onClick={() => setFirstPage(false)}>Next page</button>
+              </ProfileContainer>
+            ) : (
+              <GigContainer>
+                <h2>Your service</h2>
+                <label>Upload your gig picture</label>
+                <img
+                  src={`https://gateway.ipfscdn.io/ipfs/${gigImg}`}
+                  // alt="skill swap gig profile"
+                />
+                <input
+                  type="file"
+                  required
+                  onChange={(event) => uploadToIPFS(event, "setGigImg")}
+                />
+                <label>Set your gig title in under 70 characters</label>
+                <input
+                  type="text"
+                  maxLength="70"
+                  placeholder="Title"
+                  required
+                  onChange={(e) => setGigHead(e.target.value)}
+                />
+                <label>Describe your gig</label>
+                <textarea
+                  name="gigDes"
+                  cols="30"
+                  rows="10"
+                  placeholder="Gig Description"
+                  required
+                  onChange={(e) => setGigDescrip(e.target.value)}
+                ></textarea>
+                <label>Set the category</label>
+                <select
+                  name="gig category"
+                  onChange={(e) => setGigCategory(e.target.value)}
+                  defaultValue={gigCategory}
+                  required
+                >
+                  <option value="">Category...</option>
+                  <option value="Programming & Tech">Programming & Tech</option>
+                  <option value="Video and Animation">
+                    Video and Animation
                   </option>
-                ))}
-              </select>
-              <label>Describe yourself</label>
-              <textarea
-                name="description"
-                cols="30"
-                rows="10"
-                placeholder="Something about yourself"
-                required
-                onChange={(e) => setDescription(e.target.value)}
-              ></textarea>
-              <label>Your social media or website link</label>
-              <input
-                type="url"
-                placeholder="Website link"
-                required
-                onChange={(e) => setUrl(e.target.value)}
-              />
-              <label>
-                Type your skills, after each skill press 'enter' on your
-                keyboard
-              </label>
-              <textarea
-                name="skill"
-                cols="30"
-                rows="10"
-                placeholder="skills"
-                required
-                onChange={(e) => setSkill(e.target.value)}
-                value={skill}
-                onKeyDown={(event) => handleKeyDown(event, "setSkillArr")}
-              />
-              <label>
-                What languages do you speak, again after each word press 'enter'
-                on your keyboard
-              </label>
-              <textarea
-                name="language"
-                cols="30"
-                rows="10"
-                placeholder="Languages you can speak"
-                required
-                onChange={(e) => setLang(e.target.value)}
-                onKeyDown={(event) => handleKeyDown(event, "setLangArr")}
-              />
-              <button onClick={() => setFirstPage(false)}>Next page</button>
-            </ProfileContainer>
-          ) : (
-            <GigContainer>
-              <h2>Your service</h2>
-              <label>Upload your gig picture</label>
-              <img
-                src={`https://gateway.ipfscdn.io/ipfs/${gigImg}`}
-                // alt="skill swap gig profile"
-              />
-              <input
-                type="file"
-                required
-                onChange={(event) => uploadToIPFS(event, "setGigImg")}
-              />
-              <label>Set your gig title in under 70 characters</label>
-              <input
-                type="text"
-                maxLength="70"
-                placeholder="Title"
-                required
-                onChange={(e) => setGigHead(e.target.value)}
-              />
-              <label>Describe your gig</label>
-              <textarea
-                name="gigDes"
-                cols="30"
-                rows="10"
-                placeholder="Gig Description"
-                required
-                onChange={(e) => setGigDescrip(e.target.value)}
-              ></textarea>
-              <label>Set the category</label>
-              <select
-                name="gig category"
-                onChange={(e) => setGigCategory(e.target.value)}
-                defaultValue={gigCategory}
-                required
-              >
-                <option value="">Category...</option>
-                <option value="Programming & Tech">Programming & Tech</option>
-                <option value="Video and Animation">Video and Animation</option>
-                <option value="Design & Creative">Design & Creative</option>
-                <option value="Digital Marketing">Digital Marketing</option>
-                <option value="Writing & Translation">
-                  Writing & Translation
-                </option>
-                <option value="Music & Audio">Music & Audio</option>
-                <option value="Video & Animation">Video & Animation</option>
-                <option value="Development & IT">Development & IT</option>
-                <option value="Finance & Accounting">
-                  Finance & Accounting
-                </option>
-              </select>
-              <label>What are you offering in this gig</label>
-              <textarea
-                name="offer"
-                cols="30"
-                rows="10"
-                placeholder="Gig offer"
-                required
-                onChange={(e) => setGigOffer(e.target.value)}
-              ></textarea>
-              <label>Set the price</label>
-              <input
-                type="number"
-                placeholder="Price"
-                onChange={(e) => setGigPrice(e.target.value)}
-                required
-              />
-              <label>Set the keywords to help buyer find your gig</label>
-              <textarea
-                name="keyword"
-                cols="30"
-                rows="10"
-                placeholder="Keywords"
-                required
-                onChange={(e) => setGigKeywords(e.target.value)}
-                onKeyDown={(event) => handleKeyDown(event, "setGigKeywordsArr")}
-              />
-              <button onClick={() => setFirstPage(true)}>Previous page</button>
-              <input type="submit" />
-            </GigContainer>
-          )}
-        </form>
-      </Container>
+                  <option value="Design & Creative">Design & Creative</option>
+                  <option value="Digital Marketing">Digital Marketing</option>
+                  <option value="Writing & Translation">
+                    Writing & Translation
+                  </option>
+                  <option value="Music & Audio">Music & Audio</option>
+                  <option value="Video & Animation">Video & Animation</option>
+                  <option value="Development & IT">Development & IT</option>
+                  <option value="Finance & Accounting">
+                    Finance & Accounting
+                  </option>
+                </select>
+                <label>What are you offering in this gig</label>
+                <textarea
+                  name="offer"
+                  cols="30"
+                  rows="10"
+                  placeholder="Gig offer"
+                  required
+                  onChange={(e) => setGigOffer(e.target.value)}
+                ></textarea>
+                <label>Set the price</label>
+                <input
+                  type="number"
+                  placeholder="Price"
+                  onChange={(e) => setGigPrice(e.target.value)}
+                  required
+                />
+                <label>Set the keywords to help buyer find your gig</label>
+                <textarea
+                  name="keyword"
+                  cols="30"
+                  rows="10"
+                  placeholder="Keywords"
+                  required
+                  onChange={(e) => setGigKeywords(e.target.value)}
+                  onKeyDown={(event) =>
+                    handleKeyDown(event, "setGigKeywordsArr")
+                  }
+                />
+                <button onClick={() => setFirstPage(true)}>
+                  Previous page
+                </button>
+                <input type="submit" />
+              </GigContainer>
+            )}
+          </form>
+        </Container>
+      )}
     </Wrapper>
   );
 }
@@ -304,7 +380,7 @@ const Wrapper = styled.div`
   min-height: 100vh;
   color: white;
   padding-top: 72px;
- background: linear-gradient(to right, #111118, #161727, #1a1c35);
+  background: linear-gradient(to right, #111118, #161727, #1a1c35);
   @media (max-width: 930px) {
     padding-top: 60px;
   }
