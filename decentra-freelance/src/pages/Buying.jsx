@@ -13,7 +13,7 @@ function Buying(category) {
 
   const abi = SkillSwap.abi;
 
-  const contractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
   const skillswap = new ethers.Contract(contractAddress, abi, signer);
 
@@ -31,6 +31,7 @@ function Buying(category) {
       const metadata = await response.json();
       const categoryWords = metadata.gig.gigCategory.split(" ");
       //   console.log("🚀 ~ file: Buying.jsx:29 ~ loadUser ~ categoryWords:", user);
+      console.log(category.category);
 
       console.log(listAddr);
       for (let j = 0; j < categoryWords.length; j++) {
@@ -60,7 +61,7 @@ function Buying(category) {
   return (
     <Wrapper>
       <Container>
-        <h1>Developers</h1>
+        <h1>{category.category}</h1>
         <h3>
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Esse,
           nostrum.
@@ -128,6 +129,7 @@ const CardContainer = styled.div`
 `;
 
 const Card = styled.div`
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   padding: 20px;
   background: var(--darkBg);
   cursor: pointer;

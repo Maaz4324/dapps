@@ -6,9 +6,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { ethers } from "ethers";
 import SkillSwap from "../artifacts/contracts/SkillSwap.sol/SkillSwap.json";
 
-function Navbar() {
+function Navbar({ searchState }) {
   const navigate = useNavigate();
   const [connectBtn, setConnectBtn] = useState("Connect");
+  const [searchResult, setSearchResult] = useState("");
+  // const [searchSend, setSearchSend] = useState("");
 
   function closeNav() {
     document.getElementById("mySidebar").style.width = "0";
@@ -30,19 +32,22 @@ function Navbar() {
 
       const abi = SkillSwap.abi;
 
-      const contractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+      const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
       const skillswap = new ethers.Contract(contractAddress, abi, signer);
       const noOfuser = await skillswap.noOfSellers();
+      console.log("working");
       // console.log(noOfuser.toString());
-      for (let index = 1; index <= noOfuser.toString(); index++) {
-        const user = await skillswap.sellerProfile(index);
-        if (user.seller.toLowerCase() == account[0]) {
-          setConnectBtn(
-            account[0].substring(0, 4) + "..." + account[0].slice(-3)
-          );
-        } else {
-          setConnectBtn("Connected");
+      if (noOfuser.toString() == 0) {
+        setConnectBtn("Connected");
+      } else {
+        for (let index = 1; index <= noOfuser.toString(); index++) {
+          const user = await skillswap.sellerProfile(index);
+          if (user.seller.toLowerCase() == account[0]) {
+            setConnectBtn(
+              account[0].substring(0, 4) + "..." + account[0].slice(-3)
+            );
+          }
         }
       }
     } else {
@@ -58,6 +63,14 @@ function Navbar() {
     }
   }
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      // console.log(searchResult);
+      navigate(searchResult);
+      searchState(searchResult);
+    }
+  };
+
   return (
     <Wrapper>
       <Container>
@@ -68,7 +81,13 @@ function Navbar() {
         </Logo>
         <Search>
           <img src={search} alt="search on skillswap - skill swap" />
-          <input type="text" placeholder="Search for the services" />
+          <input
+            type="text"
+            placeholder="Search for the services"
+            onChange={(e) => setSearchResult(e.target.value)}
+            value={searchResult}
+            onKeyDown={handleKeyDown}
+          />
         </Search>
         <Right>
           <img src={chat} alt="chat on skillswap - skill swap" />

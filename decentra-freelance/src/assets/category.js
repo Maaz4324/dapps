@@ -48,7 +48,7 @@ export const categoryData = [
     img: programming,
     head: "Programming & Tech",
     text: "Programmers and coders Both for Your Project",
-    link: "programmer",
+    link: "programming",
   },
   {
     img: finance,
