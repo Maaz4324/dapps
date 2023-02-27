@@ -14,12 +14,13 @@ contract SkillSwap{
 
     struct Profile{
         address seller;
+        uint256 id;
         string uri;
-        bool profileEdit;
     }
     uint256 public noOfSellers;
 
     mapping(uint256=>Profile) public sellerProfile;
+    mapping(address=>bool) public isSeller;
 
     mapping(address=>mapping(address=>Deal)) public dealSellrToBuyr;
 
@@ -43,10 +44,17 @@ contract SkillSwap{
     }
 
     function setProfile(string memory _uri) public {
-        if(!sellerProfile[noOfSellers].profileEdit){
-            ++noOfSellers;
-        }
-        sellerProfile[noOfSellers] = Profile(msg.sender, _uri, true);
+        require(isSeller[msg.sender]==false, "Already a seller");
+        ++noOfSellers;
+        sellerProfile[noOfSellers] = Profile(msg.sender, noOfSellers, _uri);
+        isSeller[msg.sender]=true;
+    }
+
+    function updateProfile(string memory _uri, uint256 _id) public{
+        require(isSeller[msg.sender]==true, "not a seller");
+        require(sellerProfile[_id].seller == msg.sender, "NOT your profile");
+        Profile storage profile = sellerProfile[_id];
+        profile.uri = _uri;
     }
 
      function contractBalance() public view returns(uint256){

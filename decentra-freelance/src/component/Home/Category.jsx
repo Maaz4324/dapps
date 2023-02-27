@@ -1,8 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import { categoryData } from "../../assets/category";
+import { useNavigate } from "react-router-dom";
 
 function Category() {
+  const navigate = useNavigate();
+
+  function handleRedirect(link) {
+    navigate(link);
+  }
   return (
     <Wrapper>
       <Container>
@@ -10,15 +16,13 @@ function Category() {
         <h5>Get some Inspirations from 1800+ skills</h5>
         <CategoryContainer>
           {categoryData.map((data, idx) => (
-            <Card key={idx}>
+            <Card key={idx} onClick={() => handleRedirect(data.link)}>
               <img src={data.img} alt="" />
               <h3>{data.head}</h3>
               <p>
                 <span>{data.text}</span>
               </p>
-              <a href="#">
-                <h4>See more</h4>
-              </a>
+              <h4>See more</h4>
             </Card>
           ))}
         </CategoryContainer>
@@ -68,11 +72,13 @@ const Card = styled.section`
     grid-column: 1/2;
     grid-row: 1/2;
   }
-  a {
+
+  h4 {
     color: white;
     grid-column: 1/3;
     grid-row: 3/4;
     margin-top: 10px;
+    text-decoration: underline;
   }
   span {
     font-size: 20px;

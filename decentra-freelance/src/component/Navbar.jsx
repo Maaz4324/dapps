@@ -30,7 +30,7 @@ function Navbar() {
 
       const abi = SkillSwap.abi;
 
-      const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+      const contractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
       const skillswap = new ethers.Contract(contractAddress, abi, signer);
       const noOfuser = await skillswap.noOfSellers();
@@ -38,7 +38,9 @@ function Navbar() {
       for (let index = 1; index <= noOfuser.toString(); index++) {
         const user = await skillswap.sellerProfile(index);
         if (user.seller.toLowerCase() == account[0]) {
-          setConnectBtn(account[0].substring(0, 10) + "...");
+          setConnectBtn(
+            account[0].substring(0, 4) + "..." + account[0].slice(-3)
+          );
         } else {
           setConnectBtn("Connected");
         }
