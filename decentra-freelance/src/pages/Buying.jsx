@@ -6,6 +6,7 @@ import developer from "../../src/images/developer.svg";
 
 function Buying(category) {
   const [listData, setListData] = useState([]);
+  const [listAddr, setListAddr] = useState([]);
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -23,28 +24,29 @@ function Buying(category) {
 
     const noOfuser = await skillswap.noOfSellers();
     console.log(noOfuser.toString());
-    for (let index = 1; index <= 2; index++) {
+
+    for (let index = 1; index <= noOfuser.toString(); index++) {
       const user = await skillswap.sellerProfile(index);
       const response = await fetch(user.uri);
       const metadata = await response.json();
       const categoryWords = metadata.gig.gigCategory.split(" ");
-      console.log("🚀 ~ file: Buying.jsx:29 ~ loadUser ~ categoryWords:", user);
-      let sellerAddr = listData.map((data) => data.address);
+      //   console.log("🚀 ~ file: Buying.jsx:29 ~ loadUser ~ categoryWords:", user);
+
+      console.log(listAddr);
       for (let j = 0; j < categoryWords.length; j++) {
         if (
           category.category
             .toLowerCase()
-            .includes(categoryWords[j].toLowerCase()) &&
-          sellerAddr[sellerAddr.length - 1] != user.seller
+            .includes(categoryWords[j].toLowerCase())
         ) {
-          //   console.log(
-          //     "🚀 ~ file: Buying.jsx:36 ~ loadUser ~ sellerAddr:",
-          //     sellerAddr[sellerAddr.length - 1]
-          //   );
-          const result = metadata.gig;
-          result.userName = metadata.profile.name;
-          result.address = user.seller;
-          setListData((oldArray) => [...oldArray, result]);
+          if (!listAddr.includes(user.seller)) {
+            console.log(listAddr);
+            const result = metadata.gig;
+            result.userName = metadata.profile.name;
+            result.address = user.seller;
+            setListAddr((prev) => [...prev, user.seller]);
+            setListData((oldArray) => [...oldArray, result]);
+          }
         }
       }
     }
@@ -52,7 +54,7 @@ function Buying(category) {
 
   useEffect(() => {
     loadUser();
-    // eslint-disable-next-line
+    // eslint - disable - next - line;
   }, []);
 
   return (
@@ -66,10 +68,16 @@ function Buying(category) {
         <CardContainer>
           {listData.map((data, idx) => (
             <Card key={idx}>
-              <img
-                src={`https://gateway.ipfscdn.io/ipfs/${data.gigImg}`}
-                alt=""
-              />
+              <div
+                style={{
+                  backgroundImage: `url(https://gateway.ipfscdn.io/ipfs/${data.gigImg})`,
+                  backgroundPosition: "center",
+                  backgroundSize: "cover",
+                  backgroundRepeat: "no-repeat",
+                  width: "100%",
+                  height: "30vh",
+                }}
+              ></div>
               <h5>{data.userName}</h5>
               <h4>{data.gigHead}</h4>
               <Line />
