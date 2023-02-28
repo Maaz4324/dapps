@@ -42,7 +42,7 @@ export const categoryData = [
     img: editor,
     head: "Video & Animation",
     text: "Animation Video Maker that Brings Studio Quality",
-    link: "animator",
+    link: "animation",
   },
   {
     img: programming,

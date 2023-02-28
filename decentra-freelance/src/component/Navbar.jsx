@@ -68,6 +68,7 @@ function Navbar({ searchState }) {
       // console.log(searchResult);
       navigate(searchResult);
       searchState(searchResult);
+      localStorage.setItem("searchReq", searchResult);
     }
   };
 

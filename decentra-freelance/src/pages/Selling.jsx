@@ -60,7 +60,6 @@ function Selling() {
 
   const handleKeyDown = (event, Arr) => {
     if (event.key === "Enter") {
-      console.log(Arr);
       if (Arr == "setSkillArr") {
         setSkillArr(skill.split("\n"));
       }
@@ -169,7 +168,9 @@ function Selling() {
               <h5>{profileData.description}</h5>
               <ul>
                 <li>{profileData.country}</li>
-                <li>{profileData.urlS}</li>
+                <li>
+                  <a href={profileData.urlS}>{profileData.urlS}</a>
+                </li>
                 <li>{profileData.skill}</li>
                 <li>{profileData.language}</li>
               </ul>

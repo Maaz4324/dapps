@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { ethers } from "ethers";
 import SkillSwap from "../artifacts/contracts/SkillSwap.sol/SkillSwap.json";
-import developer from "../../src/images/developer.svg";
+import { useNavigate } from "react-router-dom";
 
-function Buying(category) {
+function Buying({ category, sellerState }) {
+  const navigate = useNavigate();
   const [listData, setListData] = useState([]);
   const [listAddr, setListAddr] = useState([]);
 
@@ -18,39 +19,33 @@ function Buying(category) {
   const skillswap = new ethers.Contract(contractAddress, abi, signer);
 
   async function loadUser() {
-    const account = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
-
     const noOfuser = await skillswap.noOfSellers();
-    console.log(noOfuser.toString());
 
     for (let index = 1; index <= noOfuser.toString(); index++) {
       const user = await skillswap.sellerProfile(index);
       const response = await fetch(user.uri);
       const metadata = await response.json();
-      const categoryWords = metadata.gig.gigCategory.split(" ");
-      //   console.log("🚀 ~ file: Buying.jsx:29 ~ loadUser ~ categoryWords:", user);
-      console.log(category.category);
-
-      console.log(listAddr);
-      for (let j = 0; j < categoryWords.length; j++) {
-        if (
-          category.category
-            .toLowerCase()
-            .includes(categoryWords[j].toLowerCase())
-        ) {
-          if (!listAddr.includes(user.seller)) {
-            console.log(listAddr);
-            const result = metadata.gig;
-            result.userName = metadata.profile.name;
-            result.address = user.seller;
-            setListAddr((prev) => [...prev, user.seller]);
-            setListData((oldArray) => [...oldArray, result]);
-          }
+      const categoryWords = metadata.gig.gigCategory;
+      if (
+        categoryWords.includes(category) ||
+        metadata.gig.gigKeywords.includes(category)
+      ) {
+        if (!listAddr.includes(user.seller)) {
+          const result = metadata.gig;
+          result.userName = metadata.profile.name;
+          result.address = user.seller;
+          setListAddr((prev) => [...prev, user.seller]);
+          setListData((oldArray) => [...oldArray, result]);
         }
       }
     }
+  }
+
+  function RenderSeller(e, to) {
+    e.preventDefault();
+    navigate("/seller/" + to.slice(2));
+    sellerState(to);
+    localStorage.setItem("sellerId", to);
   }
 
   useEffect(() => {
@@ -61,14 +56,14 @@ function Buying(category) {
   return (
     <Wrapper>
       <Container>
-        <h1>{category.category}</h1>
+        <h1>{category}</h1>
         <h3>
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Esse,
           nostrum.
         </h3>
         <CardContainer>
           {listData.map((data, idx) => (
-            <Card key={idx}>
+            <Card key={idx} onClick={(e) => RenderSeller(e, data.address)}>
               <div
                 style={{
                   backgroundImage: `url(https://gateway.ipfscdn.io/ipfs/${data.gigImg})`,

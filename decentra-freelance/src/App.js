@@ -9,33 +9,50 @@ import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
 import Buying from "./pages/Buying";
 import { useState, useEffect } from "react";
 import { categoryData } from "./assets/category";
+import ScrollToTop from "./ScrollToTop";
+import SellerProfile from "./pages/SellerProfile";
 
 function App() {
   const activeChainId = ChainId.Mainnet;
   const [searchData, setSearchData] = useState("");
-
-  function getState() {
-    console.log("searchData");
-  }
+  const [sellerData, setSellerData] = useState("");
 
   return (
     <Router>
       <Wrapper>
-        <Navbar searchState={setSearchData} onClick={getState} />
+        <Navbar searchState={setSearchData} />
+        <ScrollToTop />
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route
             exact
-            path={searchData}
-            element={<Buying category={searchData} />}
+            path={localStorage.getItem("searchReq")}
+            element={
+              <Buying
+                category={localStorage.getItem("searchReq")}
+                sellerState={setSellerData}
+              />
+            }
           />
           {categoryData.map((data, idx) => (
             <Route
               exact
               path={data.link}
-              element={<Buying category={data.link} />}
+              key={idx}
+              element={
+                <Buying category={data.link} sellerState={setSellerData} />
+              }
             />
           ))}
+          <Route
+            exact
+            path={"/seller/" + localStorage.getItem("sellerId").slice(2)}
+            element={
+              <SellerProfile
+                setSellerState={localStorage.getItem("sellerId")}
+              />
+            }
+          />
           <Route
             exact
             path="/selling"
