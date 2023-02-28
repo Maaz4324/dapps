@@ -40,13 +40,21 @@ function SellerProfile({ setSellerState }) {
     <Wrapper>
       <Container>
         {displayProfile.map((profileData, idx) => (
-          <div key={idx}>
-            <h1>Profile</h1>
-            <img
-              src={`https://gateway.ipfscdn.io/ipfs/${profileData.image}`}
-              alt=""
-            />
+          <Content className="profile" key={idx}>
+            <h2>About the seller</h2>
+            {/* <ProfileContainer> */}
+            <div
+              style={{
+                backgroundImage: `url(https://gateway.ipfscdn.io/ipfs/${profileData.image})`,
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                width: "100px",
+                height: "100px",
+              }}
+            ></div>
             <h3>{profileData.name}</h3>
+            {/* </ProfileContainer> */}
             <h5>{profileData.description}</h5>
             <ul>
               <li>{profileData.country}</li>
@@ -56,23 +64,22 @@ function SellerProfile({ setSellerState }) {
               <li>{profileData.skill}</li>
               <li>{profileData.language}</li>
             </ul>
-          </div>
+          </Content>
         ))}
         {displayGig.map((gigData, idx) => (
-          <div key={idx}>
-            <h1>Gig</h1>
-            <div style={{ width: "50%" }}>
+          <Content className="gig" key={idx}>
+            <h2>{gigData.gigHead}</h2>
+            <div>
               <img
                 style={{ width: "100%" }}
                 src={`https://gateway.ipfscdn.io/ipfs/${gigData.gigImg}`}
                 alt=""
               />
             </div>
-            <h2>{gigData.gigHead}</h2>
             <p>{gigData.gigDescription}</p>
             <p>Offer: {gigData.gigOffer}</p>
             <p>Price: {gigData.gigPrice}</p>
-          </div>
+          </Content>
         ))}
       </Container>
     </Wrapper>
@@ -93,16 +100,17 @@ const Wrapper = styled.section`
 `;
 
 const Container = styled.div`
+  border: 2px solid white;
   display: flex;
   width: 98%;
-  max-width: 747px;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  max-width: 1147px;
+  align-items: start;
+  justify-content: space-between;
+  flex-direction: row-reverse;
   margin: 0 auto;
   padding: 40px 0;
   margin-bottom: 30px;
-  background: var(--darkBg);
+  /* background: var(--darkBg); */
   h2 {
     font-size: 40px;
   }
@@ -132,4 +140,57 @@ const Container = styled.div`
       float: right;
     }
   }
+  .profile {
+    width: 40%;
+    div {
+      width: 40%;
+      border-radius: 500px;
+      width: 60px;
+      height: 60px;
+      img {
+        border-radius: 500px;
+        width: 60px;
+        height: 60px;
+      }
+    }
+  }
+  .gig {
+    width: 60%;
+    div {
+      width: 100%;
+    }
+  }
+`;
+
+const Content = styled.div`
+  width: 100%;
+  margin: 0 20px;
+  border: 2px solid red;
+
+  div {
+    border: 2px solid white;
+    // width: 100%;
+    margin: 10px 0;
+    img {
+      //   width: 100%;
+    }
+  }
+  ul li {
+    list-style: none;
+  }
+  h2 {
+    font-size: 30px;
+  }
+  h5 {
+    font-size: 16px;
+    font-weight: 200;
+  }
+`;
+
+const ProfileContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border: 8px solid red;
 `;

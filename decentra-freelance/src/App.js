@@ -16,6 +16,12 @@ function App() {
   const activeChainId = ChainId.Mainnet;
   const [searchData, setSearchData] = useState("");
   const [sellerData, setSellerData] = useState("");
+  const [changeSearch, setChangeSearch] = useState("");
+
+  useEffect(() => {
+    setChangeSearch(localStorage.getItem("searchReq"));
+    // eslint - disable - next - line;
+  }, [searchData]);
 
   return (
     <Router>
@@ -26,21 +32,21 @@ function App() {
           <Route exact path="/" element={<Home />} />
           <Route
             exact
-            path={localStorage.getItem("searchReq")}
+            path={changeSearch}
             element={
-              <Buying
-                category={localStorage.getItem("searchReq")}
-                sellerState={setSellerData}
-              />
+              <Buying category={changeSearch} sellerState={setSellerData} />
             }
           />
           {categoryData.map((data, idx) => (
             <Route
               exact
               path={data.link}
-              key={idx}
               element={
-                <Buying category={data.link} sellerState={setSellerData} />
+                <Buying
+                  key={idx}
+                  category={data.link}
+                  sellerState={setSellerData}
+                />
               }
             />
           ))}

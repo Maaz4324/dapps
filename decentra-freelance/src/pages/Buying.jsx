@@ -27,8 +27,8 @@ function Buying({ category, sellerState }) {
       const metadata = await response.json();
       const categoryWords = metadata.gig.gigCategory;
       if (
-        categoryWords.includes(category) ||
-        metadata.gig.gigKeywords.includes(category)
+        categoryWords.toLowerCase().includes(category) ||
+        metadata.gig.gigKeywords.includes(category.toLowerCase())
       ) {
         if (!listAddr.includes(user.seller)) {
           const result = metadata.gig;
@@ -74,13 +74,15 @@ function Buying({ category, sellerState }) {
                   height: "30vh",
                 }}
               ></div>
-              <h5>{data.userName}</h5>
-              <h4>{data.gigHead}</h4>
-              <Line />
-              <p>
-                starting at
-                <span> {data.gigPrice}Eth</span>
-              </p>
+              <CardText>
+                <h5>{data.userName}</h5>
+                <h4>{data.gigHead}</h4>
+                <Line />
+                <p>
+                  starting at
+                  <span> {data.gigPrice}Eth</span>
+                </p>
+              </CardText>
             </Card>
           ))}
         </CardContainer>
@@ -119,13 +121,15 @@ const Container = styled.div`
 const CardContainer = styled.div`
   margin-top: 40px;
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: 33% 33% 33%;
   grid-gap: 20px;
+`;
+const CardText = styled.div`
+  padding: 20px;
 `;
 
 const Card = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  padding: 20px;
   background: var(--darkBg);
   cursor: pointer;
   border-radius: 8px;
@@ -145,6 +149,10 @@ const Card = styled.div`
   p {
     font-size: 16px;
     color: var(--darkText);
+  }
+  div {
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
   }
 `;
 

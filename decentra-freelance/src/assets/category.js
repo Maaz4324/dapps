@@ -12,7 +12,7 @@ export const categoryData = [
     img: developer,
     head: "Development & IT",
     text: "Software Engineer, Web / Mobile Developer & more",
-    link: "developer",
+    link: "development",
   },
   {
     img: designer,
