@@ -65,10 +65,9 @@ function Navbar({ searchState }) {
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      // console.log(searchResult);
-      navigate(searchResult);
-      searchState(searchResult);
-      localStorage.setItem("searchReq", searchResult);
+      navigate(searchResult.trim());
+      searchState(searchResult.trim());
+      localStorage.setItem("searchReq", searchResult.trim());
     }
   };
 
