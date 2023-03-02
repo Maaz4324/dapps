@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import { categoryData } from "./assets/category";
 import ScrollToTop from "./ScrollToTop";
 import SellerProfile from "./pages/SellerProfile";
+import Chat from "./pages/Chat";
 
 function App() {
   const activeChainId = ChainId.Mainnet;
@@ -30,6 +31,7 @@ function App() {
         <ScrollToTop />
         <Routes>
           <Route exact path="/" element={<Home />} />
+          <Route exact path="/chat" element={<Chat />} />
           <Route
             exact
             path={changeSearch}

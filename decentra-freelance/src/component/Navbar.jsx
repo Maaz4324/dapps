@@ -91,7 +91,9 @@ function Navbar({ searchState }) {
           />
         </Search>
         <Right>
-          <img src={chat} alt="chat on skillswap - skill swap" />
+          <Link to="/chat">
+            <img src={chat} alt="chat on skillswap - skill swap" />
+          </Link>
           {/* <Link to="/selling"> */}
           <h4
             onClick={goToSell}

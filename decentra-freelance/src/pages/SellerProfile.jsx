@@ -100,7 +100,7 @@ const Wrapper = styled.section`
 `;
 
 const Container = styled.div`
-  border: 2px solid white;
+  /* border: 2px solid white; */
   display: flex;
   width: 98%;
   max-width: 1147px;
@@ -165,10 +165,10 @@ const Container = styled.div`
 const Content = styled.div`
   width: 100%;
   margin: 0 20px;
-  border: 2px solid red;
+  /* border: 2px solid red; */
 
   div {
-    border: 2px solid white;
+    /* border: 2px solid white; */
     // width: 100%;
     margin: 10px 0;
     img {
@@ -192,5 +192,5 @@ const ProfileContainer = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  border: 8px solid red;
+  /* border: 8px solid red; */
 `;
