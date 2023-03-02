@@ -29,6 +29,8 @@ function Selling() {
   const [displayProfile, setDisplayProfile] = useState([]);
   const [displayGig, setDisplayGig] = useState([]);
   const [userLogin, setUserLogin] = useState(false);
+  const [gigFormItem, setGigFormItem] = useState([]);
+  const [profileFormItem, setProfileFormItem] = useState([]);
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -38,6 +40,14 @@ function Selling() {
   const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
   const skillswap = new ethers.Contract(contractAddress, abi, signer);
+
+  useEffect(() => {
+    localStorage.setItem("gigFormItem", JSON.stringify(gigFormItem));
+  }, [gigFormItem]);
+
+  useEffect(() => {
+    localStorage.setItem("profileFormItem", JSON.stringify(profileFormItem));
+  }, [profileFormItem]);
 
   async function loadUser() {
     const account = await window.ethereum.request({
@@ -133,6 +143,7 @@ function Selling() {
         gigOffer: gigOffer,
         gigKeywords: gigKeywordsArr,
       };
+      setGigFormItem(gig);
       // Here we get the IPFS URI of where our metadata has been uploaded
       const uri = await storage.upload({ profile: profile, gig: gig });
       const url = await storage.resolveScheme(uri);
@@ -155,26 +166,45 @@ function Selling() {
 
   return (
     <Wrapper>
-      {userLogin ? (
+      {/* {userLogin ? (
         <Container>
           {displayProfile.map((profileData, idx) => (
             <YourDetail key={idx}>
               <PPContainer>
                 <img
                   src={`https://gateway.ipfscdn.io/ipfs/${profileData.image}`}
-                  alt=""
+                  alt={profileData.name}
                 />
               </PPContainer>
               <YourName>
                 <h3>{profileData.name}</h3>
-                <button>Edit profile</button>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    {" "}
+                    <path
+                      d="M18.9445 9.1875L14.9445 5.1875M18.9445 9.1875L13.946 14.1859C13.2873 14.8446 12.4878 15.3646 11.5699 15.5229C10.6431 15.6828 9.49294 15.736 8.94444 15.1875C8.39595 14.639 8.44915 13.4888 8.609 12.562C8.76731 11.6441 9.28735 10.8446 9.946 10.1859L14.9445 5.1875M18.9445 9.1875C18.9445 9.1875 21.9444 6.1875 19.9444 4.1875C17.9444 2.1875 14.9445 5.1875 14.9445 5.1875M20.5 12C20.5 18.5 18.5 20.5 12 20.5C5.5 20.5 3.5 18.5 3.5 12C3.5 5.5 5.5 3.5 12 3.5"
+                      stroke="#ffffff"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    ></path>{" "}
+                  </g>
+                </svg>
               </YourName>
               <YourOthers>
                 <ul>
                   <li>
                     <svg
-                      width="24px"
-                      height="24px"
                       viewBox="0 0 24 24"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -207,8 +237,6 @@ function Selling() {
                   </li>
                   <li>
                     <svg
-                      width="24px"
-                      height="24px"
                       viewBox="0 0 24 24"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -232,8 +260,6 @@ function Selling() {
                   </li>
                   <li>
                     <svg
-                      width="24px"
-                      height="24px"
                       viewBox="0 0 24 24"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -269,8 +295,6 @@ function Selling() {
                   </li>
                   <li>
                     <svg
-                      width="24px"
-                      height="24px"
                       viewBox="0 0 24 24"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -298,198 +322,212 @@ function Selling() {
               </YourDes>
             </YourDetail>
           ))}
-          {/* {displayGig.map((gigData, idx) => (
-            <div key={idx}>
-              <h1>Gig</h1>
-              <div style={{ width: "50%" }}>
+          {displayGig.map((gigData, idx) => (
+            <YourService key={idx}>
+              <ServiceHead>
+                <h2>{gigData.gigHead}</h2>
+                <ServiceImg
+                  style={{
+                    background: `url(https://gateway.ipfscdn.io/ipfs/${gigData.gigImg})`,
+                    backgroundPosition: "center",
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                  }}
+                ></ServiceImg>
+              </ServiceHead>
+              <Offer>
+                <h4>
+                  <span>Starting from:</span> {gigData.gigPrice} ETH
+                </h4>
+                <p>
+                  <span>Offer:</span> {gigData.gigOffer}
+                </p>
+              </Offer>
+              <ServiceDes>
+                <span>Service Description: </span>
+                <p>{gigData.gigDescription}</p>
+              </ServiceDes>
+            </YourService>
+          ))}
+        </Container>
+      ) : ( */}
+      <Container>
+        <form onSubmit={uploadFileToStorage}>
+          {firstPage ? (
+            <ProfileContainer>
+              <h2>About yourself</h2>
+              <label>Full name</label>
+              <input
+                type="text"
+                placeholder="Full name"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <label>Upload your profile</label>
+              <div>
                 <img
-                  style={{ width: "100%" }}
-                  src={`https://gateway.ipfscdn.io/ipfs/${gigData.gigImg}`}
-                  alt=""
+                  src={`https://gateway.ipfscdn.io/ipfs/${img}`}
+                  alt="skill swap user profile"
                 />
               </div>
-              <h2>{gigData.gigHead}</h2>
-              <p>{gigData.gigDescription}</p>
-              <p>Offer: {gigData.gigOffer}</p>
-              <p>Price: {gigData.gigPrice}</p>
-            </div>
-          ))} */}
-        </Container>
-      ) : (
-        <Container>
-          <form onSubmit={uploadFileToStorage}>
-            {firstPage ? (
-              <ProfileContainer>
-                <h2>About yourself</h2>
-                <label>Full name</label>
-                <input
-                  type="text"
-                  placeholder="Full name"
-                  required
-                  onChange={(e) => setName(e.target.value)}
-                />
-                <label>Upload your profile</label>
-                <div>
-                  <img
-                    src={`https://gateway.ipfscdn.io/ipfs/${img}`}
-                    alt="skill swap user profile"
-                  />
-                </div>
-                <input
-                  type="file"
-                  required
-                  onChange={(event) => uploadToIPFS(event, "setImg")}
-                />
-                <label>Country</label>
-                <select
-                  name="country"
-                  onChange={(e) => setCountry(e.target.value)}
-                  defaultValue={country}
-                  required
-                >
-                  <option value="">Country...</option>
-                  {countriesData.map((data, idx) => (
-                    <option key={idx} value={data.code}>
-                      {data.name}
-                    </option>
-                  ))}
-                </select>
-                <label>Describe yourself</label>
-                <textarea
-                  name="description"
-                  cols="30"
-                  rows="10"
-                  placeholder="Something about yourself"
-                  required
-                  onChange={(e) => setDescription(e.target.value)}
-                ></textarea>
-                <label>Your social media or website link</label>
-                <input
-                  type="url"
-                  placeholder="Website link"
-                  required
-                  onChange={(e) => setUrl(e.target.value)}
-                />
-                <label>
-                  Type your skills, after each skill press 'enter' on your
-                  keyboard
-                </label>
-                <textarea
-                  name="skill"
-                  cols="30"
-                  rows="10"
-                  placeholder="skills"
-                  required
-                  onChange={(e) => setSkill(e.target.value)}
-                  value={skill}
-                  onKeyDown={(event) => handleKeyDown(event, "setSkillArr")}
-                />
-                <label>
-                  What languages do you speak, again after each word press
-                  'enter' on your keyboard
-                </label>
-                <textarea
-                  name="language"
-                  cols="30"
-                  rows="10"
-                  placeholder="Languages you can speak"
-                  required
-                  onChange={(e) => setLang(e.target.value)}
-                  onKeyDown={(event) => handleKeyDown(event, "setLangArr")}
-                />
-                <button onClick={() => setFirstPage(false)}>Next page</button>
-              </ProfileContainer>
-            ) : (
-              <GigContainer>
-                <h2>Your service</h2>
-                <label>Upload your gig picture</label>
-                <img
-                  src={`https://gateway.ipfscdn.io/ipfs/${gigImg}`}
-                  // alt="skill swap gig profile"
-                />
-                <input
-                  type="file"
-                  required
-                  onChange={(event) => uploadToIPFS(event, "setGigImg")}
-                />
-                <label>Set your gig title in under 70 characters</label>
-                <input
-                  type="text"
-                  maxLength="70"
-                  placeholder="Title"
-                  required
-                  onChange={(e) => setGigHead(e.target.value)}
-                />
-                <label>Describe your gig</label>
-                <textarea
-                  name="gigDes"
-                  cols="30"
-                  rows="10"
-                  placeholder="Gig Description"
-                  required
-                  onChange={(e) => setGigDescrip(e.target.value)}
-                ></textarea>
-                <label>Set the category</label>
-                <select
-                  name="gig category"
-                  onChange={(e) => setGigCategory(e.target.value)}
-                  defaultValue={gigCategory}
-                  required
-                >
-                  <option value="">Category...</option>
-                  <option value="Programming & Tech">Programming & Tech</option>
-                  <option value="Video and Animation">
-                    Video and Animation
+              <input
+                type="file"
+                required
+                onChange={(event) => uploadToIPFS(event, "setImg")}
+              />
+              <label>Country</label>
+              <select
+                name="country"
+                onChange={(e) => setCountry(e.target.value)}
+                defaultValue={country}
+                required
+              >
+                <option value="">Country...</option>
+                {countriesData.map((data, idx) => (
+                  <option key={idx} value={data.code}>
+                    {data.name}
                   </option>
-                  <option value="Design & Creative">Design & Creative</option>
-                  <option value="Digital Marketing">Digital Marketing</option>
-                  <option value="Writing & Translation">
-                    Writing & Translation
-                  </option>
-                  <option value="Music & Audio">Music & Audio</option>
-                  <option value="Video & Animation">Video & Animation</option>
-                  <option value="Development & IT">Development & IT</option>
-                  <option value="Finance & Accounting">
-                    Finance & Accounting
-                  </option>
-                </select>
-                <label>What are you offering in this gig</label>
-                <textarea
-                  name="offer"
-                  cols="30"
-                  rows="10"
-                  placeholder="Gig offer"
-                  required
-                  onChange={(e) => setGigOffer(e.target.value)}
-                ></textarea>
-                <label>Set the price</label>
-                <input
-                  type="number"
-                  placeholder="Price"
-                  onChange={(e) => setGigPrice(e.target.value)}
-                  required
-                />
-                <label>Set the keywords to help buyer find your gig</label>
-                <textarea
-                  name="keyword"
-                  cols="30"
-                  rows="10"
-                  placeholder="Keywords"
-                  required
-                  onChange={(e) => setGigKeywords(e.target.value)}
-                  onKeyDown={(event) =>
-                    handleKeyDown(event, "setGigKeywordsArr")
-                  }
-                />
-                <button onClick={() => setFirstPage(true)}>
-                  Previous page
-                </button>
-                <input type="submit" />
-              </GigContainer>
-            )}
-          </form>
-        </Container>
-      )}
+                ))}
+              </select>
+              <label>Describe yourself</label>
+              <textarea
+                name="description"
+                cols="30"
+                rows="10"
+                placeholder="Something about yourself"
+                required
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              ></textarea>
+              <label>Your social media or website link</label>
+              <input
+                type="url"
+                placeholder="Website link"
+                required
+                value={urlS}
+                onChange={(e) => setUrl(e.target.value)}
+              />
+              <label>
+                Type your skills, after each skill press 'enter' on your
+                keyboard
+              </label>
+              {/* <textarea
+                name="skill"
+                cols="30"
+                rows="10"
+                placeholder="skills"
+                required
+                onChange={(e) => setSkill(e.target.value)}
+                value={skill}
+                onKeyDown={(event) => handleKeyDown(event, "setSkillArr")}
+              /> */}
+              <label>
+                What languages do you speak, again after each word press 'enter'
+                on your keyboard
+              </label>
+              <textarea
+                name="language"
+                cols="30"
+                rows="10"
+                placeholder="Languages you can speak"
+                required
+                defaultValue={lang}
+                onChange={(e) => setLang(e.target.value)}
+                onKeyDown={(event) => handleKeyDown(event, "setLangArr")}
+              />
+              <button onClick={() => setFirstPage(false)}>Next page</button>
+            </ProfileContainer>
+          ) : (
+            <GigContainer>
+              <h2>Your service</h2>
+              <label>Upload your gig picture</label>
+              <img
+                src={`https://gateway.ipfscdn.io/ipfs/${gigImg}`}
+                alt="skill swap gig profile"
+              />
+              <input
+                type="file"
+                required
+                onChange={(event) => uploadToIPFS(event, "setGigImg")}
+              />
+              <label>Set your gig title in under 70 characters</label>
+              <input
+                type="text"
+                maxLength="70"
+                placeholder="Title"
+                required
+                defaultValue={gigHead}
+                onChange={(e) => setGigHead(e.target.value)}
+              />
+              <label>Describe your gig</label>
+              <textarea
+                name="gigDes"
+                cols="30"
+                rows="10"
+                placeholder="Gig Description"
+                required
+                defaultValue={gigDescrip}
+                onChange={(e) => setGigDescrip(e.target.value)}
+              ></textarea>
+              <label>Set the category</label>
+              <select
+                name="gig category"
+                onChange={(e) => setGigCategory(e.target.value)}
+                defaultValue={gigCategory}
+                required
+              >
+                <option value="">Category...</option>
+                <option value="Programming & Tech">Programming & Tech</option>
+                <option value="Video and Animation">Video and Animation</option>
+                <option value="Design & Creative">Design & Creative</option>
+                <option value="Digital Marketing">Digital Marketing</option>
+                <option value="Writing & Translation">
+                  Writing & Translation
+                </option>
+                <option value="Music & Audio">Music & Audio</option>
+                <option value="Video & Animation">Video & Animation</option>
+                <option value="Development & IT">Development & IT</option>
+                <option value="Finance & Accounting">
+                  Finance & Accounting
+                </option>
+              </select>
+              <label>What are you offering in this gig</label>
+              <textarea
+                name="offer"
+                cols="30"
+                rows="10"
+                placeholder="Gig offer"
+                required
+                defaultValue={gigOffer}
+                onChange={(e) => setGigOffer(e.target.value)}
+              ></textarea>
+              <label>Set the price</label>
+              <input
+                type="number"
+                placeholder="Price"
+                defaultValue={gigPrice}
+                onChange={(e) => setGigPrice(e.target.value)}
+                required
+              />
+              <label>Set the keywords to help buyer find your gig</label>
+              <textarea
+                name="keyword"
+                cols="30"
+                rows="10"
+                placeholder="Keywords"
+                required
+                defaultValue={gigKeywords}
+                onChange={(e) => setGigKeywords(e.target.value)}
+                onKeyDown={(event) => handleKeyDown(event, "setGigKeywordsArr")}
+              />
+              <button onClick={() => setFirstPage(true)}>Previous page</button>
+              <input type="submit" />
+            </GigContainer>
+          )}
+        </form>
+      </Container>
+      {/* )} */}
     </Wrapper>
   );
 }
@@ -553,10 +591,14 @@ const ProfileContainer = styled.div`
   text-align: start;
   flex-direction: column;
   width: 80%;
-  @media (max-width: 747px) {
-    width: 99%;
-  }
   margin: 0 auto;
+  padding: 40px;
+  border-radius: 10px;
+  @media (max-width: 747px) {
+    width: 97%;
+    padding: 40px 0;
+    background: transparent;
+  }
 `;
 
 const GigContainer = styled.div`
@@ -564,14 +606,19 @@ const GigContainer = styled.div`
   text-align: start;
   flex-direction: column;
   width: 80%;
-  @media (max-width: 747px) {
-    width: 99%;
-  }
   margin: 0 auto;
+  padding: 40px;
+  border-radius: 10px;
+  background: var(--darkBg);
+  @media (max-width: 747px) {
+    width: 97%;
+    padding: 40px 0;
+    background: transparent;
+  }
 `;
 
 const YourDetail = styled.div`
-  /* border: 2px solid red; */
+  margin: 20px 0;
   background: var(--darkBg);
   padding: 40px 30px;
   display: grid;
@@ -582,7 +629,7 @@ const YourDetail = styled.div`
     grid-template-columns: auto auto;
     grid-template-rows: auto auto auto;
   }
-  @media (max-width: 770px) {
+  @media (max-width: 812px) {
     grid-template-columns: 60% 40%;
   }
   @media (max-width: 575px) {
@@ -601,6 +648,7 @@ const PPContainer = styled.div`
   img {
     width: 80%;
     border-radius: 10px;
+    box-shadow: 0.6px 2px 3px black;
     @media (max-width: 970px) {
       border-radius: 10px;
     }
@@ -627,16 +675,23 @@ const PPContainer = styled.div`
       border-radius: 10px;
     }
   }
+  @media (max-width: 375px) {
+    width: 90%;
+  }
 `;
 
 const YourName = styled.div`
   grid-row: 1/2;
-  padding: 20px 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 20px 10px;
   h3 {
     font-size: 22px;
+  }
+  svg {
+    width: 30px;
+    height: 30px;
   }
   button {
     padding: 7px 20px;
@@ -656,15 +711,16 @@ const YourName = styled.div`
     grid-column: 2/3;
     width: 100%;
   }
-  @media (max-width: 770px) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
   @media (max-width: 575px) {
     grid-row: auto;
     grid-column: auto;
     flex-direction: row;
     align-items: center;
+  }
+  @media (max-width: 375px) {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 60%;
   }
 `;
 
@@ -684,17 +740,21 @@ const YourOthers = styled.div`
       display: flex;
       align-items: center;
       a {
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-        -ms-word-break: break-all;
-        word-break: break-all;
-        word-break: break-word;
-        -ms-hyphens: auto;
-        -moz-hyphens: auto;
-        -webkit-hyphens: auto;
-        hyphens: auto;
         color: white;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        width: 160px;
+        height: 1.2em;
+        white-space: nowrap;
       }
+    }
+  }
+  svg {
+    width: 24px;
+    height: 24px;
+    @media (max-width: 770px) {
+      width: 30px;
+      height: 30px;
     }
   }
   @media (max-width: 970px) {
@@ -706,11 +766,14 @@ const YourOthers = styled.div`
     grid-row: auto;
     grid-column: auto;
   }
+  @media (max-width: 375px) {
+    width: 90%;
+  }
 `;
 
 const YourDes = styled.div`
   grid-row: 2/4;
-  padding: 20px 0;
+  padding: 20px 10px;
   p {
     font-size: 16px;
     margin: 10px 0;
@@ -728,5 +791,82 @@ const YourDes = styled.div`
   @media (max-width: 575px) {
     grid-row: auto;
     grid-column: auto;
+  }
+  @media (max-width: 375px) {
+    width: 90%;
+  }
+`;
+
+const YourService = styled.div`
+  display: grid;
+  grid-template-columns: auto auto 30%;
+  @media (max-width: 914px) {
+    grid-template-columns: auto;
+  }
+`;
+
+const ServiceHead = styled.div`
+  background: var(--darkBg);
+  margin-bottom: 10px;
+  margin-right: 10px;
+  grid-column: 1/3;
+  padding: 20px;
+  border-radius: 10px;
+  h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+  @media (max-width: 914px) {
+    grid-column: auto;
+    margin-right: 0;
+  }
+`;
+
+const Offer = styled.div`
+  background: var(--darkBg);
+  margin-bottom: 10px;
+  margin-left: 10px;
+  padding: 20px;
+  border-radius: 10px;
+  h4 {
+    font-size: 30px;
+  }
+  span {
+    font-size: 18px;
+    color: var(--darkText);
+    font-weight: 500;
+  }
+  p {
+    margin: 20px 0;
+    font-size: 20px;
+  }
+  @media (max-width: 914px) {
+    grid-column: auto;
+    margin-left: 0;
+  }
+`;
+
+const ServiceDes = styled.div`
+  background: var(--darkBg);
+  margin-top: 10px;
+  grid-column: 1/4;
+  padding: 20px;
+  border-radius: 10px;
+  span {
+    color: var(--darkText);
+  }
+  p {
+    margin-top: 10px;
+    font-size: 18px;
+  }
+  @media (max-width: 914px) {
+    grid-column: auto;
+  }
+`;
+
+const ServiceImg = styled.div`
+  height: 50vh;
+  img {
+    width: 100%;
   }
 `;
