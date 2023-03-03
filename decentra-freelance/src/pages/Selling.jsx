@@ -505,7 +505,12 @@ function Selling() {
                     name="languages"
                     placeHolder="Languages you can speak"
                   />
-                  <button onClick={() => setFirstPage(false)}>Next page</button>
+                  <BtnContainer>
+                    <button onClick={() => setUserLogin(true)}>Back</button>
+                    <button onClick={() => setFirstPage(false)}>
+                      Next page
+                    </button>
+                  </BtnContainer>
                 </ProfileContainer>
               ) : (
                 <GigContainer>
@@ -589,16 +594,18 @@ function Selling() {
                   <TagsInput
                     value={gigKeywords}
                     onChange={setGigKeywords}
+                    style={{ background: "transparent !important" }}
                     name="keywords"
                     placeHolder="Keywords"
                   />
-                  <button onClick={() => setFirstPage(true)}>
-                    Previous page
-                  </button>
-                  <input
-                    type="submit"
-                    value={editButton ? "Save changes" : "Submit"}
-                  />
+                  <BtnContainer>
+                    <TogglePage onClick={() => setFirstPage(true)}>
+                      Previous page
+                    </TogglePage>
+                    <SubmitBtn type="submit">
+                      {editButton ? "Save changes" : "Submit"}
+                    </SubmitBtn>
+                  </BtnContainer>
                 </GigContainer>
               )}
             </form>
@@ -659,7 +666,7 @@ const Container = styled.div`
       width: 30%;
       margin: 10px 0;
       padding: 7px 20px;
-      float: right;
+      cursor: pointer;
     }
   }
 `;
@@ -955,4 +962,18 @@ const ServiceImg = styled.div`
   img {
     width: 100%;
   }
+`;
+
+const SubmitBtn = styled.button`
+  background: var(--primary);
+  border: 0;
+  outline: 0;
+`;
+
+const TogglePage = styled.button``;
+
+const BtnContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
