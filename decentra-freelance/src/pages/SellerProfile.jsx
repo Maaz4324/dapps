@@ -271,15 +271,19 @@ const Offer = styled.div`
   border-radius: 10px;
   h4 {
     font-size: 30px;
+    span {
+      color: var(--darkText);
+      font-size: 18px;
+      font-weight: 500;
+    }
   }
   span {
-    font-size: 18px;
     color: var(--darkText);
-    font-weight: 500;
+    font-size: 16px;
   }
   p {
     margin: 20px 0;
-    font-size: 20px;
+    font-size: 18px;
   }
   @media (max-width: 914px) {
     grid-column: auto;

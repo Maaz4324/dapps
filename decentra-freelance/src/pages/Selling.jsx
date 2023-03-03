@@ -11,6 +11,7 @@ import Loading from "../component/Loading";
 function Selling() {
   const storage = new ThirdwebStorage();
   const [name, setName] = useState();
+  const [profileTitle, setProfileTitle] = useState();
   const [country, setCountry] = useState();
   const [description, setDescription] = useState();
   const [urlS, setUrl] = useState();
@@ -50,7 +51,7 @@ function Selling() {
     localStorage.setItem("profileFormItem", JSON.stringify(profileFormItem));
   }, [profileFormItem]);
 
-  document.addEventListener("wheel", function (event) {
+  document.addEventListener("wheel", function () {
     if (
       document.activeElement.type === "number" &&
       document.activeElement.classList.contains("noscroll")
@@ -63,6 +64,7 @@ function Selling() {
     setUserLogin(false);
     setEditButton(true);
     setName(profileFormItem[0].name);
+    setProfileTitle(profileFormItem[0].profileTitle);
     setImg(profileFormItem[0].image);
     setCountry(profileFormItem[0].country);
     setDescription(profileFormItem[0].description);
@@ -146,9 +148,11 @@ function Selling() {
 
   async function uploadFileToStorage(e) {
     e.preventDefault();
+    setLoading(true);
     try {
       const profile = {
         name: name,
+        profileTitle: profileTitle,
         description: description,
         country: country,
         urlS: urlS,
@@ -178,6 +182,7 @@ function Selling() {
       console.error(e);
       alert("Error sending file to IPFS");
     }
+    setLoading(false);
   }
 
   async function saveChanges() {
@@ -193,6 +198,7 @@ function Selling() {
         if (element.seller.toLowerCase() == account[0].toLowerCase()) {
           const profile = {
             name: name,
+            profileTitle: profileTitle,
             description: description,
             country: country,
             urlS: urlS,
@@ -247,7 +253,14 @@ function Selling() {
                     />
                   </PPContainer>
                   <YourName>
-                    <h3>{profileData.name}</h3>
+                    <div>
+                      <h3>{profileData.name}</h3>
+                      <p
+                        style={{ color: "var(--darkText)", marginTop: "10px" }}
+                      >
+                        {profileData.profileTitle}
+                      </p>
+                    </div>
                     <svg
                       onClick={handleEditProfile}
                       viewBox="0 0 24 24"
@@ -472,6 +485,15 @@ function Selling() {
                     type="file"
                     // required
                     onChange={(event) => uploadToIPFS(event, "setImg")}
+                  />
+                  <label>Give title to yourself in few words</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Title to yourself"
+                    maxLength="70"
+                    value={profileTitle}
+                    onChange={(e) => setProfileTitle(e.target.value)}
                   />
                   <label>Country</label>
                   <select
