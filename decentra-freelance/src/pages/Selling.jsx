@@ -105,7 +105,11 @@ function Selling() {
     console.log(setPic);
     event.preventDefault();
     const file = event.target.files[0];
-    if (file) {
+    const MIN_FILE_SIZE = 1024; // 1MB
+    const MAX_FILE_SIZE = 5120;
+    const fileSizeKiloBytes = file.size / 1024;
+
+    if (file && fileSizeKiloBytes < MAX_FILE_SIZE) {
       try {
         const formData = new FormData();
         formData.append("file", file);
@@ -135,6 +139,8 @@ function Selling() {
         console.log(error);
         alert("Error sending file to IPFS");
       }
+    } else {
+      alert("Please select a file with size under 5MB");
     }
   }
 
@@ -361,7 +367,15 @@ function Selling() {
                             </defs>{" "}
                           </g>
                         </svg>
-                        {profileData.skill}
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
+                          {profileData.skill.map((skillData, idx) => (
+                            <div style={{ margin: "1px" }} key={idx}>
+                              {skillData}
+                            </div>
+                          ))}
+                        </div>
                       </li>
                       <li>
                         <svg
@@ -382,7 +396,15 @@ function Selling() {
                             ></path>
                           </g>
                         </svg>
-                        {profileData.language}
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
+                          {profileData.language.map((langData, idx) => (
+                            <div style={{ margin: "1px" }} key={idx}>
+                              {langData}
+                            </div>
+                          ))}
+                        </div>
                       </li>
                     </ul>
                   </YourOthers>
@@ -623,7 +645,7 @@ const Wrapper = styled.div`
   min-height: 100vh;
   color: white;
   padding-top: 72px;
-  background: #151517;
+  background: var(--black);
   @media (max-width: 930px) {
     padding-top: 60px;
   }
@@ -638,7 +660,6 @@ const Container = styled.div`
   flex-direction: column;
   margin: 0 auto;
   padding: 40px 0;
-  margin-bottom: 30px;
   h2 {
     font-size: 40px;
   }

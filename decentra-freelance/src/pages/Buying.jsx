@@ -3,11 +3,14 @@ import styled from "styled-components";
 import { ethers } from "ethers";
 import SkillSwap from "../artifacts/contracts/SkillSwap.sol/SkillSwap.json";
 import { useNavigate } from "react-router-dom";
+import Loading from "../component/Loading";
 
 function Buying({ category, sellerState }) {
   const navigate = useNavigate();
   const [listData, setListData] = useState([]);
   const [listAddr, setListAddr] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const Category = category.charAt(0).toUpperCase() + category.slice(1);
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -19,6 +22,7 @@ function Buying({ category, sellerState }) {
   const skillswap = new ethers.Contract(contractAddress, abi, signer);
 
   async function loadUser() {
+    setLoading(true);
     const noOfuser = await skillswap.noOfSellers();
 
     for (let index = 1; index <= noOfuser.toString(); index++) {
@@ -39,6 +43,7 @@ function Buying({ category, sellerState }) {
         }
       }
     }
+    setLoading(false);
   }
 
   function RenderSeller(e, to) {
@@ -56,36 +61,40 @@ function Buying({ category, sellerState }) {
   return (
     <Wrapper>
       <Container>
-        <h1>{category}</h1>
+        <h1>{Category}</h1>
         <h3>
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Esse,
           nostrum.
         </h3>
-        <CardContainer>
-          {listData.map((data, idx) => (
-            <Card key={idx} onClick={(e) => RenderSeller(e, data.address)}>
-              <div
-                style={{
-                  backgroundImage: `url(https://gateway.ipfscdn.io/ipfs/${data.gigImg})`,
-                  backgroundPosition: "center",
-                  backgroundSize: "cover",
-                  backgroundRepeat: "no-repeat",
-                  width: "100%",
-                  height: "30vh",
-                }}
-              ></div>
-              <CardText>
-                <h5>{data.userName}</h5>
-                <h4>{data.gigHead}</h4>
-                <Line />
-                <p>
-                  starting at
-                  <span> {data.gigPrice}Eth</span>
-                </p>
-              </CardText>
-            </Card>
-          ))}
-        </CardContainer>
+        {loading ? (
+          <Loading />
+        ) : (
+          <CardContainer>
+            {listData.map((data, idx) => (
+              <Card key={idx} onClick={(e) => RenderSeller(e, data.address)}>
+                <div
+                  style={{
+                    backgroundImage: `url(https://gateway.ipfscdn.io/ipfs/${data.gigImg})`,
+                    backgroundPosition: "center",
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                    width: "100%",
+                    height: "30vh",
+                  }}
+                ></div>
+                <CardText>
+                  <h5>{data.userName}</h5>
+                  <h4>{data.gigHead}</h4>
+                  <Line />
+                  <p>
+                    starting at
+                    <span> {data.gigPrice}Eth</span>
+                  </p>
+                </CardText>
+              </Card>
+            ))}
+          </CardContainer>
+        )}
       </Container>
     </Wrapper>
   );

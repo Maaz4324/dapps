@@ -22,7 +22,7 @@ const Wrapper = styled.div`
   color: rgb(255, 255, 255);
   padding-top: 100px;
   /* border: 2px solid red; */
-  background: linear-gradient(to right, #111118, #161727, #1a1c35);
+  background: var(--black);
   @media (max-width: 930px) {
     padding-top: 60px;
   }

@@ -69,7 +69,7 @@ function Foot() {
 export default Foot;
 
 const Wrapper = styled.section`
-  background: linear-gradient(to right, #111118, #161727, #1a1c35);
+  background: var(--black);
 `;
 
 const Container = styled.section`
