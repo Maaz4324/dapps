@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import SkillSwap from "../artifacts/contracts/SkillSwap.sol/SkillSwap.json";
 import { ethers } from "ethers";
+import { useNavigate } from "react-router-dom";
 
 function SellerProfile({ setSellerState }) {
   const [displayProfile, setDisplayProfile] = useState([]);
   const [displayGig, setDisplayGig] = useState([]);
+  const navigate = useNavigate();
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -15,6 +17,10 @@ function SellerProfile({ setSellerState }) {
   const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
   const skillswap = new ethers.Contract(contractAddress, abi, signer);
+
+  function goToChat() {
+    navigate("/chat/" + setSellerState.slice(2));
+  }
 
   async function loadUser() {
     const noOfuser = await skillswap.noOfSellers();
@@ -75,6 +81,7 @@ function SellerProfile({ setSellerState }) {
             </PPContainer>
             <YourName>
               <h3>{profileData.name}</h3>
+              <button onClick={goToChat}>Contact seller</button>
             </YourName>
             <YourOthers>
               <ul>
@@ -402,16 +409,25 @@ const YourName = styled.div`
     grid-column: 2/3;
     width: 100%;
   }
+  @media (max-width: 820px) {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-evenly;
+  }
   @media (max-width: 575px) {
     grid-row: auto;
     grid-column: auto;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
   }
   @media (max-width: 375px) {
     flex-direction: column;
     align-items: flex-start;
     width: 60%;
+    button {
+      margin-top: 10px;
+    }
   }
 `;
 

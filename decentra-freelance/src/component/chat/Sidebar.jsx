@@ -1,8 +1,26 @@
 import React from "react";
 import styled from "styled-components";
 import chat from "../../images/chat.svg";
+import { useEffect, useState } from "react";
+import { db } from "../../firebase";
+import { collection, query, doc, onSnapshot, getDoc } from "firebase/firestore";
 
 function Sidebar() {
+  useEffect(() => {
+    async function getData() {
+      const account = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+
+      console.log("working");
+      const docRef = doc(db, "userChat", account[0].substring(2).toLowerCase());
+      const data = await getDoc(docRef);
+      console.log("🚀 ~ file: Sidebar.jsx:19 ~ getData ~ data:", data);
+    }
+
+    getData();
+  }, []);
+
   return (
     <Wrapper>
       <User>

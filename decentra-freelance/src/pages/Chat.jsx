@@ -3,7 +3,7 @@ import Chatbox from "../component/chat/Chatbox";
 import Sidebar from "../component/chat/Sidebar";
 import styled from "styled-components";
 
-function Chat() {
+function Chat({ chatSellerId }) {
   return (
     <Wrapper>
       <Container>
@@ -21,7 +21,7 @@ const Wrapper = styled.div`
   min-height: 100vh;
   color: rgb(255, 255, 255);
   padding-top: 100px;
-  /* border: 2px solid red; */
+  border: 2px solid red;
   background: var(--black);
   @media (max-width: 930px) {
     padding-top: 60px;
@@ -29,12 +29,12 @@ const Wrapper = styled.div`
 `;
 
 const Container = styled.div`
-  /* border: 2px solid white; */
+  border: 2px solid white;
   background: var(--darkBg);
   width: 100%;
   max-width: 1047px;
   margin: 0 auto;
-  min-height: 80vh;
+  height: 80vh;
   border-radius: 10px;
   display: grid;
   grid-template-columns: 30% 70%;

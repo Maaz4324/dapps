@@ -475,12 +475,16 @@ function Selling() {
                     onChange={(e) => setName(e.target.value)}
                   />
                   <label>Upload your profile</label>
-                  <div>
-                    <img
-                      src={`https://gateway.ipfscdn.io/ipfs/${img}`}
-                      alt="skill swap user profile"
-                    />
-                  </div>
+                  {img ? (
+                    <div>
+                      <img
+                        src={`https://gateway.ipfscdn.io/ipfs/${img}`}
+                        alt="skill swap user profile"
+                      />
+                    </div>
+                  ) : (
+                    <div></div>
+                  )}
                   <input
                     type="file"
                     // required
@@ -560,10 +564,16 @@ function Selling() {
                 <GigContainer>
                   <h2>Your service</h2>
                   <label>Upload your gig picture</label>
-                  <img
-                    src={`https://gateway.ipfscdn.io/ipfs/${gigImg}`}
-                    alt="skill swap gig profile"
-                  />
+                  {gigImg ? (
+                    <div>
+                      <img
+                        src={`https://gateway.ipfscdn.io/ipfs/${gigImg}`}
+                        alt="skill swap user profile"
+                      />
+                    </div>
+                  ) : (
+                    <div></div>
+                  )}
                   <input
                     type="file"
                     // required

@@ -34,6 +34,11 @@ function App() {
           <Route exact path="/chat" element={<Chat />} />
           <Route
             exact
+            path={"/chat/" + localStorage.getItem("sellerId").slice(2)}
+            element={<Chat chatSellerId={localStorage.getItem("sellerId")} />}
+          />
+          <Route
+            exact
             path={changeSearch}
             element={
               <Buying category={changeSearch} sellerState={setSellerData} />
