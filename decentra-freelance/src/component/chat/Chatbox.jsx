@@ -19,6 +19,10 @@ function Chatbox({ sellerChangeState }) {
   const [displayMsg, setDisplayMsg] = useState([]);
   const [sendTo, setSendTo] = useState("");
   const [receiverAccs, setReceiverAccs] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [offerDeadLine, setOfferDeadLine] = useState("");
+  const [offerBudget, setOfferBudget] = useState("");
+  const [offerDes, setOfferDes] = useState("");
 
   const messagesEndRef = useRef(null);
 
@@ -164,14 +168,27 @@ function Chatbox({ sellerChangeState }) {
         orderBy("created", "desc")
       );
       onSnapshot(q, (querySnapshot) => {
-        setDisplayMsg(
-          querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            message: doc.data().message,
-            createdAt: timeConverter(doc.data().created.seconds),
-            createdBy: doc.data().createdBy == account[0] && "msgByCurrUser",
-          }))
-        );
+        let dataList = querySnapshot.docs.map((doc) => doc.data().message);
+        let dataList2 = querySnapshot.docs.map((doc) => doc);
+        let dataArr = [];
+        let dataArrOffer = [];
+
+        for (let i in dataList) {
+          if (dataList[i] != undefined) {
+            dataArr.push({
+              id: dataList2[i].id,
+              message: dataList2[i].data().message,
+              createdAt: timeConverter(dataList2[i].data().created.seconds),
+              createdBy:
+                dataList2[i].data().createdBy == account[0] && "msgByCurrUser",
+            });
+          } else {
+            dataArrOffer.push(dataList2[i].data());
+          }
+        }
+        console.log(dataArr);
+        console.log(dataArrOffer);
+        setDisplayMsg(dataArr);
       });
     }
     getData();
@@ -202,12 +219,106 @@ function Chatbox({ sellerChangeState }) {
     getData();
   }, [receiverAccs]);
 
+  async function makeOffer(e) {
+    e.preventDefault();
+    if (
+      offerBudget.trim() != "" &&
+      offerDeadLine.trim() != "" &&
+      offerDes.trim() != ""
+    ) {
+      try {
+        const account = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        await addDoc(
+          collection(
+            db,
+            "userChat",
+            account[0].substring(2).toLowerCase(),
+            "receiver",
+            sendTo.substring(2),
+            "messages"
+          ),
+          {
+            offerBudget: offerBudget,
+            offerDeadLine: offerDeadLine,
+            offerDes: offerDes,
+            created: Timestamp.now(),
+            createdBy: account[0],
+          }
+        );
+        await addDoc(
+          collection(
+            db,
+            "userChat",
+            sendTo.substring(2),
+            "receiver",
+            account[0].substring(2).toLowerCase(),
+            "messages"
+          ),
+          {
+            offerBudget: offerBudget,
+            offerDeadLine: offerDeadLine,
+            offerDes: offerDes,
+            created: Timestamp.now(),
+            createdBy: account[0],
+          }
+        );
+        setModalOpen(false);
+      } catch (err) {
+        alert(err);
+      }
+    }
+  }
+
   useEffect(() => {
     scrollToBottom();
   }, [displayMsg]);
 
   return (
     <Wrapper>
+      {modalOpen ? (
+        <div className="modalBack"></div>
+      ) : (
+        <div className="openModalAlt"></div>
+      )}
+      {modalOpen ? (
+        <Modal>
+          <h3>Make offer</h3>
+          <div className="closeModal" onClick={() => setModalOpen(false)}>
+            close
+          </div>
+          <div>
+            <label>Days: </label>
+            <input
+              type="number"
+              onChange={(e) => setOfferDeadLine(e.target.value)}
+              value={offerDeadLine}
+            ></input>
+          </div>
+          <div>
+            <label>Amount: </label>
+            <input
+              type="number"
+              onChange={(e) => setOfferBudget(e.target.value)}
+              value={offerBudget}
+            ></input>
+          </div>
+          <div>
+            <label>Description: </label>
+            <textarea
+              name="description"
+              cols="20"
+              rows="10"
+              onChange={(e) => setOfferDes(e.target.value)}
+              value={offerDes}
+            ></textarea>
+          </div>
+          <button onClick={makeOffer}>Send</button>
+        </Modal>
+      ) : (
+        <div className="openModalAlt"></div>
+      )}
       <Container>
         <MesContent>
           {displayMsg.map((msgData, idx) => (
@@ -228,6 +339,7 @@ function Chatbox({ sellerChangeState }) {
           onChange={(e) => setMsgText(e.target.value)}
           value={msgText}
         />
+        <span onClick={() => setModalOpen(true)}>offer</span>
         <button onClick={handleSubmit}>Send</button>
       </InputCont>
     </Wrapper>
@@ -242,6 +354,19 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: end;
   flex-direction: column;
+  .modalBack {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 2px solid white;
+    min-height: 128vh;
+    width: 100%;
+    filter: blur(20px);
+    -webkit-filter: blur(20px);
+  }
+  .openModalAlt {
+    display: none;
+  }
 `;
 
 const Container = styled.div`
@@ -255,7 +380,7 @@ const Container = styled.div`
 const InputCont = styled.div`
   /* border: 3px solid blue; */
   display: grid;
-  grid-template-columns: 80% 20%;
+  grid-template-columns: 70% 10% 20%;
   align-self: flex-end;
   border-radius: 20px;
   width: 100%;
@@ -273,6 +398,13 @@ const InputCont = styled.div`
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
     border: 0;
+  }
+  span {
+    background: white;
+    text-align: center;
+    color: black;
+    cursor: pointer;
+    padding: 10px;
   }
 `;
 
@@ -302,4 +434,30 @@ const ShowMes = styled.div`
   font-weight: 600;
   font-style: italic;
   border-radius: 20px;
+`;
+
+const Modal = styled.div`
+  position: absolute;
+  top: 30%;
+  left: 40%;
+  z-index: 999;
+  background: black;
+  min-height: 40vh;
+  padding: 60px;
+  border-radius: 10px;
+  div {
+    display: flex;
+    align-items: flex-start;
+    justify-content: start;
+    margin: 10px 0;
+    input {
+      padding: 10px;
+    }
+  }
+  .closeModal {
+    position: relative;
+    top: -70px;
+    left: 220px;
+    cursor: pointer;
+  }
 `;
