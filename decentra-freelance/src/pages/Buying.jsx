@@ -48,9 +48,9 @@ function Buying({ category, sellerState }) {
 
   function RenderSeller(e, to) {
     e.preventDefault();
-    navigate("/seller/" + to.slice(2));
+    navigate("/seller/" + to.slice(2).toLowerCase());
     sellerState(to);
-    localStorage.setItem("sellerId", to);
+    localStorage.setItem("sellerId", to.toLowerCase());
   }
 
   useEffect(() => {

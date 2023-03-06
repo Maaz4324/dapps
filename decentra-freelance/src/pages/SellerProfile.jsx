@@ -3,6 +3,16 @@ import styled from "styled-components";
 import SkillSwap from "../artifacts/contracts/SkillSwap.sol/SkillSwap.json";
 import { ethers } from "ethers";
 import { useNavigate } from "react-router-dom";
+import { db } from "../firebase";
+import {
+  collection,
+  doc,
+  addDoc,
+  setDoc,
+  Timestamp,
+  query,
+  onSnapshot,
+} from "firebase/firestore";
 
 function SellerProfile({ setSellerState }) {
   const [displayProfile, setDisplayProfile] = useState([]);
@@ -18,8 +28,8 @@ function SellerProfile({ setSellerState }) {
 
   const skillswap = new ethers.Contract(contractAddress, abi, signer);
 
-  function goToChat() {
-    navigate("/chat/" + setSellerState.slice(2));
+  async function goToChat() {
+    navigate("/chat/");
   }
 
   async function loadUser() {

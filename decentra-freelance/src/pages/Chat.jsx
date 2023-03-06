@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Chatbox from "../component/chat/Chatbox";
 import Sidebar from "../component/chat/Sidebar";
 import styled from "styled-components";
 
-function Chat({ chatSellerId }) {
+function Chat() {
+  const [changeSellerId, setChangeSellerId] = useState("");
   return (
     <Wrapper>
       <Container>
-        <Sidebar />
-        <Chatbox />
+        <Sidebar idChange={setChangeSellerId} />
+        <Chatbox sellerChangeState={changeSellerId} />
       </Container>
     </Wrapper>
   );

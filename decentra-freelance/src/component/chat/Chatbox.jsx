@@ -12,61 +12,111 @@ import {
   orderBy,
   onSnapshot,
 } from "firebase/firestore";
+import { async } from "@firebase/util";
 
-function Chatbox() {
+function Chatbox({ sellerChangeState }) {
   const [msgText, setMsgText] = useState("");
   const [displayMsg, setDisplayMsg] = useState([]);
   const [sendTo, setSendTo] = useState("");
+  const [receiverAccs, setReceiverAccs] = useState("");
 
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
     setSendTo(localStorage.getItem("sellerId").toLowerCase());
-  }, []);
+  }, [sendTo]);
+
+  useEffect(() => {
+    setSendTo(localStorage.getItem("sellerId").toLowerCase());
+  }, [sellerChangeState]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
+  useEffect(() => {
+    async function getData() {
       const account = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
-      const send = await addDoc(
+      const q = query(
         collection(
           db,
-          "userChat",
+          "chatList",
           account[0].substring(2).toLowerCase(),
-          "receiver",
-          sendTo.substring(2),
-          "messages"
-        ),
-        {
-          message: msgText,
-          created: Timestamp.now(),
-          createdBy: account[0],
-        }
+          "receivers"
+        )
       );
-      const recieved = await addDoc(
-        collection(
-          db,
-          "userChat",
-          sendTo.substring(2),
-          "receiver",
-          account[0].substring(2).toLowerCase(),
-          "messages"
-        ),
-        {
-          message: msgText,
-          created: Timestamp.now(),
-          createdBy: account[0],
-        }
-      );
-      setMsgText("");
-    } catch (err) {
-      alert(err);
+      onSnapshot(q, (querySnapshot) => {
+        setReceiverAccs(querySnapshot.docs.map((doc) => doc.data().chatWith));
+      });
+    }
+    getData();
+  }, []);
+
+  async function saveSenderAccs() {
+    const account = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    await addDoc(collection(db, "chatList", sendTo.substring(2), "receivers"), {
+      chatWith: account[0].substring(2).toLowerCase(),
+    });
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (msgText.trim() != "") {
+      try {
+        const account = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        await addDoc(
+          collection(
+            db,
+            "userChat",
+            account[0].substring(2).toLowerCase(),
+            "receiver",
+            sendTo.substring(2),
+            "messages"
+          ),
+          {
+            message: msgText,
+            created: Timestamp.now(),
+            createdBy: account[0],
+          }
+        );
+        await addDoc(
+          collection(
+            db,
+            "userChat",
+            sendTo.substring(2),
+            "receiver",
+            account[0].substring(2).toLowerCase(),
+            "messages"
+          ),
+          {
+            message: msgText,
+            created: Timestamp.now(),
+            createdBy: account[0],
+          }
+        );
+        const r = query(
+          collection(db, "chatList", sendTo.substring(2), "receivers")
+        );
+        onSnapshot(r, (querySnapshot) => {
+          if (
+            !querySnapshot.docs
+              .map((doc) => doc.data().chatWith)
+              .includes(account[0].substring(2))
+          ) {
+            saveSenderAccs();
+          }
+        });
+
+        setMsgText("");
+      } catch (err) {
+        alert(err);
+      }
     }
   };
 
@@ -126,6 +176,31 @@ function Chatbox() {
     }
     getData();
   }, [sendTo]);
+
+  useEffect(() => {
+    async function getData() {
+      const account = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      if (
+        !receiverAccs.includes(sendTo.substring(2)) &&
+        account[0].substring(2).toLowerCase() != sendTo.substring(2)
+      ) {
+        await addDoc(
+          collection(
+            db,
+            "chatList",
+            account[0].substring(2).toLowerCase(),
+            "receivers"
+          ),
+          {
+            chatWith: sendTo.substring(2),
+          }
+        );
+      }
+    }
+    getData();
+  }, [receiverAccs]);
 
   useEffect(() => {
     scrollToBottom();

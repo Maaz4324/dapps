@@ -4,18 +4,33 @@ import chat from "../../images/chat.svg";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase";
 import { collection, query, doc, onSnapshot, getDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
-function Sidebar() {
+function Sidebar({ idChange }) {
+  const [receiverAccs, setReceiverAccs] = useState("");
+  const navigate = useNavigate();
+
+  async function goToChat(to) {
+    localStorage.setItem("sellerId", "0x" + to);
+    idChange("0x" + to);
+  }
+
   useEffect(() => {
     async function getData() {
       const account = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
-
-      console.log("working");
-      const docRef = doc(db, "userChat", account[0].substring(2).toLowerCase());
-      const data = await getDoc(docRef);
-      console.log("🚀 ~ file: Sidebar.jsx:19 ~ getData ~ data:", data);
+      const q = query(
+        collection(
+          db,
+          "chatList",
+          account[0].substring(2).toLowerCase(),
+          "receivers"
+        )
+      );
+      onSnapshot(q, (querySnapshot) => {
+        setReceiverAccs(querySnapshot.docs.map((doc) => doc.data().chatWith));
+      });
     }
 
     getData();
@@ -23,34 +38,23 @@ function Sidebar() {
 
   return (
     <Wrapper>
-      <User>
-        <Profile>
-          <Img>
-            <img src={chat} alt="" />
-          </Img>
-          <div>
-            <h4>User Name</h4>
-            <p>
-              Previous chat fjdslj ljsdflsdkfj lasdjfosadfjsoagffg oihgdj
-              soafifj heihl omaa az hai ow are ou
-            </p>
-          </div>
-        </Profile>
-      </User>
-      <User>
-        <Profile>
-          <Img>
-            <img src={chat} alt="" />
-          </Img>
-          <div>
-            <h4>User Name</h4>
-            <p>
-              Previous chat fjdslj ljsdflsdkfj lasdjfosadfjsoagffg oihgdj
-              soafifj heihl omaa az hai ow are ou
-            </p>
-          </div>
-        </Profile>
-      </User>
+      {receiverAccs &&
+        receiverAccs.map((data, idx) => (
+          <User key={idx} onClick={() => goToChat(data)}>
+            <Profile>
+              <Img>
+                <img src={chat} alt="" />
+              </Img>
+              <div>
+                <h4>{data}</h4>
+                <p>
+                  Previous chat fjdslj ljsdflsdkfj lasdjfosadfjsoagffg oihgdj
+                  soafifj heihl omaa az hai ow are ou
+                </p>
+              </div>
+            </Profile>
+          </User>
+        ))}
     </Wrapper>
   );
 }
@@ -74,6 +78,9 @@ const Profile = styled.div`
   h4 {
     padding: 0;
     padding-top: 6px;
+    width: 200px;
+    border: 2px solid red;
+    word-wrap: break-word;
   }
   p {
     color: var(--darkText);

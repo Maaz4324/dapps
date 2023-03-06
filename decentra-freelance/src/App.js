@@ -34,7 +34,7 @@ function App() {
           <Route exact path="/chat" element={<Chat />} />
           <Route
             exact
-            path={"/chat/" + localStorage.getItem("sellerId").slice(2)}
+            path={"/chat/"}
             element={<Chat chatSellerId={localStorage.getItem("sellerId")} />}
           />
           <Route
