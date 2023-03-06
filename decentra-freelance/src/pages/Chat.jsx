@@ -35,7 +35,7 @@ const Container = styled.div`
   width: 100%;
   max-width: 1047px;
   margin: 0 auto;
-  height: 80vh;
+  min-height: 80vh;
   border-radius: 10px;
   display: grid;
   grid-template-columns: 30% 70%;

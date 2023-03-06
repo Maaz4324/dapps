@@ -11,6 +11,7 @@ import {
   query,
   orderBy,
   onSnapshot,
+  deleteDoc,
 } from "firebase/firestore";
 import { async } from "@firebase/util";
 
@@ -23,6 +24,10 @@ function Chatbox({ sellerChangeState }) {
   const [offerDeadLine, setOfferDeadLine] = useState("");
   const [offerBudget, setOfferBudget] = useState("");
   const [offerDes, setOfferDes] = useState("");
+  const [displayOffer, setDisplayOffer] = useState([]);
+  const [openOfferModal, setOpenOfferModal] = useState(false);
+  const [currentAcc, setCurrentAcc] = useState();
+  const [senderOfferDeleteId, setSenderOfferDeleteId] = useState();
 
   const messagesEndRef = useRef(null);
 
@@ -38,11 +43,24 @@ function Chatbox({ sellerChangeState }) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const DisplayOfferUser = () => {
+    if (displayOffer[0].data.createdBy == currentAcc) {
+      return <p>You have made an offer. Click here to see</p>;
+    }
+    if (displayOffer[0].data.createdBy == sendTo) {
+      return <p>Seller has made an offer. Click here to see</p>;
+    }
+    if ((displayOffer.length = 0)) {
+      return <p></p>;
+    }
+  };
+
   useEffect(() => {
     async function getData() {
       const account = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
+      setCurrentAcc(account[0]);
       const q = query(
         collection(
           db,
@@ -167,11 +185,38 @@ function Chatbox({ sellerChangeState }) {
         ),
         orderBy("created", "desc")
       );
+      const r = query(
+        collection(
+          db,
+          "userChat",
+          sendTo.substring(2),
+          "receiver",
+          account[0].substring(2).toLowerCase(),
+          "messages"
+        ),
+        orderBy("created", "desc")
+      );
+      onSnapshot(r, (querySnapshot) => {
+        let isOfferBudget = querySnapshot.docs.map(
+          (doc) => doc.data().offerBudget
+        );
+        let getOfferId = querySnapshot.docs.map((doc) => doc.id);
+
+        for (let i in isOfferBudget) {
+          if (isOfferBudget[i] != undefined) {
+            // console.log(getOfferId[i]);
+            setSenderOfferDeleteId(getOfferId[i]);
+          }
+        }
+      });
       onSnapshot(q, (querySnapshot) => {
         let dataList = querySnapshot.docs.map((doc) => doc.data().message);
+        let dataListOffer = querySnapshot.docs.map(
+          (doc) => doc.data().offerBudget
+        );
         let dataList2 = querySnapshot.docs.map((doc) => doc);
         let dataArr = [];
-        let dataArrOffer = [];
+        let dataArr2 = [];
 
         for (let i in dataList) {
           if (dataList[i] != undefined) {
@@ -182,13 +227,13 @@ function Chatbox({ sellerChangeState }) {
               createdBy:
                 dataList2[i].data().createdBy == account[0] && "msgByCurrUser",
             });
-          } else {
-            dataArrOffer.push(dataList2[i].data());
+          }
+          if (dataListOffer[i] != undefined) {
+            dataArr2.push({ id: dataList2[i].id, data: dataList2[i].data() });
           }
         }
-        console.log(dataArr);
-        console.log(dataArrOffer);
         setDisplayMsg(dataArr);
+        setDisplayOffer(dataArr2);
       });
     }
     getData();
@@ -271,13 +316,43 @@ function Chatbox({ sellerChangeState }) {
     }
   }
 
+  async function handleDeleteOffer(id) {
+    try {
+      await deleteDoc(
+        doc(
+          db,
+          "userChat",
+          sendTo.substring(2),
+          "receiver",
+          currentAcc.substring(2).toLowerCase(),
+          "messages",
+          senderOfferDeleteId
+        )
+      );
+      await deleteDoc(
+        doc(
+          db,
+          "userChat",
+          currentAcc.substring(2).toLowerCase(),
+          "receiver",
+          sendTo.substring(2),
+          "messages",
+          id
+        )
+      );
+      setDisplayOffer([]);
+    } catch (err) {
+      alert(err);
+    }
+  }
+
   useEffect(() => {
     scrollToBottom();
   }, [displayMsg]);
 
   return (
     <Wrapper>
-      {modalOpen ? (
+      {modalOpen || openOfferModal ? (
         <div className="modalBack"></div>
       ) : (
         <div className="openModalAlt"></div>
@@ -319,6 +394,7 @@ function Chatbox({ sellerChangeState }) {
       ) : (
         <div className="openModalAlt"></div>
       )}
+      <h1>{sendTo}</h1>
       <Container>
         <MesContent>
           {displayMsg.map((msgData, idx) => (
@@ -332,6 +408,37 @@ function Chatbox({ sellerChangeState }) {
         </MesContent>
         {/* <div ref={messagesEndRef} /> */}
       </Container>
+      {displayOffer.length != 0 && (
+        <OfferContent onClick={() => setOpenOfferModal(true)}>
+          <DisplayOfferUser />
+        </OfferContent>
+      )}
+      {openOfferModal ? (
+        <OfferModal>
+          {displayOffer.map((offerData, idx) => (
+            <Offer key={idx}>
+              <div
+                className="closeModal"
+                onClick={() => setOpenOfferModal(false)}
+              >
+                close
+              </div>
+              <h3>{offerData.data.offerBudget}ETH</h3>
+              <h3>{offerData.data.offerDeadLine} Days</h3>
+              <h3>Des: {offerData.data.offerDes}</h3>
+              {displayOffer[0].data.createdBy == currentAcc ? (
+                <button onClick={() => handleDeleteOffer(offerData.id)}>
+                  withdraw offer
+                </button>
+              ) : (
+                <button>Accept offer</button>
+              )}
+            </Offer>
+          ))}
+        </OfferModal>
+      ) : (
+        <div className="openModalAlt"></div>
+      )}
       <InputCont>
         <input
           type="text"
@@ -375,6 +482,9 @@ const Container = styled.div`
   overflow-y: scroll;
   overflow-x: hidden;
   height: 70vh;
+  .openModalAlt {
+    display: none;
+  }
 `;
 
 const InputCont = styled.div`
@@ -461,3 +571,31 @@ const Modal = styled.div`
     cursor: pointer;
   }
 `;
+
+const OfferContent = styled.div`
+  color: var(--primary);
+  cursor: pointer;
+  p {
+    font-style: underline;
+    border-bottom: 2px solid var(--primary);
+  }
+`;
+
+const OfferModal = styled.div`
+  position: absolute;
+  top: 30%;
+  left: 40%;
+  z-index: 999;
+  background: black;
+  min-height: 40vh;
+  padding: 60px;
+  border-radius: 10px;
+  .closeModal {
+    position: relative;
+    top: -20px;
+    left: 20px;
+    cursor: pointer;
+  }
+`;
+
+const Offer = styled.div``;
