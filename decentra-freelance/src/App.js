@@ -12,6 +12,7 @@ import { categoryData } from "./assets/category";
 import ScrollToTop from "./ScrollToTop";
 import SellerProfile from "./pages/SellerProfile";
 import Chat from "./pages/Chat";
+import Order from "./pages/Order";
 
 function App() {
   const activeChainId = ChainId.Mainnet;
@@ -59,13 +60,18 @@ function App() {
           ))}
           <Route
             exact
-            path={"/seller/" + localStorage.getItem("sellerId").slice(2)}
+            path={
+              localStorage.getItem("sellerId") == undefined
+                ? ""
+                : "/seller/" + localStorage.getItem("sellerId").slice(2)
+            }
             element={
               <SellerProfile
                 setSellerState={localStorage.getItem("sellerId")}
               />
             }
           />
+          <Route exact path="/order" element={<Order />} />
           <Route
             exact
             path="/selling"

@@ -32,7 +32,7 @@ function Navbar({ searchState }) {
 
       const abi = SkillSwap.abi;
 
-      const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+      const contractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
       const skillswap = new ethers.Contract(contractAddress, abi, signer);
       const noOfuser = await skillswap.noOfSellers();
@@ -65,9 +65,29 @@ function Navbar({ searchState }) {
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      navigate(searchResult.trim());
-      searchState(searchResult.trim());
-      localStorage.setItem("searchReq", searchResult.trim());
+      if (!window.ethereum) {
+        alert("Please download metamask wallet to continue.");
+      } else {
+        navigate(searchResult.trim());
+        searchState(searchResult.trim());
+        localStorage.setItem("searchReq", searchResult.trim());
+      }
+    }
+  };
+
+  const handleGoToChat = () => {
+    if (!window.ethereum) {
+      alert("Please download metamask wallet to continue.");
+    } else {
+      navigate("/chat/");
+    }
+  };
+
+  const handleGoToOrder = () => {
+    if (!window.ethereum) {
+      alert("Please download metamask wallet to continue.");
+    } else {
+      navigate("/order/");
     }
   };
 
@@ -90,17 +110,43 @@ function Navbar({ searchState }) {
           />
         </Search>
         <Right>
-          <Link to="/chat">
-            <img src={chat} alt="chat on skillswap - skill swap" />
-          </Link>
-          {/* <Link to="/selling"> */}
+          <svg
+            width="32px"
+            height="32px"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            onClick={handleGoToOrder}
+            style={{ cursor: "pointer" }}
+          >
+            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+            <g
+              id="SVGRepo_tracerCarrier"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            ></g>
+            <g id="SVGRepo_iconCarrier">
+              {" "}
+              <path
+                d="M4.78571 5H18.2251C19.5903 5 20.5542 6.33739 20.1225 7.63246L18.4558 12.6325C18.1836 13.4491 17.4193 14 16.5585 14H6.07142M4.78571 5L4.74531 4.71716C4.60455 3.73186 3.76071 3 2.76541 3H2M4.78571 5L6.07142 14M6.07142 14L6.25469 15.2828C6.39545 16.2681 7.23929 17 8.23459 17H17M17 17C15.8954 17 15 17.8954 15 19C15 20.1046 15.8954 21 17 21C18.1046 21 19 20.1046 19 19C19 17.8954 18.1046 17 17 17ZM11 19C11 20.1046 10.1046 21 9 21C7.89543 21 7 20.1046 7 19C7 17.8954 7.89543 17 9 17C10.1046 17 11 17.8954 11 19Z"
+                stroke="#ffffff"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></path>{" "}
+            </g>
+          </svg>
+          <img
+            src={chat}
+            onClick={handleGoToChat}
+            alt="chat on skillswap - skill swap"
+          />
           <h4
             onClick={goToSell}
             style={{ cursor: "pointer", textDecoration: "underline" }}
           >
             Get hired
           </h4>
-          {/* </Link> */}
           <button onClick={connectWallet}>{connectBtn}</button>
         </Right>
         <Collapse className="collapse">

@@ -7,7 +7,11 @@ function Category() {
   const navigate = useNavigate();
 
   function handleRedirect(link) {
-    navigate(link);
+    if (!window.ethereum) {
+      alert("Please download metamask wallet to continue.");
+    } else {
+      navigate(link);
+    }
   }
   return (
     <Wrapper>

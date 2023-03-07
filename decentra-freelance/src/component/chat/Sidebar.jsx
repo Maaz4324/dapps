@@ -79,7 +79,6 @@ const Profile = styled.div`
     padding: 0;
     padding-top: 6px;
     width: 200px;
-    border: 2px solid red;
     word-wrap: break-word;
   }
   p {
@@ -95,8 +94,6 @@ const Profile = styled.div`
 
 const User = styled.div`
   border-bottom: 1px solid var(--gray);
-  /* padding: 7px; */
-  /* border-radius: 10px; */
   margin: 10px 0;
   cursor: pointer;
 `;

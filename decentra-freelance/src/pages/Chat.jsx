@@ -22,7 +22,6 @@ const Wrapper = styled.div`
   min-height: 100vh;
   color: rgb(255, 255, 255);
   padding-top: 100px;
-  border: 2px solid red;
   background: var(--black);
   @media (max-width: 930px) {
     padding-top: 60px;
@@ -30,7 +29,6 @@ const Wrapper = styled.div`
 `;
 
 const Container = styled.div`
-  border: 2px solid white;
   background: var(--darkBg);
   width: 100%;
   max-width: 1047px;

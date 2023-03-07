@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useEffect, useState, useRef } from "react";
+import SkillSwap from "../../artifacts/contracts/SkillSwap.sol/SkillSwap.json";
 import { db } from "../../firebase";
 import {
   collection,
@@ -13,7 +14,7 @@ import {
   onSnapshot,
   deleteDoc,
 } from "firebase/firestore";
-import { async } from "@firebase/util";
+import { ethers } from "ethers";
 
 function Chatbox({ sellerChangeState }) {
   const [msgText, setMsgText] = useState("");
@@ -28,6 +29,15 @@ function Chatbox({ sellerChangeState }) {
   const [openOfferModal, setOpenOfferModal] = useState(false);
   const [currentAcc, setCurrentAcc] = useState();
   const [senderOfferDeleteId, setSenderOfferDeleteId] = useState();
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+
+  const abi = SkillSwap.abi;
+
+  const contractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+
+  const skillswap = new ethers.Contract(contractAddress, abi, signer);
 
   const messagesEndRef = useRef(null);
 
@@ -341,9 +351,38 @@ function Chatbox({ sellerChangeState }) {
         )
       );
       setDisplayOffer([]);
+      setModalOpen(false);
     } catch (err) {
       alert(err);
     }
+  }
+
+  async function makeOrder(budget, deadline) {
+    try {
+      console.log(budget);
+      console.log(deadline);
+      console.log(sendTo);
+      let deadlineSec = deadline * 86400;
+      console.log(deadlineSec);
+      let totalBudget = JSON.stringify(
+        parseInt(budget) + parseInt(budget) * 0.1
+      );
+      console.log(totalBudget);
+      const success = await skillswap.placeOrder(budget, deadlineSec, sendTo, {
+        value: ethers.utils.parseEther(totalBudget),
+      });
+      console.log(success);
+    } catch (error) {
+      // if (error.includes(`'not a seller'`)) {
+      //   console.log("working");
+      //   alert("Seller is not registered");
+      // } else {
+      // console.log("working2");
+      alert(error);
+      // }
+    }
+
+    // await placeOrder()
   }
 
   useEffect(() => {
@@ -431,7 +470,21 @@ function Chatbox({ sellerChangeState }) {
                   withdraw offer
                 </button>
               ) : (
-                <button>Accept offer</button>
+                <div>
+                  <button
+                    onClick={() =>
+                      makeOrder(
+                        offerData.data.offerBudget,
+                        offerData.data.offerDeadLine
+                      )
+                    }
+                  >
+                    Accept offer
+                  </button>
+                  <button onClick={() => handleDeleteOffer(offerData.id)}>
+                    Decline
+                  </button>
+                </div>
               )}
             </Offer>
           ))}
@@ -573,11 +626,11 @@ const Modal = styled.div`
 `;
 
 const OfferContent = styled.div`
-  color: var(--primary);
+  color: #91b7f4;
   cursor: pointer;
   p {
     font-style: underline;
-    border-bottom: 2px solid var(--primary);
+    border-bottom: 2px solid #91b7f4;
   }
 `;
 
