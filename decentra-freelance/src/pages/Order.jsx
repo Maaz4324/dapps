@@ -14,6 +14,7 @@ function Order() {
   const [receiversAdd, setReceiversAdd] = useState([]);
   const [currentAcc, setCurrentAcc] = useState();
   const [orderList, setOrderList] = useState([]);
+  const [deliveryList, setDeliveryList] = useState([]);
   const [sampleFile, setSampleFile] = useState();
   const [originalFile, setOriginalFile] = useState();
   const [percent, setPercent] = useState(0);
@@ -47,33 +48,6 @@ function Order() {
     }
     loadRecieverAdd();
   }, []);
-
-  function timeConverter(UNIX_timestamp) {
-    var a = new Date(UNIX_timestamp * 1000);
-    var months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    var year = a.getFullYear();
-    var month = months[a.getMonth()];
-    var date = a.getDate();
-    var hour = a.getHours();
-    var min = a.getMinutes();
-    var sec = a.getSeconds();
-    var time =
-      date + " " + month + " " + year + " " + hour + ":" + min + ":" + sec;
-    return time;
-  }
 
   function handleUpload() {
     if (!sampleFile) {
@@ -116,6 +90,10 @@ function Order() {
             currentAcc,
             receiversAdd[i]
           );
+          const deliveryAvailable = await skillswap.dealSellrToBuyr(
+            receiversAdd[i],
+            currentAcc
+          );
           if (
             orderAvailable.seller !=
             "0x0000000000000000000000000000000000000000"
@@ -128,6 +106,23 @@ function Order() {
             };
             orderArray.push(orderResult);
             setOrderList(orderArray);
+            console.log(
+              "🚀 ~ file: Order.jsx:56 ~ loadOrders ~ orderAvailable:",
+              new Date().getDate()
+            );
+          }
+          if (
+            deliveryAvailable.seller !=
+            "0x0000000000000000000000000000000000000000"
+          ) {
+            let deliveryArray = [];
+            // let days = parseInt(orderAvailable.duration) / 86400;
+            let deliveryResult = {
+              amount: deliveryAvailable.amount.toString(),
+              deadline: deliveryAvailable.duration.toString(),
+            };
+            deliveryArray.push(deliveryResult);
+            setDeliveryList(deliveryArray);
             console.log(
               "🚀 ~ file: Order.jsx:56 ~ loadOrders ~ orderAvailable:",
               new Date().getDate()
@@ -181,6 +176,33 @@ function Order() {
                 <span>Amount</span>
               </p>
               <h3>{orderData.amount}ETH</h3>
+            </div>
+          </Delivery>
+        ))}
+        {deliveryList.map((deliveryData, idx) => (
+          <Delivery key={idx}>
+            <div>
+              <h5>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta
+                doloremque illum consequuntur suscipit aliquid! Iure enim ab
+                nemo nihil. Numquam voluptate doloribus minima quam, quasi
+                temporibus illo. Itaque, recusandae ipsum?
+              </h5>
+            </div>
+            <div>
+              <p>
+                <span>Time left</span>
+              </p>
+              <div className="timecolor">
+                <CountDown timeStamp={deliveryData.deadline * 1000} />
+              </div>
+            </div>
+            <div></div>
+            <div>
+              <p>
+                <span>Amount</span>
+              </p>
+              <h3>{deliveryData.amount}ETH</h3>
             </div>
           </Delivery>
         ))}
