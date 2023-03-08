@@ -35,7 +35,7 @@ function Chatbox({ sellerChangeState }) {
 
   const abi = SkillSwap.abi;
 
-  const contractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
   const skillswap = new ethers.Contract(contractAddress, abi, signer);
 
@@ -357,7 +357,7 @@ function Chatbox({ sellerChangeState }) {
     }
   }
 
-  async function makeOrder(budget, deadline) {
+  async function makeOrder(budget, deadline, id) {
     try {
       console.log(budget);
       console.log(deadline);
@@ -372,6 +372,7 @@ function Chatbox({ sellerChangeState }) {
         value: ethers.utils.parseEther(totalBudget),
       });
       console.log(success);
+      handleDeleteOffer(id);
     } catch (error) {
       // if (error.includes(`'not a seller'`)) {
       //   console.log("working");
@@ -475,7 +476,8 @@ function Chatbox({ sellerChangeState }) {
                     onClick={() =>
                       makeOrder(
                         offerData.data.offerBudget,
-                        offerData.data.offerDeadLine
+                        offerData.data.offerDeadLine,
+                        offerData.id
                       )
                     }
                   >

@@ -3,20 +3,9 @@ import { useEffect, useState } from "react";
 import SkillSwap from "../artifacts/contracts/SkillSwap.sol/SkillSwap.json";
 import { ethers } from "ethers";
 import { db, storage } from "../firebase";
-// import firebase from "@firebase/app";
 
-import {
-  collection,
-  doc,
-  addDoc,
-  setDoc,
-  Timestamp,
-  query,
-  orderBy,
-  onSnapshot,
-  deleteDoc,
-  ref,
-} from "firebase/firestore";
+import { collection, query, onSnapshot } from "firebase/firestore";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 // import { ref } from "@firebase/firestore";
 import CountDown from "../component/CountDown";
 // import * as firebase from "firebase";
@@ -87,7 +76,7 @@ function Order() {
   }
 
   function handleUpload() {
-    if (!sampleFile || !originalFile) {
+    if (!sampleFile) {
       alert("Please choose a file first!");
     }
     try {
@@ -177,12 +166,12 @@ function Order() {
               <input
                 type="file"
                 placeholder="Sample file"
-                onChange={(e) => setSampleFile(e.target.value)}
+                onChange={(e) => setSampleFile(e.target.files[0])}
               />
               <input
                 type="file"
                 placeholder="Original work"
-                onChange={(e) => setOriginalFile(e.target.value)}
+                onChange={(e) => setOriginalFile(e.target.files[0])}
               />
               <button onClick={handleUpload}>Upload files</button>
               <p>{percent} "% done"</p>
