@@ -104,46 +104,74 @@ function Selling() {
   }
 
   async function uploadToIPFS(event, setPic) {
-    console.log(setPic);
     event.preventDefault();
     const file = event.target.files[0];
     const MIN_FILE_SIZE = 1024; // 1MB
-    const MAX_FILE_SIZE = 5120;
+    const MAX_FILE_SIZE = 2048;
     const fileSizeKiloBytes = file.size / 1024;
-
-    if (file && fileSizeKiloBytes < MAX_FILE_SIZE) {
-      try {
-        const formData = new FormData();
-        formData.append("file", file);
-        console.log("working1");
-        const resFile = await axios({
-          method: "post",
-          url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
-          data: formData,
-          headers: {
-            pinata_api_key: `83828a285ed6ac100f38`,
-            pinata_secret_api_key: `0a87dafa6567074b4754a03e10341a813b8fe372f86e12d559a66a61b14398eb`,
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        console.log("working2");
-        const ImgHash = `${resFile.data.IpfsHash}`;
-        if (setPic == "setGigImg") {
-          setGigImg(ImgHash);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        async function upLoadFormatedImg() {
+          if (
+            file &&
+            fileSizeKiloBytes < MAX_FILE_SIZE &&
+            setPic == "setGigImg"
+          ) {
+            try {
+              const formData = new FormData();
+              formData.append("file", file);
+              const resFile = await axios({
+                method: "post",
+                url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
+                data: formData,
+                headers: {
+                  pinata_api_key: `83828a285ed6ac100f38`,
+                  pinata_secret_api_key: `0a87dafa6567074b4754a03e10341a813b8fe372f86e12d559a66a61b14398eb`,
+                  "Content-Type": "multipart/form-data",
+                },
+              });
+              const ImgHash = `${resFile.data.IpfsHash}`;
+              setGigImg(ImgHash);
+            } catch (error) {
+              alert("Error sending file to IPFS");
+            }
+          } else if (
+            file &&
+            fileSizeKiloBytes < MAX_FILE_SIZE &&
+            img.width == img.height &&
+            setPic == "setImg"
+          ) {
+            try {
+              const formData = new FormData();
+              formData.append("file", file);
+              const resFile = await axios({
+                method: "post",
+                url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
+                data: formData,
+                headers: {
+                  pinata_api_key: `83828a285ed6ac100f38`,
+                  pinata_secret_api_key: `0a87dafa6567074b4754a03e10341a813b8fe372f86e12d559a66a61b14398eb`,
+                  "Content-Type": "multipart/form-data",
+                },
+              });
+              const ImgHash = `${resFile.data.IpfsHash}`;
+              setImg(ImgHash);
+            } catch (error) {
+              alert("Error sending file to IPFS");
+            }
+          } else {
+            alert(
+              "Please select a file with size below 2MB and with square dimensions"
+            );
+          }
         }
-        if (setPic == "setImg") {
-          setImg(ImgHash);
-        }
-
-        console.log(ImgHash);
-      } catch (error) {
-        console.log("Error sending File to IPFS: ");
-        console.log(error);
-        alert("Error sending file to IPFS");
-      }
-    } else {
-      alert("Please select a file with size under 5MB");
-    }
+        upLoadFormatedImg();
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
   }
 
   async function uploadFileToStorage(e) {
@@ -172,14 +200,11 @@ function Selling() {
 
       const uri = await storage.upload({ profile: profile, gig: gig });
       const url = await storage.resolveScheme(uri);
-      console.log(url);
       const profileSet = await skillswap.setProfile(url);
-      console.log(
-        "🚀 ~ file: Selling.jsx:136 ~ uploadFileToStorage ~ profileSet:",
-        profileSet
-      );
+      setTimeout(function () {
+        window.location.reload(false);
+      }, 8000);
     } catch (e) {
-      console.error(e);
       alert("Error sending file to IPFS");
     }
     setLoading(false);
@@ -219,11 +244,10 @@ function Selling() {
           const uri = await storage.upload({ profile: profile, gig: gig });
           const url = await storage.resolveScheme(uri);
           const edited = await skillswap.updateProfile(url, i);
-          console.log(
-            "🚀 ~ file: Selling.jsx:196 ~ saveChanges ~ edited:",
-            edited
-          );
         }
+        setTimeout(function () {
+          window.location.reload(false);
+        }, 8000);
       }
     } catch (error) {
       alert("We're facing some problems saving your profile");
@@ -441,12 +465,11 @@ function Selling() {
                     ></ServiceImg>
                   </ServiceHead>
                   <Offer>
-                    <h4>
-                      <span>Starting from:</span> {gigData.gigPrice} ETH
-                    </h4>
-                    <p>
-                      <span>Offer:</span> {gigData.gigOffer}
-                    </p>
+                    <span>Starting from:</span>
+                    <h4> {gigData.gigPrice} ETH</h4>
+                    <br /> <br />
+                    <span>Offer:</span>
+                    <p>{gigData.gigOffer}</p>
                   </Offer>
                   <ServiceDes>
                     <span>Service Description: </span>
@@ -466,34 +489,39 @@ function Selling() {
               {firstPage ? (
                 <ProfileContainer>
                   <h2>About yourself</h2>
-                  <label>Full name</label>
+                  <label>Name</label>
                   <input
                     type="text"
                     placeholder="Full name"
                     required
                     value={name}
+                    spellCheck="true"
                     onChange={(e) => setName(e.target.value)}
                   />
-                  <label>Upload your profile</label>
+                  <label>
+                    Upload profile pic (max upload size 5 MB: 1000 x 1000 px)
+                  </label>
                   {img ? (
-                    <div>
+                    <FormImg>
                       <img
                         src={`https://gateway.ipfscdn.io/ipfs/${img}`}
                         alt="skill swap user profile"
                       />
-                    </div>
+                    </FormImg>
                   ) : (
                     <div></div>
                   )}
                   <input
                     type="file"
                     // required
+                    accept="image/*"
                     onChange={(event) => uploadToIPFS(event, "setImg")}
                   />
                   <label>Give title to yourself in few words</label>
                   <input
                     type="text"
                     required
+                    spellCheck="true"
                     placeholder="Title to yourself"
                     maxLength="70"
                     value={profileTitle}
@@ -518,6 +546,7 @@ function Selling() {
                     name="description"
                     cols="30"
                     rows="10"
+                    spellCheck="true"
                     placeholder="Something about yourself"
                     required
                     value={description}
@@ -528,6 +557,7 @@ function Selling() {
                     type="url"
                     placeholder="Website link"
                     required
+                    spellCheck="true"
                     value={urlS}
                     onChange={(e) => setUrl(e.target.value)}
                   />
@@ -536,7 +566,7 @@ function Selling() {
                     keyboard
                   </label>
                   <TagsInput
-                    style={{ color: "black !important" }}
+                    style={{ border: "5px solid black !important" }}
                     value={skill}
                     onChange={setSkill}
                     name="skills"
@@ -550,6 +580,7 @@ function Selling() {
                   <TagsInput
                     value={lang}
                     onChange={setLang}
+                    style={{ background: "black !important" }}
                     name="languages"
                     placeHolder="Languages you can speak"
                   />
@@ -565,17 +596,18 @@ function Selling() {
                   <h2>Your service</h2>
                   <label>Upload your gig picture</label>
                   {gigImg ? (
-                    <div>
+                    <FormImg>
                       <img
                         src={`https://gateway.ipfscdn.io/ipfs/${gigImg}`}
                         alt="skill swap user profile"
                       />
-                    </div>
+                    </FormImg>
                   ) : (
                     <div></div>
                   )}
                   <input
                     type="file"
+                    accept="image/*"
                     // required
                     onChange={(event) => uploadToIPFS(event, "setGigImg")}
                   />
@@ -585,16 +617,18 @@ function Selling() {
                     maxLength="70"
                     placeholder="Title"
                     required
+                    spellCheck="true"
                     defaultValue={gigHead}
                     onChange={(e) => setGigHead(e.target.value)}
                   />
-                  <label>Describe your gig</label>
+                  <label>Describe your service</label>
                   <textarea
                     name="gigDes"
                     cols="30"
                     rows="10"
                     placeholder="Gig Description"
                     required
+                    spellCheck="true"
                     defaultValue={gigDescrip}
                     onChange={(e) => setGigDescrip(e.target.value)}
                   ></textarea>
@@ -631,6 +665,7 @@ function Selling() {
                     rows="10"
                     placeholder="Gig offer"
                     required
+                    spellCheck="true"
                     defaultValue={gigOffer}
                     onChange={(e) => setGigOffer(e.target.value)}
                   ></textarea>
@@ -639,6 +674,7 @@ function Selling() {
                     type="number"
                     placeholder="Price"
                     className="noscroll"
+                    spellCheck="true"
                     defaultValue={gigPrice}
                     onChange={(e) => setGigPrice(e.target.value)}
                     required
@@ -648,7 +684,7 @@ function Selling() {
                   <TagsInput
                     value={gigKeywords}
                     onChange={setGigKeywords}
-                    style={{ background: "transparent !important" }}
+                    style={{ background: "black !important" }}
                     name="keywords"
                     placeHolder="Keywords"
                   />
@@ -705,13 +741,13 @@ const Container = styled.div`
     border-radius: 7px;
     outline: none;
     border: 0;
-    margin: 4px 0;
     @media (max-width: 747px) {
       width: 90%;
     }
   }
   label {
     margin-top: 30px;
+    margin-bottom: 10px;
   }
   form {
     width: 100%;
@@ -733,6 +769,9 @@ const ProfileContainer = styled.div`
   padding: 40px;
   border-radius: 10px;
   background: var(--darkBg);
+  .rti--tag {
+    background: #636363 !important;
+  }
   @media (max-width: 747px) {
     width: 97%;
     padding: 40px 0;
@@ -756,6 +795,9 @@ const GigContainer = styled.div`
     appearance: none;
     margin: 0;
   }
+  .rti--tag {
+    background: #636363 !important;
+  }
   @media (max-width: 747px) {
     width: 97%;
     padding: 40px 0;
@@ -768,6 +810,7 @@ const YourDetail = styled.div`
   background: var(--darkBg);
   padding: 40px 30px;
   display: grid;
+  grid-gap: 30px;
   grid-template-columns: 30% 70%;
   grid-template-rows: auto auto auto;
   border-radius: 10px;
@@ -832,6 +875,7 @@ const YourName = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 20px 10px;
+  padding-right: 30px;
   h3 {
     font-size: 22px;
   }
@@ -877,7 +921,8 @@ const YourOthers = styled.div`
   ul {
     width: 100%;
     display: grid;
-    grid-template-columns: auto;
+    grid-template-columns: auto auto;
+    grid-gap: 20px;
     padding: 0 10px;
     li {
       word-wrap: break-word;
@@ -920,6 +965,7 @@ const YourOthers = styled.div`
 const YourDes = styled.div`
   grid-row: 2/4;
   padding: 20px 10px;
+  padding-right: 30px;
   p {
     font-size: 16px;
     margin: 10px 0;
@@ -975,16 +1021,17 @@ const Offer = styled.div`
   padding: 20px;
   border-radius: 10px;
   h4 {
-    font-size: 30px;
+    font-size: 20px;
+    margin-top: 10px;
   }
   span {
-    font-size: 18px;
+    font-size: 16px;
     color: var(--darkText);
     font-weight: 500;
   }
   p {
-    margin: 20px 0;
-    font-size: 20px;
+    margin-top: 10px;
+    font-size: 18px;
   }
   @media (max-width: 914px) {
     grid-column: auto;
@@ -1029,4 +1076,10 @@ const BtnContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+`;
+
+const FormImg = styled.div`
+  img {
+    width: 50%;
+  }
 `;

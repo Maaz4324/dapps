@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import search from "../images/search.svg";
 import chat from "../images/chat.svg";
@@ -10,7 +10,7 @@ function Navbar({ searchState }) {
   const navigate = useNavigate();
   const [connectBtn, setConnectBtn] = useState("Connect");
   const [searchResult, setSearchResult] = useState("");
-  // const [searchSend, setSearchSend] = useState("");
+  const [hiredText, setHiredText] = useState("Get hired");
 
   function closeNav() {
     document.getElementById("mySidebar").style.width = "0";
@@ -21,6 +21,30 @@ function Navbar({ searchState }) {
     document.getElementById("mySidebar").style.width = "250px";
     document.getElementById("main").style.marginLeft = "250px";
   }
+
+  useEffect(() => {
+    async function getHiredTextLoad() {
+      if (window.ethereum) {
+        const account = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+
+        const abi = SkillSwap.abi;
+
+        const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+
+        const skillswap = new ethers.Contract(contractAddress, abi, signer);
+
+        const isSeller = await skillswap.isSeller(account[0]);
+        if (isSeller) {
+          setHiredText("My profile");
+        }
+      }
+    }
+    getHiredTextLoad();
+  }, []);
 
   async function connectWallet() {
     if (window.ethereum) {
@@ -36,8 +60,6 @@ function Navbar({ searchState }) {
 
       const skillswap = new ethers.Contract(contractAddress, abi, signer);
       const noOfuser = await skillswap.noOfSellers();
-      console.log("working");
-      // console.log(noOfuser.toString());
       if (noOfuser.toString() == 0) {
         setConnectBtn("Connected");
       } else {
@@ -145,7 +167,7 @@ function Navbar({ searchState }) {
             onClick={goToSell}
             style={{ cursor: "pointer", textDecoration: "underline" }}
           >
-            Get hired
+            {hiredText}
           </h4>
           <button onClick={connectWallet}>{connectBtn}</button>
         </Right>
@@ -161,7 +183,7 @@ function Navbar({ searchState }) {
             <button className="connect" onClick={connectWallet}>
               {connectBtn}
             </button>
-            <a href="#">Get hired</a>
+            <a href="#">{hiredText}</a>
             <a href="#">Chat</a>
           </div>
 

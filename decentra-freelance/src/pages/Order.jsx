@@ -3,12 +3,9 @@ import { useEffect, useState } from "react";
 import SkillSwap from "../artifacts/contracts/SkillSwap.sol/SkillSwap.json";
 import { ethers } from "ethers";
 import { db, storage } from "../firebase";
-
-import { collection, query, onSnapshot } from "firebase/firestore";
+import { collection, query, onSnapshot, addDoc } from "firebase/firestore";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-// import { ref } from "@firebase/firestore";
 import CountDown from "../component/CountDown";
-// import * as firebase from "firebase";
 
 function Order() {
   const [receiversAdd, setReceiversAdd] = useState([]);
@@ -18,6 +15,10 @@ function Order() {
   const [sampleFile, setSampleFile] = useState();
   const [originalFile, setOriginalFile] = useState();
   const [percent, setPercent] = useState(0);
+  const [sampleUrl, setSampleUrl] = useState({
+    buyer: "",
+    sampleFile: "",
+  });
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -33,7 +34,7 @@ function Order() {
       const account = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
-      setCurrentAcc(account[0]);
+      setCurrentAcc(account[0].toLowerCase());
       const q = query(
         collection(
           db,
@@ -49,18 +50,22 @@ function Order() {
     loadRecieverAdd();
   }, []);
 
-  function handleUpload() {
+  function handleUpload(buyer) {
     if (!sampleFile) {
       alert("Please choose a file first!");
     }
     try {
       const storageRefSample = ref(storage, `/files/${sampleFile.name}`);
-      //   const storageRefOriginal = ref(storage, `/files/${originalFile.name}`);
+      // const storageRefOriginal = ref(storage, `/files/${originalFile.name}`);
       const uploadSampleTask = uploadBytesResumable(
         storageRefSample,
         sampleFile
       );
-      //   const uploadOriginalTask = uploadBytesResumable(storageRefOriginal, file);
+      // const uploadOriginalTask = uploadBytesResumable(
+      //   storageRefOriginal,
+      //   originalFile
+      // );
+      let sampleUrl;
       uploadSampleTask.on(
         "state_changed",
         (snapshot) => {
@@ -73,10 +78,11 @@ function Order() {
         () => {
           // download url
           getDownloadURL(uploadSampleTask.snapshot.ref).then((url) => {
-            console.log(url);
+            sampleUrl = url;
           });
         }
       );
+      console.log(sampleUrl);
     } catch (error) {
       console.log(error);
     }
@@ -90,10 +96,6 @@ function Order() {
             currentAcc,
             receiversAdd[i]
           );
-          const deliveryAvailable = await skillswap.dealSellrToBuyr(
-            receiversAdd[i],
-            currentAcc
-          );
           if (
             orderAvailable.seller !=
             "0x0000000000000000000000000000000000000000"
@@ -103,30 +105,10 @@ function Order() {
             let orderResult = {
               amount: orderAvailable.amount.toString(),
               deadline: orderAvailable.duration.toString(),
+              buyer: receiversAdd[i].toLowerCase(),
             };
             orderArray.push(orderResult);
             setOrderList(orderArray);
-            console.log(
-              "🚀 ~ file: Order.jsx:56 ~ loadOrders ~ orderAvailable:",
-              new Date().getDate()
-            );
-          }
-          if (
-            deliveryAvailable.seller !=
-            "0x0000000000000000000000000000000000000000"
-          ) {
-            let deliveryArray = [];
-            // let days = parseInt(orderAvailable.duration) / 86400;
-            let deliveryResult = {
-              amount: deliveryAvailable.amount.toString(),
-              deadline: deliveryAvailable.duration.toString(),
-            };
-            deliveryArray.push(deliveryResult);
-            setDeliveryList(deliveryArray);
-            console.log(
-              "🚀 ~ file: Order.jsx:56 ~ loadOrders ~ orderAvailable:",
-              new Date().getDate()
-            );
           }
         }
       } catch (error) {
@@ -134,6 +116,76 @@ function Order() {
       }
     }
     loadOrders();
+  }, [receiversAdd]);
+
+  async function acceptOrder(seller) {
+    const transaction = await skillswap.Transaction(seller, currentAcc);
+  }
+
+  useEffect(() => {
+    async function loadDelivery() {
+      try {
+        let deliveryArray = [];
+        for (let i in receiversAdd) {
+          const deliveryAvailable = await skillswap.dealSellrToBuyr(
+            receiversAdd[i],
+            currentAcc
+          );
+          if (
+            deliveryAvailable.seller !=
+            "0x0000000000000000000000000000000000000000"
+          ) {
+            // let days = parseInt(orderAvailable.duration) / 86400;
+            const r = query(
+              collection(
+                db,
+                "fileUrl",
+                currentAcc.substring(2),
+                "deliverBy",
+                deliveryAvailable.seller.toLowerCase().substring(2),
+                "items"
+              )
+            );
+            if (
+              (await skillswap.Transaction(
+                deliveryAvailable.seller,
+                currentAcc
+              )) == 0
+            ) {
+              onSnapshot(r, (querySnapshot) => {
+                let deliveryResult = {
+                  amount: deliveryAvailable.amount.toString(),
+                  deadline: deliveryAvailable.duration.toString(),
+                  sampleFileLink: querySnapshot.docs.map(
+                    (doc) => doc.data().sampleFile
+                  ),
+                  seller: deliveryAvailable.seller,
+                };
+                deliveryArray.push(deliveryResult);
+              });
+            } else {
+              onSnapshot(r, (querySnapshot) => {
+                let deliveryResult = {
+                  amount: deliveryAvailable.amount.toString(),
+                  deadline: deliveryAvailable.duration.toString(),
+                  sampleFileLink: querySnapshot.docs.map(
+                    (doc) => doc.data().sampleFile
+                  ),
+                  originalFileLink: "original",
+                  seller: deliveryAvailable.seller,
+                };
+                deliveryArray.push(deliveryResult);
+                setDeliveryList(deliveryArray);
+                console.log(deliveryArray);
+              });
+            }
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    loadDelivery();
   }, [receiversAdd]);
 
   return (
@@ -168,8 +220,10 @@ function Order() {
                 placeholder="Original work"
                 onChange={(e) => setOriginalFile(e.target.files[0])}
               />
-              <button onClick={handleUpload}>Upload files</button>
-              <p>{percent} "% done"</p>
+              <button onClick={() => handleUpload(orderData.buyer)}>
+                Upload files
+              </button>
+              <p>{percent}% done</p>
             </div>
             <div>
               <p>
@@ -197,7 +251,21 @@ function Order() {
                 <CountDown timeStamp={deliveryData.deadline * 1000} />
               </div>
             </div>
-            <div></div>
+            <div>
+              {deliveryData.sampleFileLink.length != 0 ? (
+                <div>
+                  <a href={deliveryData.sampleFileLink} download>
+                    Download file
+                  </a>
+                  <a>{deliveryData.originalFileLink}</a>
+                  <button onClick={() => acceptOrder(deliveryData.seller)}>
+                    Accept delivery
+                  </button>
+                </div>
+              ) : (
+                <p>Files will appear when seller delivers</p>
+              )}
+            </div>
             <div>
               <p>
                 <span>Amount</span>
@@ -224,6 +292,9 @@ const Container = styled.div`
   width: 97%;
   max-width: 1147px;
   margin: 0 auto;
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 30px;
 `;
 
 const Delivery = styled.div`

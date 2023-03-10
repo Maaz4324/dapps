@@ -4,8 +4,10 @@ import blob1 from "../../images/blob1.svg";
 import blob2 from "../../images/blob2.svg";
 import blob3 from "../../images/blob3.svg";
 import blob4 from "../../images/blob4.svg";
+import { useNavigate } from "react-router-dom";
 
 function HeroSec() {
+  const navigate = useNavigate();
   return (
     <Wrapper>
       <h1>Decentralized</h1>
@@ -14,7 +16,7 @@ function HeroSec() {
         Start your freelancing journey from here or hire someone cuz we help you
         build the future.
       </h5>
-      <button>Start Now</button>
+      <button onClick={() => navigate("/selling")}>View profile</button>
       <img
         src={blob1}
         className="blob1"

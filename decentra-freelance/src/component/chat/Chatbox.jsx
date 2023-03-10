@@ -55,10 +55,10 @@ function Chatbox({ sellerChangeState }) {
 
   const DisplayOfferUser = () => {
     if (displayOffer[0].data.createdBy == currentAcc) {
-      return <p>You have made an offer. Click here to see</p>;
+      return <h3>You have made an offer.</h3>;
     }
     if (displayOffer[0].data.createdBy == sendTo) {
-      return <p>Seller has made an offer. Click here to see</p>;
+      return <h3>Seller has made an offer.</h3>;
     }
     if ((displayOffer.length = 0)) {
       return <p></p>;
@@ -279,7 +279,9 @@ function Chatbox({ sellerChangeState }) {
     if (
       offerBudget.trim() != "" &&
       offerDeadLine.trim() != "" &&
-      offerDes.trim() != ""
+      offerDes.trim() != "" &&
+      offerBudget > 0 &&
+      offerDeadLine > 0
     ) {
       try {
         const account = await window.ethereum.request({
@@ -323,6 +325,8 @@ function Chatbox({ sellerChangeState }) {
       } catch (err) {
         alert(err);
       }
+    } else {
+      alert("Set all requirements correctly");
     }
   }
 
@@ -386,6 +390,12 @@ function Chatbox({ sellerChangeState }) {
     // await placeOrder()
   }
 
+  function closeModal() {
+    setModalOpen(false);
+    setOfferDeadLine();
+    setOfferBudget();
+    setOfferDes();
+  }
   useEffect(() => {
     scrollToBottom();
   }, [displayMsg]);
@@ -399,10 +409,12 @@ function Chatbox({ sellerChangeState }) {
       )}
       {modalOpen ? (
         <Modal>
-          <h3>Make offer</h3>
-          <div className="closeModal" onClick={() => setModalOpen(false)}>
-            close
-          </div>
+          <section className="modalhead">
+            <h3>Make offer</h3>
+            <div className="closeModal" onClick={closeModal}>
+              ×
+            </div>
+          </section>
           <div>
             <label>Days: </label>
             <input
@@ -434,76 +446,72 @@ function Chatbox({ sellerChangeState }) {
       ) : (
         <div className="openModalAlt"></div>
       )}
-      <h1>{sendTo}</h1>
-      <Container>
-        <MesContent>
-          {displayMsg.map((msgData, idx) => (
-            <Mes key={idx} className={msgData.createdBy}>
-              <ShowMes>
-                <p>{msgData.message}</p>
-              </ShowMes>
-              <span>{msgData.createdAt}</span>
-            </Mes>
-          ))}
-        </MesContent>
-        {/* <div ref={messagesEndRef} /> */}
-      </Container>
-      {displayOffer.length != 0 && (
-        <OfferContent onClick={() => setOpenOfferModal(true)}>
-          <DisplayOfferUser />
-        </OfferContent>
-      )}
-      {openOfferModal ? (
-        <OfferModal>
-          {displayOffer.map((offerData, idx) => (
-            <Offer key={idx}>
-              <div
-                className="closeModal"
-                onClick={() => setOpenOfferModal(false)}
-              >
-                close
-              </div>
-              <h3>{offerData.data.offerBudget}ETH</h3>
-              <h3>{offerData.data.offerDeadLine} Days</h3>
-              <h3>Des: {offerData.data.offerDes}</h3>
-              {displayOffer[0].data.createdBy == currentAcc ? (
-                <button onClick={() => handleDeleteOffer(offerData.id)}>
-                  withdraw offer
-                </button>
-              ) : (
-                <div>
-                  <button
-                    onClick={() =>
-                      makeOrder(
-                        offerData.data.offerBudget,
-                        offerData.data.offerDeadLine,
-                        offerData.id
-                      )
-                    }
-                  >
-                    Accept offer
-                  </button>
+      <Main>
+        <MainHead>
+          <h1>{sendTo}</h1>
+        </MainHead>
+        <Container>
+          <MesContent>
+            {displayMsg.map((msgData, idx) => (
+              <Mes key={idx} className={msgData.createdBy}>
+                <ShowMes>
+                  <p>{msgData.message}</p>
+                </ShowMes>
+                <span>{msgData.createdAt}</span>
+              </Mes>
+            ))}
+          </MesContent>
+          {/* <div ref={messagesEndRef} /> */}
+        </Container>
+        <InputCont>
+          <input
+            type="text"
+            placeholder="Chat"
+            onChange={(e) => setMsgText(e.target.value)}
+            value={msgText}
+          />
+          <span onClick={() => setModalOpen(true)}>offer</span>
+          <button onClick={handleSubmit}>Send</button>
+        </InputCont>
+      </Main>
+      <Side>
+        {displayOffer.length != 0 && (
+          <OfferModal>
+            <OfferContent>
+              <DisplayOfferUser />
+            </OfferContent>
+            {displayOffer.map((offerData, idx) => (
+              <Offer key={idx}>
+                <p>{offerData.data.offerDes}</p>
+                <h3>{offerData.data.offerBudget}ETH</h3>
+                <h3>{offerData.data.offerDeadLine} Days</h3>
+                {displayOffer[0].data.createdBy == currentAcc ? (
                   <button onClick={() => handleDeleteOffer(offerData.id)}>
-                    Decline
+                    withdraw offer
                   </button>
-                </div>
-              )}
-            </Offer>
-          ))}
-        </OfferModal>
-      ) : (
-        <div className="openModalAlt"></div>
-      )}
-      <InputCont>
-        <input
-          type="text"
-          placeholder="Chat"
-          onChange={(e) => setMsgText(e.target.value)}
-          value={msgText}
-        />
-        <span onClick={() => setModalOpen(true)}>offer</span>
-        <button onClick={handleSubmit}>Send</button>
-      </InputCont>
+                ) : (
+                  <div>
+                    <button
+                      onClick={() =>
+                        makeOrder(
+                          offerData.data.offerBudget,
+                          offerData.data.offerDeadLine,
+                          offerData.id
+                        )
+                      }
+                    >
+                      Accept offer
+                    </button>
+                    <button onClick={() => handleDeleteOffer(offerData.id)}>
+                      Decline
+                    </button>
+                  </div>
+                )}
+              </Offer>
+            ))}
+          </OfferModal>
+        )}
+      </Side>
     </Wrapper>
   );
 }
@@ -511,11 +519,11 @@ function Chatbox({ sellerChangeState }) {
 export default Chatbox;
 
 const Wrapper = styled.div`
-  /* border: 3px solid red; */
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  flex-direction: column;
+  border: 3px solid red;
+  display: grid;
+  width: 100%;
+  grid-template-columns: 69% 29%;
+  grid-gap: 10px;
   .modalBack {
     position: absolute;
     top: 0;
@@ -603,27 +611,61 @@ const ShowMes = styled.div`
 
 const Modal = styled.div`
   position: absolute;
-  top: 30%;
-  left: 40%;
+  top: 17%;
+  left: 33%;
   z-index: 999;
   background: black;
+  display: grid;
   min-height: 40vh;
   padding: 60px;
   border-radius: 10px;
   div {
     display: flex;
     align-items: flex-start;
+    flex-direction: column;
     justify-content: start;
     margin: 10px 0;
+    width: 100%;
     input {
       padding: 10px;
+      font-size: 18px;
+      width: 95%;
+      border: 0;
+      outline: none;
+      background: var(--darkBg);
+      color: white;
+    }
+    textarea {
+      min-width: 400px;
+      max-width: 450px;
+      padding: 10px;
+      font-size: 18px;
+      border: 0;
+      outline: none;
+      background: var(--darkBg);
+      color: white;
+      font-weight: 200;
+    }
+    label {
+      margin-bottom: 5px;
+    }
+  }
+  button {
+    font-size: 18px;
+    padding: 7px 20px;
+  }
+  .modalhead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    h3 {
+      font-size: 25px;
     }
   }
   .closeModal {
-    position: relative;
-    top: -70px;
-    left: 220px;
+    width: fit-content;
     cursor: pointer;
+    font-size: 22px;
   }
 `;
 
@@ -637,20 +679,39 @@ const OfferContent = styled.div`
 `;
 
 const OfferModal = styled.div`
-  position: absolute;
-  top: 30%;
-  left: 40%;
-  z-index: 999;
   background: black;
   min-height: 40vh;
-  padding: 60px;
+  padding: 10px;
   border-radius: 10px;
-  .closeModal {
-    position: relative;
-    top: -20px;
-    left: 20px;
+  p,
+  h3 {
+    margin: 5px 0;
+  }
+  button {
+    padding: 7px 10px;
     cursor: pointer;
+    font-size: 18px;
   }
 `;
 
 const Offer = styled.div``;
+
+const Main = styled.div`
+  border: 2px solid green;
+  &::-webkit-scrollbar {
+    width: 10px;
+    border: 1px solid black;
+  }
+`;
+
+const Side = styled.div`
+  border: 2px solid blue;
+`;
+
+const MainHead = styled.div`
+  border: 2px solid blue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+`;
