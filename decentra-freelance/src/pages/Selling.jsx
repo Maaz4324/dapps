@@ -580,6 +580,7 @@ function Selling() {
                   <TagsInput
                     value={lang}
                     onChange={setLang}
+                    required
                     style={{ background: "black !important" }}
                     name="languages"
                     placeHolder="Languages you can speak"
@@ -684,6 +685,7 @@ function Selling() {
                   <TagsInput
                     value={gigKeywords}
                     onChange={setGigKeywords}
+                    required
                     style={{ background: "black !important" }}
                     name="keywords"
                     placeHolder="Keywords"

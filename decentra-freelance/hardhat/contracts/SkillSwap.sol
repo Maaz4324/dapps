@@ -3,18 +3,23 @@
 pragma solidity ^0.8.9;
 
 contract SkillSwap{
-     struct Deal{
-         uint256 amount;
-         uint256 duration;
-         address seller;
-         address buyer;
-         bool inProgress;
-     }
 
-     enum escrow {ordered, delivered, complete}
+    address owner;
+    constructor(){
+        owner = msg.sender;
+    }
 
-     mapping(address=>mapping(address=>escrow)) public Transaction;
-        
+    enum escrow{offered, ordered, delivered, complete}
+
+    mapping(address=>mapping(address=>escrow)) public Transaction;
+
+    struct Deal{
+        uint256 amount;
+        uint256 duration;
+        address seller;
+        address buyer;
+        bool inProgress;
+    }
 
     struct Profile{
         address seller;
@@ -25,9 +30,6 @@ contract SkillSwap{
 
     mapping(uint256=>Profile) public sellerProfile;
     mapping(address=>bool) public isSeller;
-
-    mapping(address=>mapping(address=>Deal)) public dealSellrToBuyr;
-
 
     function setProfile(string memory _uri) public {
         require(isSeller[msg.sender]==false, "Already a seller");
@@ -43,35 +45,51 @@ contract SkillSwap{
         profile.uri = _uri;
     }
 
-    function placeOrder(uint256 _amount, uint256 _duration, address _seller) public payable{
-        require(isSeller[_seller]==true, "not a seller");
-        require(dealSellrToBuyr[_seller][msg.sender].inProgress == false, "already order in progress");
-        require(_seller != msg.sender, "you cannot order yourself");
-        // require(_amount+_amount*share/100==msg.value, "Set the amount correctly");
+    mapping(address=>mapping(address=>Deal)) public deal;
+    uint256 public totalCommision;
+
+    function placeOrder(address _seller, uint256 _amount, uint256 _duration) public payable{
+        require(deal[_seller][msg.sender].inProgress == false, "in process");
+        require(_seller != msg.sender, "Cannot order yourself");
+        require(msg.value == _amount+_amount*1/10, "set the right amount");
+        deal[_seller][msg.sender] = Deal(_amount, _duration + block.timestamp, _seller, msg.sender, true);
         Transaction[_seller][msg.sender] = escrow.ordered;
-        dealSellrToBuyr[_seller][msg.sender] = Deal(_amount, _duration + block.timestamp, _seller, msg.sender, true);
-     }
-
-     function orderDelivered(address _seller) public {
-         require(Transaction[_seller][msg.sender] == escrow.ordered, "order not yet placed");
-         Transaction[_seller][msg.sender] = escrow.delivered;
-     }
-
-    function backToBuyer(address _seller, address _buyer) public payable{
-        require(dealSellrToBuyr[_seller][_buyer].duration < block.timestamp);
-        payable(_buyer).transfer(dealSellrToBuyr[_seller][_buyer].amount);
-        delete dealSellrToBuyr[_seller][_buyer];
     }
 
-    function toSeller(address _seller, address _buyer) public payable{
-         require(Transaction[msg.sender][_buyer] == escrow.delivered, "order not yet delivered");
-        require(dealSellrToBuyr[_seller][_buyer].duration <= block.timestamp, "deadline is not met");
-        require(dealSellrToBuyr[msg.sender][_buyer].inProgress == true, "order is not made");
-         Transaction[_seller][msg.sender] = escrow.complete;
-        payable(_seller).transfer(dealSellrToBuyr[_seller][_buyer].amount);
-        delete dealSellrToBuyr[_seller][_buyer];
+    function confirmDelivery(address _seller) public {
+        require(Transaction[_seller][msg.sender] == escrow.ordered, "order not yet placed");
+        deal[_seller][msg.sender].duration = block.timestamp;
+        Transaction[_seller][msg.sender] = escrow.delivered;
     }
-     function contractBalance() public view returns(uint256){
-         return address(this).balance;
-     }
+
+    function toSeller(address _buyer) public payable{
+        require(Transaction[msg.sender][_buyer] == escrow.delivered, "order not yet delivered");
+        totalCommision += deal[msg.sender][_buyer].amount * 1/10;
+        payable(msg.sender).transfer(deal[msg.sender][_buyer].amount);
+        Transaction[msg.sender][_buyer] = escrow.complete;
+        delete deal[msg.sender][_buyer];
+    }
+
+    function cancelOrder(address _seller, address _buyer) public {
+        require(Transaction[_seller][_buyer] == escrow.ordered, "order already in process");
+        payable(_buyer).transfer(deal[_seller][_buyer].amount);
+        Transaction[_seller][_buyer] = escrow.complete;
+        delete deal[_seller][_buyer];
+    }
+
+    function deadlineMet(address _seller, address _buyer) public {
+        require(Transaction[_seller][_buyer] == escrow.ordered, "order already in process");
+        require(deal[_seller][_buyer].duration<block.timestamp, "deadline not met yet!");
+        payable(_buyer).transfer(deal[_seller][_buyer].amount);
+        Transaction[_seller][_buyer] = escrow.complete;
+        delete deal[_seller][_buyer];        
+    }
+
+    function withDrawbalance() public {
+        require(msg.sender == owner, "Not the owner");
+        payable(owner).transfer(totalCommision);
+        totalCommision=0;
+    }
+
+
 }

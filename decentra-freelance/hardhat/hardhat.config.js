@@ -6,12 +6,12 @@ module.exports = {
     artifacts: "../src/artifacts",
   },
   solidity: "0.8.17",
-  networks: {
-    goerli: {
-      url: "",
-      accounts: [
-        ``,
-      ],
-    },
-  },
+  // networks: {
+  //   goerli: {
+  //     url: "",
+  //     accounts: [
+  //       ``,
+  //     ],
+  //   },
+  // },
 };

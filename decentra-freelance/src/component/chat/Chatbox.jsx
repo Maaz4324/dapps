@@ -363,19 +363,40 @@ function Chatbox({ sellerChangeState }) {
 
   async function makeOrder(budget, deadline, id) {
     try {
+      const amount = JSON.stringify(budget);
+      console.log("🚀 ~ file: Chatbox.jsx:367 ~ makeOrder ~ amount:", amount);
       console.log(budget);
-      console.log(deadline);
+
       console.log(sendTo);
       let deadlineSec = deadline * 86400;
       console.log(deadlineSec);
-      let totalBudget = JSON.stringify(
-        parseInt(budget) + parseInt(budget) * 0.1
+      const EtherToWei = ethers.utils.parseUnits(budget, "ether");
+      console.log(
+        "🚀 ~ file: Chatbox.jsx:374 ~ makeOrder ~ EtherToWei:",
+        EtherToWei.toString()
       );
-      console.log(totalBudget);
-      const success = await skillswap.placeOrder(budget, deadlineSec, sendTo, {
-        value: ethers.utils.parseEther(totalBudget),
-      });
+      let totalBudget = parseInt(EtherToWei) + parseInt(EtherToWei) * (1 / 10);
+      console.log(
+        "🚀 ~ file: Chatbox.jsx:376 ~ makeOrder ~ totalBudget:",
+        totalBudget.toString()
+      );
+      // const ethValue = ethers.utils.formatEther(budget);
+      console.log(
+        "🚀 ~ file: Chatbox.jsx:380 ~ makeOrder ~ finalBudget:",
+        ethers.utils.parseUnits(totalBudget.toString(), "ether").toString()
+      );
+      console.log(EtherToWei.toString());
+      console.log("working");
+      const success = await skillswap.placeOrder(
+        sendTo,
+        EtherToWei.toString(),
+        deadlineSec,
+        {
+          value: ethers.BigNumber.from(totalBudget.toString()),
+        }
+      );
       console.log(success);
+
       handleDeleteOffer(id);
     } catch (error) {
       // if (error.includes(`'not a seller'`)) {
@@ -383,6 +404,7 @@ function Chatbox({ sellerChangeState }) {
       //   alert("Seller is not registered");
       // } else {
       // console.log("working2");
+      console.log(error);
       alert(error);
       // }
     }
@@ -519,7 +541,6 @@ function Chatbox({ sellerChangeState }) {
 export default Chatbox;
 
 const Wrapper = styled.div`
-  border: 3px solid red;
   display: grid;
   width: 100%;
   grid-template-columns: 69% 29%;
@@ -697,19 +718,14 @@ const OfferModal = styled.div`
 const Offer = styled.div``;
 
 const Main = styled.div`
-  border: 2px solid green;
   &::-webkit-scrollbar {
     width: 10px;
-    border: 1px solid black;
   }
 `;
 
-const Side = styled.div`
-  border: 2px solid blue;
-`;
+const Side = styled.div``;
 
 const MainHead = styled.div`
-  border: 2px solid blue;
   display: flex;
   align-items: center;
   justify-content: center;

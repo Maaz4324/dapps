@@ -39,7 +39,14 @@ function Chat() {
 
       const isSeller = await skillswap.isSeller(account[0]);
       setCurrentAcc(account[0].toLowerCase());
-      const q = query(collection(db, "buyerName"));
+      const q = query(
+        collection(
+          db,
+          "buyerName",
+          account[0].toLowerCase().substring(2),
+          "profile"
+        )
+      );
       onSnapshot(q, (querySnapshot) => {
         let buyerAccs = querySnapshot.docs.map((doc) => doc.data().account);
         if (!buyerAccs.includes(account[0].toLowerCase()) && !isSeller) {
@@ -53,10 +60,13 @@ function Chat() {
   async function submitName() {
     if (buyerName.trim() != "") {
       try {
-        await addDoc(collection(db, "buyerName"), {
-          account: currentAcc,
-          name: buyerName,
-        });
+        await addDoc(
+          collection(db, "buyerName", currentAcc.substring(2), "profile"),
+          {
+            account: currentAcc,
+            name: buyerName,
+          }
+        );
         alert("Successfully added!");
         window.location.reload(false);
       } catch (error) {
@@ -89,7 +99,6 @@ function Chat() {
 export default Chat;
 
 const Wrapper = styled.div`
-  border: 2px solid blue;
   width: 100%;
   min-height: 100vh;
   color: rgb(255, 255, 255);
@@ -101,7 +110,6 @@ const Wrapper = styled.div`
 `;
 
 const Container = styled.div`
-  border: 2px solid blue;
   background: var(--darkBg);
   width: 100%;
   max-width: 1347px;

@@ -15,10 +15,9 @@ function Order() {
   const [sampleFile, setSampleFile] = useState();
   const [originalFile, setOriginalFile] = useState();
   const [percent, setPercent] = useState(0);
-  const [sampleUrl, setSampleUrl] = useState({
-    buyer: "",
-    sampleFile: "",
-  });
+  const [sampleUrl, setSampleUrl] = useState();
+  const [originalUrl, setOriginalUrl] = useState();
+  const [buyerToSend, setBuyerToSend] = useState();
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -51,21 +50,37 @@ function Order() {
   }, []);
 
   function handleUpload(buyer) {
-    if (!sampleFile) {
+    if (!sampleFile && !originalFile) {
       alert("Please choose a file first!");
     }
     try {
+      setBuyerToSend(buyer);
       const storageRefSample = ref(storage, `/files/${sampleFile.name}`);
-      // const storageRefOriginal = ref(storage, `/files/${originalFile.name}`);
+      const storageRefOriginal = ref(storage, `/files/${originalFile.name}`);
       const uploadSampleTask = uploadBytesResumable(
         storageRefSample,
         sampleFile
       );
-      // const uploadOriginalTask = uploadBytesResumable(
-      //   storageRefOriginal,
-      //   originalFile
-      // );
-      let sampleUrl;
+      const uploadOriginalTask = uploadBytesResumable(
+        storageRefOriginal,
+        originalFile
+      );
+      uploadOriginalTask.on(
+        "state_changed",
+        (snapshot) => {
+          const percent = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          ); // update progress
+          setPercent(percent);
+        },
+        (err) => console.log(err),
+        () => {
+          // download url
+          getDownloadURL(uploadSampleTask.snapshot.ref).then((url) => {
+            setOriginalUrl(url);
+          });
+        }
+      );
       uploadSampleTask.on(
         "state_changed",
         (snapshot) => {
@@ -78,21 +93,45 @@ function Order() {
         () => {
           // download url
           getDownloadURL(uploadSampleTask.snapshot.ref).then((url) => {
-            sampleUrl = url;
+            setSampleUrl(url);
           });
         }
       );
-      console.log(sampleUrl);
+      alert("File sent successfully");
     } catch (error) {
       console.log(error);
     }
   }
 
   useEffect(() => {
+    async function uploadToBuyer() {
+      const account = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      await addDoc(
+        collection(
+          db,
+          "fileUrl",
+          buyerToSend,
+          "deliverBy",
+          account[0].toLowerCase().substring(2),
+          "items"
+        ),
+        {
+          sampleUrl: sampleUrl,
+          originalUrl: originalUrl,
+          buyer: buyerToSend,
+        }
+      );
+    }
+    uploadToBuyer();
+  }, [sampleUrl]);
+
+  useEffect(() => {
     async function loadOrders() {
       try {
         for (let i in receiversAdd) {
-          const orderAvailable = await skillswap.dealSellrToBuyr(
+          const orderAvailable = await skillswap.deal(
             currentAcc,
             receiversAdd[i]
           );
@@ -108,6 +147,7 @@ function Order() {
               buyer: receiversAdd[i].toLowerCase(),
             };
             orderArray.push(orderResult);
+            console.log(orderResult);
             setOrderList(orderArray);
           }
         }
@@ -127,7 +167,7 @@ function Order() {
       try {
         let deliveryArray = [];
         for (let i in receiversAdd) {
-          const deliveryAvailable = await skillswap.dealSellrToBuyr(
+          const deliveryAvailable = await skillswap.deal(
             receiversAdd[i],
             currentAcc
           );
@@ -152,6 +192,12 @@ function Order() {
                 currentAcc
               )) == 0
             ) {
+              console.log(
+                await skillswap.Transaction(
+                  deliveryAvailable.seller,
+                  currentAcc
+                )
+              );
               onSnapshot(r, (querySnapshot) => {
                 let deliveryResult = {
                   amount: deliveryAvailable.amount.toString(),
@@ -195,6 +241,10 @@ function Order() {
           <Delivery key={idx}>
             <div>
               <h5>
+                <span style={{ fontSize: "16px" }}>
+                  Order by: {orderData.buyer}
+                </span>{" "}
+                <br />
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta
                 doloremque illum consequuntur suscipit aliquid! Iure enim ab
                 nemo nihil. Numquam voluptate doloribus minima quam, quasi
@@ -237,6 +287,10 @@ function Order() {
           <Delivery key={idx}>
             <div>
               <h5>
+                <span style={{ fontSize: "16px" }}>
+                  Order by: {deliveryData.seller}
+                </span>{" "}
+                <br />
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta
                 doloremque illum consequuntur suscipit aliquid! Iure enim ab
                 nemo nihil. Numquam voluptate doloribus minima quam, quasi
