@@ -93,6 +93,6 @@ export default App;
 const Wrapper = styled.section`
   width: 100%;
   min-height: 100vh;
-  background: linear-gradient(to right, #111118, #161727, #1a1c35);
+  background: var(--black);
   color: white;
 `;

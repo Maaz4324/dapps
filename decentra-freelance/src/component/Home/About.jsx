@@ -8,9 +8,11 @@ function About() {
       <Container>
         <h1>Why SkillSwap</h1>
         <h5>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem eaque
-          necessitatibus nemo quisquam laboriosam praesentium assumenda. Earum,
-          necessitatibus aliquid.
+          SkillSwap allows people to work from anywhere in the world without
+          having to rely on a centralized organization for their work. This
+          makes it easier for people to find work and get paid, as well as
+          giving them more control and flexibility over how, when, and where
+          they work.
         </h5>
         <Content>
           {aboutData.map((data, idx) => (
@@ -32,7 +34,7 @@ export default About;
 const Wrapper = styled.section`
   width: 100%;
   /* min-height: 100vh; */
-  background: linear-gradient(to right, #111118, #161727, #1a1c35);
+  background: var(--black);
   padding-top: 40px;
 `;
 const Container = styled.section`
@@ -69,10 +71,14 @@ const Card = styled.section`
   text-align: center;
   padding: 20px;
   border-radius: 10px;
-  background-color: #131322;
+  background-color: #1a1a1c;
   box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2);
   h3 {
     color: var(--primary);
+    margin-bottom: 13px;
+  }
+  span {
+    font-size: 14px;
   }
   @media (max-width: 990px) {
     width: 90%;

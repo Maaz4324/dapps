@@ -641,23 +641,25 @@ function Selling() {
                     required
                   >
                     <option value="">Category...</option>
-                    <option value="Programming & Tech">
-                      Programming & Tech
+                    <option value="Collection Artist">Collection Artist</option>
+                    <option value="Art director">Art director</option>
+                    <option value="Project manager">Project manager</option>
+                    <option value="NFT specialist / Adviser">
+                      NFT specialist / Adviser
                     </option>
-                    <option value="Video and Animation">
-                      Video and Animation
+                    <option value="Collabs Manager">Collabs Manager</option>
+                    <option value="Influencer">Influencer</option>
+                    <option value="Discord Moderator">Discord Moderator</option>
+                    <option value="Developer">Developer</option>
+                    <option value="Community Manager">Community Manager</option>
+                    <option value="Social Media Manager">
+                      Social Media Manager
                     </option>
-                    <option value="Design & Creative">Design & Creative</option>
-                    <option value="Digital Marketing">Digital Marketing</option>
-                    <option value="Writing & Translation">
-                      Writing & Translation
+                    <option value="Social Content Creator">
+                      Social Content Creator
                     </option>
-                    <option value="Music & Audio">Music & Audio</option>
-                    <option value="Video & Animation">Video & Animation</option>
-                    <option value="Development & IT">Development & IT</option>
-                    <option value="Finance & Accounting">
-                      Finance & Accounting
-                    </option>
+                    <option value="Meme Creator">Meme Creator</option>
+                    <option value="NFT Animator">NFT Animator</option>
                   </select>
                   <label>What are you offering in this gig</label>
                   <textarea

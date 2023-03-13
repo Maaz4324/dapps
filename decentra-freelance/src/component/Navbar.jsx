@@ -5,6 +5,7 @@ import chat from "../images/chat.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { ethers } from "ethers";
 import SkillSwap from "../artifacts/contracts/SkillSwap.sol/SkillSwap.json";
+import logo from "../images/logo.png";
 
 function Navbar({ searchState }) {
   const navigate = useNavigate();
@@ -118,7 +119,7 @@ function Navbar({ searchState }) {
       <Container>
         <Logo>
           <Link to="/" style={{ textDecoration: "none" }}>
-            <h2>SkillSwap</h2>
+            <img src={logo} alt="" />
           </Link>
         </Logo>
         <Search>
@@ -305,14 +306,18 @@ const Search = styled.section`
 `;
 
 const Logo = styled.section`
+  width: 170px;
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: center;
   Link {
     text-decoration: none;
   }
   h2 {
     color: white;
+  }
+  img {
+    width: 100%;
   }
 `;
 

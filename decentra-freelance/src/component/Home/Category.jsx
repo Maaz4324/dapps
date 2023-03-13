@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { categoryData } from "../../assets/category";
 import { useNavigate } from "react-router-dom";
+import card1 from "../../images/card1.jpg";
 
 function Category() {
   const navigate = useNavigate();
@@ -17,7 +18,11 @@ function Category() {
     <Wrapper>
       <Container>
         <h1>Browse talent by category</h1>
-        <h5>Get some Inspirations from 1800+ skills</h5>
+        <h5>
+          Welcome to our full stop shop for NFT creation, where you can find
+          everything you need to launch your own unique digital art/ asset
+          collection!{" "}
+        </h5>
         <CategoryContainer>
           {categoryData.map((data, idx) => (
             <Card key={idx} onClick={() => handleRedirect(data.link)}>
@@ -40,7 +45,7 @@ export default Category;
 const Wrapper = styled.section`
   width: 100%;
   min-height: 100vh;
-  background: linear-gradient(to right, #111118, #161727, #1a1c35);
+  background: var(--black);
   padding-top: 40px;
 `;
 const Container = styled.section`
@@ -59,13 +64,14 @@ const Container = styled.section`
 
 const Card = styled.section`
   display: grid;
-  grid-template-columns: auto auto;
-  grid-template-rows: auto auto auto;
-  padding: 20px;
+
+  flex-direction: column;
+  padding: 40px;
   background: #1d1d21;
   border-radius: 20px;
   border: 2px solid var(--gray);
   cursor: pointer;
+  background: url({card1});
   &:hover {
     transition: all 0.3s;
     background: #17171a;

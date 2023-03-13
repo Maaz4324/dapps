@@ -31,7 +31,7 @@ function Buying({ category, sellerState }) {
       const metadata = await response.json();
       const categoryWords = metadata.gig.gigCategory;
       if (
-        categoryWords.toLowerCase().includes(category) ||
+        categoryWords.toLowerCase().includes(category.toLowerCase()) ||
         metadata.gig.gigKeywords.includes(category.toLowerCase())
       ) {
         if (!listAddr.includes(user.seller)) {

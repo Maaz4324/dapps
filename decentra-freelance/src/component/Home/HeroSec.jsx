@@ -45,7 +45,7 @@ export default HeroSec;
 
 const Wrapper = styled.section`
   min-height: 100vh;
-  background: var(--bg);
+  background: var(--black);
   display: flex;
   align-items: center;
   justify-content: center;

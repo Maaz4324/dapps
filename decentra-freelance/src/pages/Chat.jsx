@@ -100,7 +100,7 @@ export default Chat;
 
 const Wrapper = styled.div`
   width: 100%;
-  min-height: 100vh;
+  /* min-height: 100vh; */
   color: rgb(255, 255, 255);
   padding-top: 100px;
   background: var(--black);

@@ -184,67 +184,68 @@ function Chatbox({ sellerChangeState }) {
       const account = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
-      const q = query(
-        collection(
-          db,
-          "userChat",
-          account[0].substring(2).toLowerCase(),
-          "receiver",
-          sendTo.substring(2),
-          "messages"
-        ),
-        orderBy("created", "desc")
-      );
-      const r = query(
-        collection(
-          db,
-          "userChat",
-          sendTo.substring(2),
-          "receiver",
-          account[0].substring(2).toLowerCase(),
-          "messages"
-        ),
-        orderBy("created", "desc")
-      );
-      onSnapshot(r, (querySnapshot) => {
-        let isOfferBudget = querySnapshot.docs.map(
-          (doc) => doc.data().offerBudget
+      if (!sendTo.substring(2) == "") {
+        const q = query(
+          collection(
+            db,
+            "userChat",
+            account[0].substring(2).toLowerCase(),
+            "receiver",
+            sendTo.substring(2),
+            "messages"
+          ),
+          orderBy("created", "desc")
         );
-        let getOfferId = querySnapshot.docs.map((doc) => doc.id);
-
-        for (let i in isOfferBudget) {
-          if (isOfferBudget[i] != undefined) {
-            // console.log(getOfferId[i]);
-            setSenderOfferDeleteId(getOfferId[i]);
-          }
-        }
-      });
-      onSnapshot(q, (querySnapshot) => {
-        let dataList = querySnapshot.docs.map((doc) => doc.data().message);
-        let dataListOffer = querySnapshot.docs.map(
-          (doc) => doc.data().offerBudget
+        const r = query(
+          collection(
+            db,
+            "userChat",
+            sendTo.substring(2),
+            "receiver",
+            account[0].substring(2).toLowerCase(),
+            "messages"
+          ),
+          orderBy("created", "desc")
         );
-        let dataList2 = querySnapshot.docs.map((doc) => doc);
-        let dataArr = [];
-        let dataArr2 = [];
-
-        for (let i in dataList) {
-          if (dataList[i] != undefined) {
-            dataArr.push({
-              id: dataList2[i].id,
-              message: dataList2[i].data().message,
-              createdAt: timeConverter(dataList2[i].data().created.seconds),
-              createdBy:
-                dataList2[i].data().createdBy == account[0] && "msgByCurrUser",
-            });
+        onSnapshot(r, (querySnapshot) => {
+          let isOfferBudget = querySnapshot.docs.map(
+            (doc) => doc.data().offerBudget
+          );
+          let getOfferId = querySnapshot.docs.map((doc) => doc.id);
+          for (let i in isOfferBudget) {
+            if (isOfferBudget[i] != undefined) {
+              // console.log(getOfferId[i]);
+              setSenderOfferDeleteId(getOfferId[i]);
+            }
           }
-          if (dataListOffer[i] != undefined) {
-            dataArr2.push({ id: dataList2[i].id, data: dataList2[i].data() });
+        });
+        onSnapshot(q, (querySnapshot) => {
+          let dataList = querySnapshot.docs.map((doc) => doc.data().message);
+          let dataListOffer = querySnapshot.docs.map(
+            (doc) => doc.data().offerBudget
+          );
+          let dataList2 = querySnapshot.docs.map((doc) => doc);
+          let dataArr = [];
+          let dataArr2 = [];
+          for (let i in dataList) {
+            if (dataList[i] != undefined) {
+              dataArr.push({
+                id: dataList2[i].id,
+                message: dataList2[i].data().message,
+                createdAt: timeConverter(dataList2[i].data().created.seconds),
+                createdBy:
+                  dataList2[i].data().createdBy == account[0] &&
+                  "msgByCurrUser",
+              });
+            }
+            if (dataListOffer[i] != undefined) {
+              dataArr2.push({ id: dataList2[i].id, data: dataList2[i].data() });
+            }
           }
-        }
-        setDisplayMsg(dataArr);
-        setDisplayOffer(dataArr2);
-      });
+          setDisplayMsg(dataArr);
+          setDisplayOffer(dataArr2);
+        });
+      }
     }
     getData();
   }, [sendTo]);
@@ -280,6 +281,7 @@ function Chatbox({ sellerChangeState }) {
       offerBudget.trim() != "" &&
       offerDeadLine.trim() != "" &&
       offerDes.trim() != "" &&
+      parseFloat(offerBudget) * 100000 > 1 &&
       offerBudget > 0 &&
       offerDeadLine > 0
     ) {
@@ -326,7 +328,7 @@ function Chatbox({ sellerChangeState }) {
         alert(err);
       }
     } else {
-      alert("Set all requirements correctly");
+      alert("Set all requirements correctly.");
     }
   }
 
@@ -381,10 +383,6 @@ function Chatbox({ sellerChangeState }) {
         totalBudget.toString()
       );
       // const ethValue = ethers.utils.formatEther(budget);
-      console.log(
-        "🚀 ~ file: Chatbox.jsx:380 ~ makeOrder ~ finalBudget:",
-        ethers.utils.parseUnits(totalBudget.toString(), "ether").toString()
-      );
       console.log(EtherToWei.toString());
       console.log("working");
       const success = await skillswap.placeOrder(
@@ -399,18 +397,19 @@ function Chatbox({ sellerChangeState }) {
 
       handleDeleteOffer(id);
     } catch (error) {
-      // if (error.includes(`'not a seller'`)) {
-      //   console.log("working");
-      //   alert("Seller is not registered");
-      // } else {
-      // console.log("working2");
       console.log(error);
       alert(error);
-      // }
     }
-
-    // await placeOrder()
   }
+
+  document.addEventListener("wheel", function () {
+    if (
+      document.activeElement.type === "number" &&
+      document.activeElement.classList.contains("noscroll")
+    ) {
+      document.activeElement.blur();
+    }
+  });
 
   function closeModal() {
     setModalOpen(false);
@@ -441,6 +440,7 @@ function Chatbox({ sellerChangeState }) {
             <label>Days: </label>
             <input
               type="number"
+              className="noscroll"
               onChange={(e) => setOfferDeadLine(e.target.value)}
               value={offerDeadLine}
             ></input>
@@ -655,6 +655,14 @@ const Modal = styled.div`
       outline: none;
       background: var(--darkBg);
       color: white;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      margin: 0;
     }
     textarea {
       min-width: 400px;
