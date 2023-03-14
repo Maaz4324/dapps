@@ -34,7 +34,7 @@ function Navbar({ searchState }) {
 
         const abi = SkillSwap.abi;
 
-        const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+        const contractAddress = "0x239C71B812e5394e28B75De4d2DCDEBB654a3df1";
 
         const skillswap = new ethers.Contract(contractAddress, abi, signer);
 
@@ -57,7 +57,7 @@ function Navbar({ searchState }) {
 
       const abi = SkillSwap.abi;
 
-      const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+      const contractAddress = "0x239C71B812e5394e28B75De4d2DCDEBB654a3df1";
 
       const skillswap = new ethers.Contract(contractAddress, abi, signer);
       const noOfuser = await skillswap.noOfSellers();
@@ -250,12 +250,16 @@ const Right = styled.section`
     padding: 6px 20px;
     background: var(--primary);
     font-size: 20px;
-    border-radius: 20px;
+    border: 0;
+    border-radius: 6px;
+    outline: none;
     cursor: pointer;
+    color: white;
+    border: 2px solid var(--primary);
+
     &:hover {
       transition: all 0.3s;
-      background: var(--primaryLight);
-      color: var(--text);
+      background: transparent;
     }
     @media (max-width: 600px) {
       display: none;

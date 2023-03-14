@@ -13,8 +13,9 @@ function HeroSec() {
       <h1>Decentralized</h1>
       <h1 className="outline">Freelancing</h1>
       <h5>
-        Start your freelancing journey from here or hire someone cuz we help you
-        build the future.
+        Skill Swap is fully focused on NFTs. Start your NFT Web3 freelancing
+        journey here, or hire someone to help you build the future of your NFT
+        Web3 startup.
       </h5>
       <button onClick={() => navigate("/selling")}>View profile</button>
       <img
@@ -88,6 +89,7 @@ const Wrapper = styled.section`
   h5 {
     z-index: 100;
     padding: 0 10px;
+    width: 40%;
   }
   .outline {
     -webkit-text-stroke-width: 1px;

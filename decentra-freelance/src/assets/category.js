@@ -14,7 +14,7 @@ export const categoryData = [
   {
     img: code,
     head: "Developer",
-    text: "Oversees the visual style of your NFT collection and social media art!",
+    text: "A web3 developer builds, for example, decentralized applications (dApps) and smart contracts using blockchain technologies! ",
     link: "Developer",
   },
   {

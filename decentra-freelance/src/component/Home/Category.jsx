@@ -17,12 +17,14 @@ function Category() {
   return (
     <Wrapper>
       <Container>
-        <h1>Browse talent by category</h1>
-        <h5>
-          Welcome to our full stop shop for NFT creation, where you can find
-          everything you need to launch your own unique digital art/ asset
-          collection!{" "}
-        </h5>
+        <Head>
+          <h1>Browse NFT talent by category</h1>
+          <h5>
+            Welcome to our full stop shop for NFT creation, where you can find
+            everything you need to launch your own unique digital art/ asset
+            collection!{" "}
+          </h5>
+        </Head>
         <CategoryContainer>
           {categoryData.map((data, idx) => (
             <Card key={idx} onClick={() => handleRedirect(data.link)}>
@@ -115,4 +117,14 @@ const CategoryContainer = styled.section`
   @media (max-width: 670px) {
     grid-template-columns: auto;
   }
+`;
+
+const Head = styled.section`
+  border: 2px solid red;
+  padding: 40px;
+  width: 45%;
+  margin: 0 auto;
+  text-align: center;
+  border-radius: 20px;
+  border: 2px solid var(--gray);
 `;

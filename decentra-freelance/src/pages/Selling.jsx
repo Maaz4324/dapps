@@ -7,6 +7,7 @@ import { ethers } from "ethers";
 import SkillSwap from "../artifacts/contracts/SkillSwap.sol/SkillSwap.json";
 import { TagsInput } from "react-tag-input-component";
 import Loading from "../component/Loading";
+import { useNavigate } from "react-router-dom";
 
 function Selling() {
   const storage = new ThirdwebStorage();
@@ -33,13 +34,15 @@ function Selling() {
   const [profileFormItem, setProfileFormItem] = useState([]);
   const [editButton, setEditButton] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [currentAcc, setCurrentAcc] = useState();
+  const navigate = useNavigate();
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
 
   const abi = SkillSwap.abi;
 
-  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  const contractAddress = "0x239C71B812e5394e28B75De4d2DCDEBB654a3df1";
 
   const skillswap = new ethers.Contract(contractAddress, abi, signer);
 
@@ -85,6 +88,7 @@ function Selling() {
     const account = await window.ethereum.request({
       method: "eth_requestAccounts",
     });
+    setCurrentAcc(account[0]);
 
     const noOfuser = await skillswap.noOfSellers();
 
@@ -210,7 +214,7 @@ function Selling() {
     setLoading(false);
   }
 
-  async function saveChanges() {
+  async function saveEdit() {
     setLoading(true);
     try {
       const account = await window.ethereum.request({
@@ -245,9 +249,6 @@ function Selling() {
           const url = await storage.resolveScheme(uri);
           const edited = await skillswap.updateProfile(url, i);
         }
-        setTimeout(function () {
-          window.location.reload(false);
-        }, 8000);
       }
     } catch (error) {
       alert("We're facing some problems saving your profile");
@@ -255,6 +256,24 @@ function Selling() {
     setLoading(false);
   }
 
+  function copyLink() {
+    navigator.clipboard.writeText(
+      "https://skillswap-c4225.web.app/seller/" +
+        currentAcc.replace("0x", "").toLowerCase()
+    );
+    alert("Link copied to clipboard");
+  }
+
+  function messageToWaitForMM() {
+    navigate("/");
+    alert("Your profile will be updated after metamask is completed");
+  }
+
+  function saveChanges() {
+    saveEdit()
+      .then(() => messageToWaitForMM())
+      .catch((reason) => alert("Message:" + reason.message));
+  }
   useEffect(() => {
     loadUser();
     // eslint-disable-next-line
@@ -285,30 +304,64 @@ function Selling() {
                         {profileData.profileTitle}
                       </p>
                     </div>
-                    <svg
-                      onClick={handleEditProfile}
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      style={{ cursor: "pointer" }}
-                    >
-                      <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                      <g
-                        id="SVGRepo_tracerCarrier"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      ></g>
-                      <g id="SVGRepo_iconCarrier">
-                        {" "}
-                        <path
-                          d="M18.9445 9.1875L14.9445 5.1875M18.9445 9.1875L13.946 14.1859C13.2873 14.8446 12.4878 15.3646 11.5699 15.5229C10.6431 15.6828 9.49294 15.736 8.94444 15.1875C8.39595 14.639 8.44915 13.4888 8.609 12.562C8.76731 11.6441 9.28735 10.8446 9.946 10.1859L14.9445 5.1875M18.9445 9.1875C18.9445 9.1875 21.9444 6.1875 19.9444 4.1875C17.9444 2.1875 14.9445 5.1875 14.9445 5.1875M20.5 12C20.5 18.5 18.5 20.5 12 20.5C5.5 20.5 3.5 18.5 3.5 12C3.5 5.5 5.5 3.5 12 3.5"
-                          stroke="#ffffff"
-                          strokeWidth="1.5"
+                    <div>
+                      <svg
+                        width="64px"
+                        height="64px"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        style={{ cursor: "pointer" }}
+                        onClick={copyLink}
+                      >
+                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                        <g
+                          id="SVGRepo_tracerCarrier"
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                        ></path>{" "}
-                      </g>
-                    </svg>
+                        ></g>
+                        <g id="SVGRepo_iconCarrier">
+                          {" "}
+                          <path
+                            d="M18 20.75H6C5.27065 20.75 4.57118 20.4603 4.05546 19.9445C3.53973 19.4288 3.25 18.7293 3.25 18V6C3.25 5.27065 3.53973 4.57118 4.05546 4.05546C4.57118 3.53973 5.27065 3.25 6 3.25H12C12.1989 3.25 12.3897 3.32902 12.5303 3.46967C12.671 3.61032 12.75 3.80109 12.75 4C12.75 4.19891 12.671 4.38968 12.5303 4.53033C12.3897 4.67098 12.1989 4.75 12 4.75H6C5.66848 4.75 5.35054 4.8817 5.11612 5.11612C4.8817 5.35054 4.75 5.66848 4.75 6V18C4.75 18.3315 4.8817 18.6495 5.11612 18.8839C5.35054 19.1183 5.66848 19.25 6 19.25H18C18.3315 19.25 18.6495 19.1183 18.8839 18.8839C19.1183 18.6495 19.25 18.3315 19.25 18V12C19.25 11.8011 19.329 11.6103 19.4697 11.4697C19.6103 11.329 19.8011 11.25 20 11.25C20.1989 11.25 20.3897 11.329 20.5303 11.4697C20.671 11.6103 20.75 11.8011 20.75 12V18C20.75 18.7293 20.4603 19.4288 19.9445 19.9445C19.4288 20.4603 18.7293 20.75 18 20.75Z"
+                            fill="#ffffff"
+                          ></path>{" "}
+                          <path
+                            d="M20 8.75C19.8019 8.74741 19.6126 8.66756 19.4725 8.52747C19.3324 8.38737 19.2526 8.19811 19.25 8V4.75H16C15.8011 4.75 15.6103 4.67098 15.4697 4.53033C15.329 4.38968 15.25 4.19891 15.25 4C15.25 3.80109 15.329 3.61032 15.4697 3.46967C15.6103 3.32902 15.8011 3.25 16 3.25H20C20.1981 3.25259 20.3874 3.33244 20.5275 3.47253C20.6676 3.61263 20.7474 3.80189 20.75 4V8C20.7474 8.19811 20.6676 8.38737 20.5275 8.52747C20.3874 8.66756 20.1981 8.74741 20 8.75Z"
+                            fill="#ffffff"
+                          ></path>{" "}
+                          <path
+                            d="M13.5 11.25C13.3071 11.2352 13.1276 11.1455 13 11C12.877 10.8625 12.809 10.6845 12.809 10.5C12.809 10.3155 12.877 10.1375 13 10L19.5 3.5C19.5687 3.42631 19.6515 3.36721 19.7435 3.32622C19.8355 3.28523 19.9348 3.26319 20.0355 3.26141C20.1362 3.25963 20.2362 3.27816 20.3296 3.31588C20.423 3.3536 20.5078 3.40974 20.579 3.48096C20.6503 3.55218 20.7064 3.63701 20.7441 3.7304C20.7818 3.82379 20.8004 3.92382 20.7986 4.02452C20.7968 4.12523 20.7748 4.22454 20.7338 4.31654C20.6928 4.40854 20.6337 4.49134 20.56 4.56L14 11C13.8724 11.1455 13.6929 11.2352 13.5 11.25Z"
+                            fill="#ffffff"
+                          ></path>{" "}
+                        </g>
+                      </svg>
+                      <svg
+                        title="Edit profile"
+                        onClick={handleEditProfile}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        style={{ cursor: "pointer", marginLeft: "20px" }}
+                      >
+                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                        <g
+                          id="SVGRepo_tracerCarrier"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        ></g>
+                        <g id="SVGRepo_iconCarrier">
+                          {" "}
+                          <path
+                            d="M18.9445 9.1875L14.9445 5.1875M18.9445 9.1875L13.946 14.1859C13.2873 14.8446 12.4878 15.3646 11.5699 15.5229C10.6431 15.6828 9.49294 15.736 8.94444 15.1875C8.39595 14.639 8.44915 13.4888 8.609 12.562C8.76731 11.6441 9.28735 10.8446 9.946 10.1859L14.9445 5.1875M18.9445 9.1875C18.9445 9.1875 21.9444 6.1875 19.9444 4.1875C17.9444 2.1875 14.9445 5.1875 14.9445 5.1875M20.5 12C20.5 18.5 18.5 20.5 12 20.5C5.5 20.5 3.5 18.5 3.5 12C3.5 5.5 5.5 3.5 12 3.5"
+                            stroke="#ffffff"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></path>{" "}
+                        </g>
+                      </svg>
+                    </div>
                   </YourName>
                   <YourOthers>
                     <ul>
@@ -766,6 +819,7 @@ const Container = styled.div`
 
 const ProfileContainer = styled.div`
   display: flex;
+  border: 1px solid var(--gray);
   text-align: start;
   flex-direction: column;
   width: 80%;
@@ -784,6 +838,7 @@ const ProfileContainer = styled.div`
 `;
 
 const GigContainer = styled.div`
+  border: 1px solid var(--gray);
   display: flex;
   text-align: start;
   flex-direction: column;
@@ -810,6 +865,7 @@ const GigContainer = styled.div`
 `;
 
 const YourDetail = styled.div`
+  border: 1px solid var(--gray);
   margin: 20px 0;
   background: var(--darkBg);
   padding: 40px 30px;
@@ -842,6 +898,7 @@ const PPContainer = styled.div`
     width: 80%;
     border-radius: 10px;
     box-shadow: 0.6px 2px 3px black;
+    align-self: flex-start;
     @media (max-width: 970px) {
       border-radius: 10px;
     }
@@ -974,6 +1031,7 @@ const YourDes = styled.div`
     font-size: 16px;
     margin: 10px 0;
     word-wrap: break-word;
+    white-space: pre-line;
   }
   span {
     font-size: 17px;
@@ -1002,6 +1060,7 @@ const YourService = styled.div`
 `;
 
 const ServiceHead = styled.div`
+  border: 1px solid var(--gray);
   background: var(--darkBg);
   margin-bottom: 10px;
   margin-right: 10px;
@@ -1019,6 +1078,7 @@ const ServiceHead = styled.div`
 `;
 
 const Offer = styled.div`
+  border: 1px solid var(--gray);
   background: var(--darkBg);
   margin-bottom: 10px;
   margin-left: 10px;
@@ -1036,6 +1096,7 @@ const Offer = styled.div`
   p {
     margin-top: 10px;
     font-size: 18px;
+    white-space: pre-line;
   }
   @media (max-width: 914px) {
     grid-column: auto;
@@ -1044,6 +1105,7 @@ const Offer = styled.div`
 `;
 
 const ServiceDes = styled.div`
+  border: 1px solid var(--gray);
   background: var(--darkBg);
   margin-top: 10px;
   grid-column: 1/4;
@@ -1054,7 +1116,8 @@ const ServiceDes = styled.div`
   }
   p {
     margin-top: 10px;
-    font-size: 18px;
+    font-size: 16px;
+    white-space: pre-line;
   }
   @media (max-width: 914px) {
     grid-column: auto;

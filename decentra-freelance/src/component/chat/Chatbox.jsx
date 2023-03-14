@@ -35,7 +35,7 @@ function Chatbox({ sellerChangeState }) {
 
   const abi = SkillSwap.abi;
 
-  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  const contractAddress = "0x239C71B812e5394e28B75De4d2DCDEBB654a3df1";
 
   const skillswap = new ethers.Contract(contractAddress, abi, signer);
 

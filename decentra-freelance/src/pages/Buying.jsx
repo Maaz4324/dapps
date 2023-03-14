@@ -17,7 +17,7 @@ function Buying({ category, sellerState }) {
 
   const abi = SkillSwap.abi;
 
-  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  const contractAddress = "0x239C71B812e5394e28B75De4d2DCDEBB654a3df1";
 
   const skillswap = new ethers.Contract(contractAddress, abi, signer);
 
@@ -30,9 +30,22 @@ function Buying({ category, sellerState }) {
       const response = await fetch(user.uri);
       const metadata = await response.json();
       const categoryWords = metadata.gig.gigCategory;
+      console.log(
+        metadata.gig.gigKeywords
+          .toString()
+          .toLowerCase()
+          .replace(",", " ")
+          .includes(category.toLowerCase())
+      );
+      // console.log(category);
       if (
         categoryWords.toLowerCase().includes(category.toLowerCase()) ||
-        metadata.gig.gigKeywords.includes(category.toLowerCase())
+        metadata.gig.gigKeywords.includes(category.toLowerCase()) ||
+        metadata.gig.gigKeywords
+          .toString()
+          .toLowerCase()
+          .replace(",", " ")
+          .includes(category.toLowerCase())
       ) {
         if (!listAddr.includes(user.seller)) {
           const result = metadata.gig;
