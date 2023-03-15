@@ -13,6 +13,7 @@ import ScrollToTop from "./ScrollToTop";
 import SellerProfile from "./pages/SellerProfile";
 import Chat from "./pages/Chat";
 import Order from "./pages/Order";
+import supabase from "./supabaseClient";
 
 function App() {
   const activeChainId = ChainId.Mainnet;
@@ -24,6 +25,34 @@ function App() {
     setChangeSearch(localStorage.getItem("searchReq"));
     // eslint - disable - next - line;
   }, [searchData]);
+
+  useEffect(() => {
+    async function testSupa() {
+      const { data, error } = await supabase.from("test1").select();
+      // console.log(supabase);
+
+      if (error) {
+        console.log(error);
+      }
+      if (data) {
+        // console.log(data);
+      }
+    }
+    testSupa();
+  }, []);
+
+  async function testInsert() {
+    console.log("clicked");
+    const { data, error } = await supabase
+      .from("test1")
+      .insert([{ name: "testname", age: "23" }]);
+    if (error) {
+      console.log(error);
+    }
+    if (data) {
+      console.log(data);
+    }
+  }
 
   return (
     <Router>
@@ -82,6 +111,7 @@ function App() {
             }
           />
         </Routes>
+        <button onClick={testInsert}>Click here to test supabase</button>
         <Foot />
       </Wrapper>
     </Router>

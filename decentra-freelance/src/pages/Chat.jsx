@@ -16,6 +16,7 @@ import {
 } from "firebase/firestore";
 import { ethers } from "ethers";
 import SkillSwap from "../artifacts/contracts/SkillSwap.sol/SkillSwap.json";
+import supabase from "../supabaseClient";
 
 function Chat() {
   const [changeSellerId, setChangeSellerId] = useState("");
@@ -39,35 +40,42 @@ function Chat() {
 
       const isSeller = await skillswap.isSeller(account[0]);
       setCurrentAcc(account[0].toLowerCase());
-      const q = query(
-        collection(
-          db,
-          "buyerName",
-          account[0].toLowerCase().substring(2),
-          "profile"
-        )
-      );
-      onSnapshot(q, (querySnapshot) => {
-        let buyerAccs = querySnapshot.docs.map((doc) => doc.data().account);
-        if (!buyerAccs.includes(account[0].toLowerCase()) && !isSeller) {
+
+      const { data, error } = await supabase.from("BuyersName").select();
+
+      if (error) {
+        console.log(error);
+      }
+      if (data) {
+        let allAddArray = [];
+        for (let i in data) {
+          allAddArray.push(data[i].address);
+        }
+        if (!allAddArray.includes(account[0].toLowerCase()) && !isSeller) {
           setModalOpen(true);
         }
-      });
+      }
     }
     getBuyerName();
   }, []);
 
   async function submitName() {
+    if (!buyerName) {
+      return;
+    }
     if (buyerName.trim() != "") {
       try {
-        await addDoc(
-          collection(db, "buyerName", currentAcc.substring(2), "profile"),
-          {
-            account: currentAcc,
-            name: buyerName,
-          }
-        );
-        alert("Successfully added!");
+        console.log("clicked");
+        console.log(buyerName);
+        const { data, error } = await supabase
+          .from("BuyersName")
+          .insert([{ name: buyerName, address: currentAcc }]);
+        if (error) {
+          alert(error);
+        }
+        if (data) {
+          console.log(data);
+        }
         window.location.reload(false);
       } catch (error) {
         alert(error);
