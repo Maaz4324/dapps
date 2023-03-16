@@ -18,12 +18,14 @@ function Category() {
     <Wrapper>
       <Container>
         <Head>
-          <h1>Browse NFT talent by category</h1>
-          <h5>
-            Welcome to our full stop shop for NFT creation, where you can find
-            everything you need to launch your own unique digital art/ asset
-            collection!{" "}
-          </h5>
+          <h3>Browse NFT talent by category</h3>
+          <p>
+            <span>
+              Welcome to our full stop shop for NFT creation, where you can find
+              everything you need to launch your own unique digital art/ asset
+              collection!
+            </span>
+          </p>
         </Head>
         <CategoryContainer>
           {categoryData.map((data, idx) => (
@@ -95,6 +97,9 @@ const Card = styled.section`
   span {
     font-size: 20px;
     color: var(--darkText);
+    @media (max-width: 800px) {
+      font-size: 16px;
+    }
   }
   img {
     fill: var(--primary);
@@ -122,9 +127,36 @@ const CategoryContainer = styled.section`
 const Head = styled.section`
   border: 2px solid red;
   padding: 40px;
-  width: 45%;
+  width: 85%;
   margin: 0 auto;
   text-align: center;
   border-radius: 20px;
   border: 2px solid var(--gray);
+  max-width: 653.2px;
+  @media (max-width: 620px) {
+    width: 83%;
+    text-align: start;
+  }
+  @media (max-width: 480px) {
+    width: 80%;
+  }
+  @media (max-width: 430px) {
+    width: 76%;
+  }
+  @media (max-width: 380px) {
+    width: 73%;
+  }
+  h3 {
+    font-size: 30px;
+    margin: auto 0;
+    grid-column: 1/2;
+    grid-row: 1/2;
+  }
+  span {
+    font-size: 20px;
+    color: var(--darkText);
+    @media (max-width: 800px) {
+      font-size: 16px;
+    }
+  }
 `;

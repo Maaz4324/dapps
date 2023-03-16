@@ -132,6 +132,7 @@ function Chatbox({ sellerChangeState }) {
             createdBy: account[0],
           }
         );
+
         const r = query(
           collection(db, "chatList", sendTo.substring(2), "receivers")
         );

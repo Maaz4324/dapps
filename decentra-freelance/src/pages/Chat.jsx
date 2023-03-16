@@ -16,7 +16,6 @@ import {
 } from "firebase/firestore";
 import { ethers } from "ethers";
 import SkillSwap from "../artifacts/contracts/SkillSwap.sol/SkillSwap.json";
-import supabase from "../supabaseClient";
 
 function Chat() {
   const [changeSellerId, setChangeSellerId] = useState("");
@@ -24,68 +23,68 @@ function Chat() {
   const [buyerName, setBuyerName] = useState();
   const [currentAcc, setCurrentAcc] = useState();
 
-  useEffect(() => {
-    async function getBuyerName() {
-      const account = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
+  // useEffect(() => {
+  //   async function getBuyerName() {
+  //     const account = await window.ethereum.request({
+  //       method: "eth_requestAccounts",
+  //     });
+  //     const provider = new ethers.providers.Web3Provider(window.ethereum);
+  //     const signer = provider.getSigner();
 
-      const abi = SkillSwap.abi;
+  //     const abi = SkillSwap.abi;
 
-      const contractAddress = "0x239C71B812e5394e28B75De4d2DCDEBB654a3df1";
+  //     const contractAddress = "0x239C71B812e5394e28B75De4d2DCDEBB654a3df1";
 
-      const skillswap = new ethers.Contract(contractAddress, abi, signer);
+  //     const skillswap = new ethers.Contract(contractAddress, abi, signer);
 
-      const isSeller = await skillswap.isSeller(account[0]);
-      setCurrentAcc(account[0].toLowerCase());
+  //     const isSeller = await skillswap.isSeller(account[0]);
+  //     setCurrentAcc(account[0].toLowerCase());
 
-      const { data, error } = await supabase.from("BuyersName").select();
+  //     const { data, error } = await supabase.from("BuyersName").select();
 
-      if (error) {
-        console.log(error);
-      }
-      if (data) {
-        let allAddArray = [];
-        for (let i in data) {
-          allAddArray.push(data[i].address);
-        }
-        if (!allAddArray.includes(account[0].toLowerCase()) && !isSeller) {
-          setModalOpen(true);
-        }
-      }
-    }
-    getBuyerName();
-  }, []);
+  //     if (error) {
+  //       console.log(error);
+  //     }
+  //     if (data) {
+  //       let allAddArray = [];
+  //       for (let i in data) {
+  //         allAddArray.push(data[i].address);
+  //       }
+  //       if (!allAddArray.includes(account[0].toLowerCase()) && !isSeller) {
+  //         setModalOpen(true);
+  //       }
+  //     }
+  //   }
+  //   getBuyerName();
+  // }, []);
 
-  async function submitName() {
-    if (!buyerName) {
-      return;
-    }
-    if (buyerName.trim() != "") {
-      try {
-        console.log("clicked");
-        console.log(buyerName);
-        const { data, error } = await supabase
-          .from("BuyersName")
-          .insert([{ name: buyerName, address: currentAcc }]);
-        if (error) {
-          alert(error);
-        }
-        if (data) {
-          console.log(data);
-        }
-        window.location.reload(false);
-      } catch (error) {
-        alert(error);
-      }
-    }
-  }
+  // async function submitName() {
+  //   if (!buyerName) {
+  //     return;
+  //   }
+  //   if (buyerName.trim() != "") {
+  //     try {
+  //       console.log("clicked");
+  //       console.log(buyerName);
+  //       const { data, error } = await supabase
+  //         .from("BuyersName")
+  //         .insert([{ name: buyerName, address: currentAcc }]);
+  //       if (error) {
+  //         alert(error);
+  //       }
+  //       if (data) {
+  //         console.log(data);
+  //       }
+  //       window.location.reload(false);
+  //     } catch (error) {
+  //       alert(error);
+  //     }
+  //   }
+  // }
 
   return (
     <Wrapper>
-      {modalOpen == true && (
+      {/* {modalOpen == true && (
         <NameModal>
           <label>Set your name</label>
           <input
@@ -95,7 +94,7 @@ function Chat() {
           />
           <button onClick={submitName}>Submit</button>
         </NameModal>
-      )}
+      )} */}
       <Container>
         <Sidebar idChange={setChangeSellerId} />
         <Chatbox sellerChangeState={changeSellerId} />

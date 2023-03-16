@@ -4,36 +4,47 @@ import blob1 from "../../images/blob1.svg";
 import blob2 from "../../images/blob2.svg";
 import blob3 from "../../images/blob3.svg";
 import blob4 from "../../images/blob4.svg";
+import ss from "../../images/imgSS.png";
+import underZaba from "../../images/underZaba.png";
 import { useNavigate } from "react-router-dom";
 
 function HeroSec() {
   const navigate = useNavigate();
   return (
     <Wrapper>
-      <h1>Decentralized</h1>
-      <h1 className="outline">Freelancing</h1>
-      <h5>
-        Skill Swap is fully focused on NFTs. Start your NFT Web3 freelancing
-        journey here, or hire someone to help you build the future of your NFT
-        Web3 startup.
-      </h5>
-      <button onClick={() => navigate("/selling")}>View profile</button>
-      <img
+      <Main>
+        <div>
+          <h2>
+            Decentralized <br /> Freelancing
+          </h2>
+          <h5>
+            Skill Swap is fully focused on NFTs. Start your NFT Web3 freelancing
+            journey here, or hire someone to help you build the future of your
+            NFT Web3 startup.
+          </h5>
+          <button onClick={() => navigate("/selling")}>View profile</button>
+        </div>
+      </Main>
+      <Left>
+        <SS src={ss} alt="" />
+        <UnderZaba src={underZaba} alt="" />
+      </Left>
+      <BlobSvg
         src={blob1}
         className="blob1"
         alt="skillswap - skill swap hero section"
       />
-      <img
+      <BlobSvg
         src={blob2}
         className="blob2"
         alt="skillswap - skill swap hero section"
       />
-      <img
+      <BlobSvg
         src={blob3}
         className="blob3"
         alt="skillswap - skill swap hero section"
       />
-      <img
+      <BlobSvg
         src={blob4}
         className="blob4"
         alt="skillswap - skill swap hero section"
@@ -46,13 +57,22 @@ export default HeroSec;
 
 const Wrapper = styled.section`
   min-height: 100vh;
-  background: var(--black);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
+  display: grid;
+  grid-template-columns: auto 50%;
   z-index: -1;
+
+  @media (max-width: 1288px) {
+    grid-template-columns: auto 60%;
+  }
+
+  @media (max-width: 996px) {
+    grid-template-columns: auto;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  @media (max-width: 440px) {
+    padding-top: 30px;
+  }
 
   button {
     z-index: 100;
@@ -86,20 +106,10 @@ const Wrapper = styled.section`
       font-size: 40px;
     }
   }
-  h5 {
-    z-index: 100;
-    padding: 0 10px;
-    width: 40%;
-  }
   .outline {
     -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: #ffffff;
     color: transparent;
-  }
-  img {
-    position: absolute;
-    z-index: 3;
-    width: 400px;
   }
   .blob1 {
     top: 30%;
@@ -185,4 +195,90 @@ const Wrapper = styled.section`
       width: 100px;
     }
   }
+`;
+
+const Main = styled.div`
+  z-index: 999;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex-direction: column;
+  /* border: 2px solid red; */
+  h2 {
+    font-size: 50px;
+  }
+  h5 {
+    z-index: 100;
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--darkText);
+  }
+  div {
+    width: 70%;
+  }
+  @media (max-width: 996px) {
+    div {
+      width: 90%;
+      padding: 0 10px;
+    }
+  }
+  @media (max-width: 450px) {
+    h2 {
+      font-size: 40px;
+    }
+    h5 {
+      font-size: 16px;
+    }
+  }
+`;
+
+const Left = styled.div`
+  z-index: 999;
+  width: 90%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  @media (max-width: 996px) {
+    width: 100%;
+    padding-top: 60px;
+  }
+`;
+
+const SS = styled.img`
+  width: 88%;
+  max-width: 581.76px;
+`;
+
+const UnderZaba = styled.img`
+  width: 99%;
+  max-width: 781.76px;
+  margin: auto;
+  position: relative;
+  top: -9px;
+  left: 3px;
+  @media (max-width: 996px) {
+    width: 95%;
+    top: -9px;
+  }
+  @media (max-width: 669px) {
+    top: -8px;
+    left: 0px;
+  }
+  @media (max-width: 538px) {
+    top: -7px;
+  }
+  @media (max-width: 450px) {
+    top: -5px;
+  }
+  @media (max-width: 400px) {
+    top: -4px;
+  }
+`;
+
+const BlobSvg = styled.img`
+  position: absolute;
+  z-index: 3;
+  width: 400px;
 `;

@@ -62,6 +62,7 @@ const Content = styled.section`
   padding: 50px 0;
   @media (max-width: 990px) {
     grid-template-columns: auto;
+    padding-top: 20px;
   }
 `;
 
@@ -88,7 +89,6 @@ const Card = styled.section`
 `;
 
 const Head = styled.section`
-  /* border: 2px solid red; */
   z-index: 999;
   min-height: 20vh;
   text-align: center;
@@ -96,8 +96,14 @@ const Head = styled.section`
   border-radius: 10px;
   background-color: #1a1a1c;
   box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2);
-  width: 30%;
+  width: 90%;
+  max-width: 338px;
   margin: 0 auto;
+  @media (max-width: 990px) {
+    width: 90%;
+    max-width: 495px;
+    margin: 0 auto;
+  }
   h1 {
     color: var(--primary);
     margin-bottom: 13px;

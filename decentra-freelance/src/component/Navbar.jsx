@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ethers } from "ethers";
 import SkillSwap from "../artifacts/contracts/SkillSwap.sol/SkillSwap.json";
 import logo from "../images/logo.png";
+import smallLogo from "../images/Skill_Swap_5.png";
 
 function Navbar({ searchState }) {
   const navigate = useNavigate();
@@ -119,7 +120,8 @@ function Navbar({ searchState }) {
       <Container>
         <Logo>
           <Link to="/" style={{ textDecoration: "none" }}>
-            <img src={logo} alt="" />
+            <BigLogo src={logo} alt="" />
+            <SmallLogo src={smallLogo} alt="" />
           </Link>
         </Logo>
         <Search>
@@ -223,7 +225,7 @@ const Container = styled.section`
     }
   }
   @media (max-width: 930px) {
-    grid-template-columns: 20% 80%;
+    grid-template-columns: 10% 90%;
     grid-template-rows: auto auto;
     padding: 0 30px;
   }
@@ -320,8 +322,8 @@ const Logo = styled.section`
   h2 {
     color: white;
   }
-  img {
-    width: 100%;
+  @media (max-width: 996px) {
+    justify-content: flex-start;
   }
 `;
 
@@ -396,5 +398,20 @@ const Collapse = styled.section`
 
   @media (max-width: 930px) {
     display: block;
+  }
+`;
+
+const SmallLogo = styled.img`
+  display: none;
+  width: 80px;
+  @media (max-width: 996px) {
+    display: block;
+  }
+`;
+
+const BigLogo = styled.img`
+  width: 100%;
+  @media (max-width: 996px) {
+    display: none;
   }
 `;
