@@ -552,7 +552,9 @@ function Selling() {
                     will cost gas fees, as the data is stored on the blockchain.
                     We encourage you to create your account and fill out all
                     necessary information in one go to avoid any unnecessary gas
-                    fees. Thank you for your cooperation.
+                    fees. If you want to create multiple gigs on SkillSwap, you
+                    must use a different ETH wallet address for each one. Thank
+                    you for your cooperation.
                   </WarningTxt>
                   <label>Name</label>
                   <input
@@ -725,6 +727,12 @@ function Selling() {
                     </option>
                     <option value="Meme Creator">Meme Creator</option>
                     <option value="NFT Animator">NFT Animator</option>
+                    <option value="Web UI/UX Designer">
+                      Web UI/UX Designer
+                    </option>
+                    <option value="Discord Server Specialist">
+                      Discord Server Specialist
+                    </option>
                   </select>
                   <label>What are you offering in this gig</label>
                   <textarea

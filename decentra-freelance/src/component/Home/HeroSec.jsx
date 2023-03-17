@@ -18,11 +18,11 @@ function HeroSec() {
             Decentralized <br /> Freelancing
           </h2>
           <h5>
-            Skill Swap is fully focused on NFTs. Start your NFT Web3 freelancing
+            SkillSwap is fully focused on NFTs. Start your NFT Web3 freelancing
             journey here, or hire someone to help you build the future of your
             NFT Web3 startup.
           </h5>
-          <button onClick={() => navigate("/selling")}>View Profile</button>
+          <button onClick={() => navigate("/selling")}>View Gigs</button>
         </div>
       </Main>
       <Left>

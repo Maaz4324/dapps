@@ -88,13 +88,13 @@ export const categoryData = [
   {
     img: webdesign,
     head: "Web UI/UX Designer",
-    text: " A UI/UX designer creates user-friendly, visually appealing, and intuitive designs to enable the best possible user experience.",
+    text: " A UI/UX Designer creates user-friendly, visually appealing, and intuitive designs to enable the best possible user experience!",
     link: "Web Designer",
   },
   {
     img: discord,
     head: "Discord Server Specialist",
-    text: "A Discord Server Specialist is responsible for managing and maintaining a Discord Server, ensuring that it is optimized for user engagement and performance.",
+    text: "A Discord Server Specialist is responsible for managing and maintaining a Discord Server, ensuring that it is optimized for user engagement and performance!",
     link: "Discord Server Specialist",
   },
 ];
