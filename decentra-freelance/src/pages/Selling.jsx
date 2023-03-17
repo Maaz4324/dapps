@@ -25,6 +25,7 @@ function Selling() {
   const [gigCategory, setGigCategory] = useState();
   const [gigKeywords, setGigKeywords] = useState();
   const [gigPrice, setGigPrice] = useState();
+  const [gigBullPrice, setGigBullPrice] = useState();
   const [gigOffer, setGigOffer] = useState();
   const [firstPage, setFirstPage] = useState(true);
   const [displayProfile, setDisplayProfile] = useState([]);
@@ -79,6 +80,7 @@ function Selling() {
     setGigDescrip(gigFormItem[0].gigDescription);
     setGigKeywords(gigFormItem[0].gigKeywords);
     setGigPrice(gigFormItem[0].gigPrice);
+    setGigBullPrice(gigFormItem[0].gigBullPrice);
     setGigOffer(gigFormItem[0].gigOffer);
     setGigCategory(gigFormItem[0].gigCategory);
   }
@@ -198,6 +200,7 @@ function Selling() {
         gigDescription: gigDescrip,
         gigCategory: gigCategory,
         gigPrice: gigPrice,
+        gigBullPrice: gigBullPrice,
         gigOffer: gigOffer,
         gigKeywords: gigKeywords,
       };
@@ -216,42 +219,39 @@ function Selling() {
 
   async function saveEdit() {
     setLoading(true);
-    try {
-      const account = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
+    const account = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
 
-      const noOfuser = await skillswap.noOfSellers();
-      for (let i = 1; i <= noOfuser.toString(); i++) {
-        const element = await skillswap.sellerProfile(i);
-        if (element.seller.toLowerCase() == account[0].toLowerCase()) {
-          const profile = {
-            name: name,
-            profileTitle: profileTitle,
-            description: description,
-            country: country,
-            urlS: urlS,
-            skill: skill,
-            image: img,
-            language: lang,
-          };
-          const gig = {
-            gigImg: gigImg,
-            gigHead: gigHead,
-            gigDescription: gigDescrip,
-            gigCategory: gigCategory,
-            gigPrice: gigPrice,
-            gigOffer: gigOffer,
-            gigKeywords: gigKeywords,
-          };
+    const noOfuser = await skillswap.noOfSellers();
+    for (let i = 1; i <= noOfuser.toString(); i++) {
+      const element = await skillswap.sellerProfile(i);
+      if (element.seller.toLowerCase() == account[0].toLowerCase()) {
+        const profile = {
+          name: name,
+          profileTitle: profileTitle,
+          description: description,
+          country: country,
+          urlS: urlS,
+          skill: skill,
+          image: img,
+          language: lang,
+        };
+        const gig = {
+          gigImg: gigImg,
+          gigHead: gigHead,
+          gigDescription: gigDescrip,
+          gigCategory: gigCategory,
+          gigPrice: gigPrice,
+          gigBullPrice: gigBullPrice,
+          gigOffer: gigOffer,
+          gigKeywords: gigKeywords,
+        };
 
-          const uri = await storage.upload({ profile: profile, gig: gig });
-          const url = await storage.resolveScheme(uri);
-          const edited = await skillswap.updateProfile(url, i);
-        }
+        const uri = await storage.upload({ profile: profile, gig: gig });
+        const url = await storage.resolveScheme(uri);
+        const edited = await skillswap.updateProfile(url, i);
       }
-    } catch (error) {
-      alert("We're facing some problems saving your profile");
     }
     setLoading(false);
   }
@@ -264,16 +264,21 @@ function Selling() {
     alert("Link copied to clipboard");
   }
 
-  function messageToWaitForMM() {
+  function messageToWaitForMM(reason) {
     navigate("/");
-    alert("Your profile will be updated after metamask is completed");
+    alert(reason);
   }
 
   function saveChanges() {
     saveEdit()
-      .then(() => messageToWaitForMM())
-      .catch((reason) => alert("Message:" + reason.message));
+      .then(() =>
+        messageToWaitForMM(
+          "Your profile will be updated after metamask is completed"
+        )
+      )
+      .catch((reason) => messageToWaitForMM(reason));
   }
+
   useEffect(() => {
     loadUser();
     // eslint-disable-next-line
@@ -378,6 +383,29 @@ function Selling() {
                             strokeLinejoin="round"
                           ></g>
                           <g id="SVGRepo_iconCarrier">
+                            <path
+                              fillRule="evenodd"
+                              clipRule="evenodd"
+                              d="M10.975 14.51a1.05 1.05 0 0 0 0-1.485 2.95 2.95 0 0 1 0-4.172l3.536-3.535a2.95 2.95 0 1 1 4.172 4.172l-1.093 1.092a1.05 1.05 0 0 0 1.485 1.485l1.093-1.092a5.05 5.05 0 0 0-7.142-7.142L9.49 7.368a5.05 5.05 0 0 0 0 7.142c.41.41 1.075.41 1.485 0zm2.05-5.02a1.05 1.05 0 0 0 0 1.485 2.95 2.95 0 0 1 0 4.172l-3.5 3.5a2.95 2.95 0 1 1-4.171-4.172l1.025-1.025a1.05 1.05 0 0 0-1.485-1.485L3.87 12.99a5.05 5.05 0 0 0 7.142 7.142l3.5-3.5a5.05 5.05 0 0 0 0-7.142 1.05 1.05 0 0 0-1.485 0z"
+                              fill="#ffffff"
+                            ></path>
+                          </g>
+                        </svg>
+                        <a href={profileData.urlS}>{profileData.urlS}</a>
+                      </li>
+                      <li>
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                          <g
+                            id="SVGRepo_tracerCarrier"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></g>
+                          <g id="SVGRepo_iconCarrier">
                             {" "}
                             <path
                               d="M12.8159 20.6077C16.8509 18.5502 20 15.1429 20 11C20 6.58172 16.4183 3 12 3C7.58172 3 4 6.58172 4 11C4 15.1429 7.14909 18.5502 11.1841 20.6077C11.6968 20.8691 12.3032 20.8691 12.8159 20.6077Z"
@@ -396,29 +424,6 @@ function Selling() {
                           </g>
                         </svg>
                         {profileData.country}
-                      </li>
-                      <li>
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                          <g
-                            id="SVGRepo_tracerCarrier"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          ></g>
-                          <g id="SVGRepo_iconCarrier">
-                            <path
-                              fillRule="evenodd"
-                              clipRule="evenodd"
-                              d="M10.975 14.51a1.05 1.05 0 0 0 0-1.485 2.95 2.95 0 0 1 0-4.172l3.536-3.535a2.95 2.95 0 1 1 4.172 4.172l-1.093 1.092a1.05 1.05 0 0 0 1.485 1.485l1.093-1.092a5.05 5.05 0 0 0-7.142-7.142L9.49 7.368a5.05 5.05 0 0 0 0 7.142c.41.41 1.075.41 1.485 0zm2.05-5.02a1.05 1.05 0 0 0 0 1.485 2.95 2.95 0 0 1 0 4.172l-3.5 3.5a2.95 2.95 0 1 1-4.171-4.172l1.025-1.025a1.05 1.05 0 0 0-1.485-1.485L3.87 12.99a5.05 5.05 0 0 0 7.142 7.142l3.5-3.5a5.05 5.05 0 0 0 0-7.142 1.05 1.05 0 0 0-1.485 0z"
-                              fill="#ffffff"
-                            ></path>
-                          </g>
-                        </svg>
-                        <a href={profileData.urlS}>{profileData.urlS}</a>
                       </li>
                       <li>
                         <svg
@@ -541,7 +546,14 @@ function Selling() {
             <form onSubmit={editButton ? saveChanges : uploadFileToStorage}>
               {firstPage ? (
                 <ProfileContainer>
-                  <h2>About yourself</h2>
+                  <h2>About Yourself</h2>
+                  <WarningTxt>
+                    <span>WARNING:</span> Any changes/ edits to a user profile
+                    will cost gas fees, as the data is stored on the blockchain.
+                    We encourage you to create your account and fill out all
+                    necessary information in one go to avoid any unnecessary gas
+                    fees. Thank you for your cooperation.
+                  </WarningTxt>
                   <label>Name</label>
                   <input
                     type="text"
@@ -552,7 +564,7 @@ function Selling() {
                     onChange={(e) => setName(e.target.value)}
                   />
                   <label>
-                    Upload profile pic (max upload size 5 MB: 1000 x 1000 px)
+                    Upload Profile Pic (max upload size 5 MB: 1000 x 1000 px)
                   </label>
                   {img ? (
                     <FormImg>
@@ -570,7 +582,7 @@ function Selling() {
                     accept="image/*"
                     onChange={(event) => uploadToIPFS(event, "setImg")}
                   />
-                  <label>Give title to yourself in few words</label>
+                  <label>Give Title To Yourself In Few Words</label>
                   <input
                     type="text"
                     required
@@ -594,7 +606,7 @@ function Selling() {
                       </option>
                     ))}
                   </select>
-                  <label>Describe yourself</label>
+                  <label>Describe Yourself</label>
                   <textarea
                     name="description"
                     cols="30"
@@ -605,7 +617,7 @@ function Selling() {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                   ></textarea>
-                  <label>Your social media or website link</label>
+                  <label>Your Social Media Or Website Link</label>
                   <input
                     type="url"
                     placeholder="Website link"
@@ -615,7 +627,7 @@ function Selling() {
                     onChange={(e) => setUrl(e.target.value)}
                   />
                   <label>
-                    Type your skills, after each skill press 'enter' on your
+                    Type your skills, after each skill press 'Enter' on your
                     keyboard
                   </label>
                   <TagsInput
@@ -647,8 +659,8 @@ function Selling() {
                 </ProfileContainer>
               ) : (
                 <GigContainer>
-                  <h2>Your service</h2>
-                  <label>Upload your gig picture</label>
+                  <h2>Your Service</h2>
+                  <label>Upload Your Gig Picture</label>
                   {gigImg ? (
                     <FormImg>
                       <img
@@ -665,7 +677,7 @@ function Selling() {
                     // required
                     onChange={(event) => uploadToIPFS(event, "setGigImg")}
                   />
-                  <label>Set your gig title in under 70 characters</label>
+                  <label>Set Your Gig Title In Under 70 Characters</label>
                   <input
                     type="text"
                     maxLength="70"
@@ -675,7 +687,7 @@ function Selling() {
                     defaultValue={gigHead}
                     onChange={(e) => setGigHead(e.target.value)}
                   />
-                  <label>Describe your service</label>
+                  <label>Describe Your Service</label>
                   <textarea
                     name="gigDes"
                     cols="30"
@@ -686,7 +698,7 @@ function Selling() {
                     defaultValue={gigDescrip}
                     onChange={(e) => setGigDescrip(e.target.value)}
                   ></textarea>
-                  <label>Set the category</label>
+                  <label>Set The Category</label>
                   <select
                     name="gig category"
                     onChange={(e) => setGigCategory(e.target.value)}
@@ -725,17 +737,27 @@ function Selling() {
                     defaultValue={gigOffer}
                     onChange={(e) => setGigOffer(e.target.value)}
                   ></textarea>
-                  <label>Set the price</label>
+                  <label>Set Bear Market Price</label>
                   <input
                     type="number"
-                    placeholder="Price"
+                    placeholder="Bear Market"
                     className="noscroll"
                     spellCheck="true"
                     defaultValue={gigPrice}
                     onChange={(e) => setGigPrice(e.target.value)}
                     required
                   />
-                  <label>Set the keywords to help buyer find your gig</label>
+                  <label>Set Bull Market Price</label>
+                  <input
+                    type="number"
+                    placeholder="Bull Market"
+                    className="noscroll"
+                    spellCheck="true"
+                    defaultValue={gigBullPrice}
+                    onChange={(e) => setGigBullPrice(e.target.value)}
+                    required
+                  />
+                  <label>Set The Keywords To Help Buyer Find Your Gig</label>
 
                   <TagsInput
                     value={gigKeywords}
@@ -834,6 +856,7 @@ const ProfileContainer = styled.div`
     width: 97%;
     padding: 40px 0;
     background: transparent;
+    border: 0;
   }
 `;
 
@@ -861,6 +884,7 @@ const GigContainer = styled.div`
     width: 97%;
     padding: 40px 0;
     background: transparent;
+    border: 0;
   }
 `;
 
@@ -982,7 +1006,7 @@ const YourOthers = styled.div`
   ul {
     width: 100%;
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto;
     grid-gap: 20px;
     padding: 0 10px;
     li {
@@ -1148,5 +1172,15 @@ const BtnContainer = styled.div`
 const FormImg = styled.div`
   img {
     width: 50%;
+  }
+`;
+
+const WarningTxt = styled.p`
+  margin: 10px 0;
+  color: #5fd3f3;
+  border: 2px solid var(--gray);
+  padding: 20px;
+  span {
+    color: white;
   }
 `;

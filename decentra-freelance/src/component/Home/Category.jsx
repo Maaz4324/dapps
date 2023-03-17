@@ -17,7 +17,7 @@ function Category() {
     <Wrapper>
       <Container>
         <Head>
-          <h3>Browse NFT talent by category</h3>
+          <h3>Browse NFT Talent By Category</h3>
           <p>
             <span>
               Welcome to our full stop shop for NFT creation, where you can find

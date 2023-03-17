@@ -74,6 +74,7 @@ const Card = styled.section`
   border-radius: 10px;
   background-color: #1a1a1c;
   box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--gray);
   h3 {
     color: var(--primary);
     margin-bottom: 13px;
@@ -99,6 +100,7 @@ const Head = styled.section`
   width: 90%;
   max-width: 338px;
   margin: 0 auto;
+  border: 1px solid var(--gray);
   @media (max-width: 990px) {
     width: 90%;
     max-width: 495px;

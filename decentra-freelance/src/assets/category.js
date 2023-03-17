@@ -9,37 +9,39 @@ import twitter from "../images/twitter.png";
 import video from "../images/video.png";
 import expand from "../images/expand.png";
 import code from "../images/code.png";
+import discord from "../images/discord.svg";
+import webdesign from "../images/webdesign.svg";
 
 export const categoryData = [
   {
     img: code,
     head: "Developer",
-    text: "A web3 developer builds, for example, decentralized applications (dApps) and smart contracts using blockchain technologies! ",
+    text: "A Web3 Developer builds, for example, decentralized applications (dApps) and smart contracts using blockchain technologies! ",
     link: "Developer",
   },
   {
     img: art1,
     head: "Collection Artist",
-    text: "A NFT collection artist creates digital artworks and can be hired to create your entire collection! ",
+    text: "A NFT Collection Artist creates digital artworks and can be hired to create your entire collection! ",
     link: "Collection Artist",
   },
   {
     img: art,
-    head: "Art director",
-    text: "Oversees the visual style of your NFT collection and social media art!",
+    head: "Art Director",
+    text: "Oversees the visual style of your NFT Collection and social media art!",
     link: "Art director",
   },
   {
     img: coach,
-    head: "Project manager",
-    text: "A project manager is responsible for planning, organizing, and directing the completion of a specific project within the allocated time and budget!",
+    head: "Project Manager",
+    text: "A Project Manager is responsible for planning, organizing, and directing the completion of a specific project within the allocated time and budget!",
     link: "Project manager",
   },
   {
     img: consultation,
-    head: "NFT specialist / Adviser",
-    text: "A NFT specialist / Adviser provides advice and guidance to clients on the best strategies for your NFT collection in most areas",
-    link: "NFT specialist / Adviser",
+    head: "NFT Specialist / Adviser",
+    text: "A NFT Specialist / Adviser provides advice and guidance to clients on the best strategies for your NFT collection in most areas!",
+    link: "NFT Specialist / Adviser",
   },
   {
     img: hand,
@@ -48,7 +50,7 @@ export const categoryData = [
     link: "Collabs Manager",
   },
   {
-    img: laptop,
+    img: discord,
     head: "Discord Moderator",
     text: "A Discord Moderator is responsible for enforcing rules and keeping the community safe and friendly!",
     link: "Discord Moderator",
@@ -56,7 +58,7 @@ export const categoryData = [
   {
     img: expand,
     head: "Influencer",
-    text: "An influencer has the power to affect the purchase decisions of others through their promotion of a product or service and can help you grow your social presence!",
+    text: "An Influencer has the power to affect the purchase decisions of others through their promotion of a product or service and can help you grow your social presence!",
     link: "Influencer",
   },
   {
@@ -68,7 +70,7 @@ export const categoryData = [
   {
     img: twitter,
     head: "Social Media Manager",
-    text: "A social media manager creates, curates, and manages content on social media channels to build an engaged audience and drive brand awareness!",
+    text: "A Social Media Manager creates, curates, and manages content on social media channels to build an engaged audience and drive brand awareness!",
     link: "Social Media Manager",
   },
   {
@@ -80,7 +82,19 @@ export const categoryData = [
   {
     img: video,
     head: "NFT Animator",
-    text: "An NFT animator animates your NFTs and brings them to life!",
+    text: "An NFT Animator animates your NFTs and brings them to life!",
     link: "NFT Animator",
+  },
+  {
+    img: webdesign,
+    head: "Web UI/UX Designer",
+    text: " A UI/UX designer creates user-friendly, visually appealing, and intuitive designs to enable the best possible user experience.",
+    link: "Web Designer",
+  },
+  {
+    img: discord,
+    head: "Discord Server Specialist",
+    text: "A Discord Server Specialist is responsible for managing and maintaining a Discord Server, ensuring that it is optimized for user engagement and performance.",
+    link: "Discord Server Specialist",
   },
 ];

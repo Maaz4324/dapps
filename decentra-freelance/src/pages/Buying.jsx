@@ -76,8 +76,8 @@ function Buying({ category, sellerState }) {
       <Container>
         <h1>{Category}</h1>
         <h3>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Esse,
-          nostrum.
+          The search query returned all possible matches related to the term "
+          {Category}"
         </h3>
         {loading ? (
           <Loading />

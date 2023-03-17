@@ -74,8 +74,12 @@ function SellerProfile({ setSellerState }) {
               </ServiceHead>
               <Offer>
                 <div>
-                  <span>Starting from:</span>
+                  <span>Bear Market Price:</span>
                   <p>{gigData.gigPrice} ETH</p>
+                </div>
+                <div>
+                  <span>Bull Market Price:</span>
+                  <p>{gigData.gigBullPrice} ETH</p>
                 </div>
                 <div>
                   <span>Offer:</span>
@@ -324,6 +328,9 @@ const ServiceHead = styled.div`
   grid-column: 1/3;
   padding: 20px;
   border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
   h2 {
     font-size: 28px;
     margin-bottom: 10px;

@@ -41,13 +41,13 @@ function SellerCount() {
             <CountUp start={0} end={noOfSeller} />
           </h3>
           <p>
-            <span>Number of seller</span>
+            <span>Total Freelancer Count</span>
           </p>
         </div>
         <div>
           <h3>{contractBalance}</h3>
           <p>
-            <span>ETH in contract</span>
+            <span>ETH In Contract</span>
           </p>
         </div>
       </Container>
