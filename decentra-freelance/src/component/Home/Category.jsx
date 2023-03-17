@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { categoryData } from "../../assets/category";
 import { useNavigate } from "react-router-dom";
-import card1 from "../../images/card1.jpg";
 
 function Category() {
   const navigate = useNavigate();
