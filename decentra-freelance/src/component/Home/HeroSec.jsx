@@ -22,7 +22,7 @@ function HeroSec() {
             journey here, or hire someone to help you build the future of your
             NFT Web3 startup.
           </h5>
-          <button onClick={() => navigate("/selling")}>View Gigs</button>
+          <button onClick={() => navigate("/gigs")}>View Gigs</button>
         </div>
       </Main>
       <Left>

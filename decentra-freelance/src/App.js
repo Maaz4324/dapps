@@ -13,6 +13,7 @@ import ScrollToTop from "./ScrollToTop";
 import SellerProfile from "./pages/SellerProfile";
 import Chat from "./pages/Chat";
 import Order from "./pages/Order";
+import Gig from "./pages/Gig";
 
 function App() {
   const activeChainId = ChainId.Mainnet;
@@ -72,6 +73,11 @@ function App() {
             }
           />
           <Route exact path="/order" element={<Order />} />
+          <Route
+            exact
+            path="/gigs"
+            element={<Gig sellerState={setSellerData} />}
+          />
           <Route
             exact
             path="/selling"

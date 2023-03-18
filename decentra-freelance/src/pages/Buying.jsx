@@ -30,14 +30,6 @@ function Buying({ category, sellerState }) {
       const response = await fetch(user.uri);
       const metadata = await response.json();
       const categoryWords = metadata.gig.gigCategory;
-      console.log(
-        metadata.gig.gigKeywords
-          .toString()
-          .toLowerCase()
-          .replace(",", " ")
-          .includes(category.toLowerCase())
-      );
-      // console.log(category);
       if (
         categoryWords.toLowerCase().includes(category.toLowerCase()) ||
         metadata.gig.gigKeywords.includes(category.toLowerCase()) ||

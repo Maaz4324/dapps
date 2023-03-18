@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import chat from "../../images/chat.svg";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase";
 import { collection, query, doc, onSnapshot, getDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import SkillSwap from "../../artifacts/contracts/SkillSwap.sol/SkillSwap.json";
+import { ethers } from "ethers";
 
 function Sidebar({ idChange }) {
-  const [receiverAccs, setReceiverAccs] = useState("");
+  const [receiverAccs, setReceiverAccs] = useState([]);
 
   async function goToChat(to) {
     localStorage.setItem("sellerId", "0x" + to);
