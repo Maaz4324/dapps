@@ -14,7 +14,6 @@ function Gig({ sellerState }) {
 
   function RenderSeller(e, to) {
     e.preventDefault();
-    console.log(to);
     navigate("/seller/" + to.slice(2).toLowerCase());
     sellerState(to);
     localStorage.setItem("sellerId", to.toLowerCase());
@@ -37,7 +36,6 @@ function Gig({ sellerState }) {
       let categoryArr = [];
       let gigsArr = [];
       for (let i = 1; i <= noOfSeller.toString(); i++) {
-        console.log(i);
         const user = await skillswap.sellerProfile(i);
         const response = await fetch(user.uri);
         const metadata = await response.json();
@@ -47,7 +45,6 @@ function Gig({ sellerState }) {
           data: metadata.gig,
           address: user.seller,
         };
-        console.log(user.seller);
         gigsArr.push(result);
       }
       setListCategory(categoryArr);
@@ -61,13 +58,22 @@ function Gig({ sellerState }) {
   return (
     <Wrapper>
       <Container>
-        <Head>All Sellers Are Listed Here</Head>
+        <Head>All Web3 Freelancers Are Listed here!</Head>
         <Text>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Porro iste
-          minus et eum delectus! Aliquam odit, tenetur reprehenderit omnis
-          excepturi iste odio? Rerum corrupti doloremque ad cum earum
-          consequatur cumque!
+          {" "}
+          SkillSwap is fully focused on NFTs. Start your NFT Web3 freelancing
+          journey here, or hire someone to help you build the future of your NFT
+          Web3 startup.
         </Text>
+        <CategoryRow>
+          <ul>
+            {listCategory.map((gig, key) => (
+              <a href={"#" + gig}>
+                <li key={key}>{gig}</li>
+              </a>
+            ))}
+          </ul>
+        </CategoryRow>
         {loading ? (
           <Loading />
         ) : (
@@ -82,7 +88,7 @@ function Gig({ sellerState }) {
                 </GigHead>
                 <Box>
                   {listGig.map((value, id) => (
-                    <CardContainer>
+                    <CardContainer id={gig}>
                       {value.data.gigCategory == gig && (
                         <Card
                           key={id}
@@ -136,6 +142,9 @@ const Container = styled.section`
   margin: 0 auto;
   min-height: 80vh;
   padding-top: 80px;
+  @media (max-width: 930px) {
+    padding-top: 140px;
+  }
 `;
 
 const GigSection = styled.section`
@@ -149,6 +158,32 @@ const Box = styled.section``;
 
 const GigHead = styled.section``;
 
+const CategoryRow = styled.section`
+  /* border: 2px solid red; */
+  margin-top: 20px;
+  border-top: 1px solid var(--darkText);
+  border-bottom: 1px solid var(--darkText);
+  ul {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-wrap: wrap;
+  }
+  li {
+    list-style: none;
+    font-size: 18px;
+    padding: 20px;
+    /* border: 2px solid blue; */
+    cursor: pointer;
+    &:hover {
+      background: var(--text);
+    }
+  }
+  a {
+    color: white;
+  }
+`;
+
 const Des = styled.p`
   margin-bottom: 20px;
   margin-top: 7px;
@@ -159,6 +194,12 @@ const CardContainer = styled.section`
   display: grid;
   grid-template-columns: 33% 33% auto;
   grid-gap: 20px;
+  @media (max-width: 930px) {
+    grid-template-columns: 50% auto;
+  }
+  @media (max-width: 590px) {
+    grid-template-columns: 100%;
+  }
 `;
 
 const Card = styled.section`
@@ -199,6 +240,9 @@ const Text = styled.p`
   width: 73%;
   margin: 0 auto;
   color: var(--darkText);
+  @media (max-width: 930px) {
+    width: 97%;
+  }
 `;
 
 const CardText = styled.div`
