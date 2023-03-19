@@ -68,7 +68,6 @@ function SellerProfile({ setSellerState }) {
                   alt={profileData.name}
                 />
               </PPContainer>
-
               <YourName>
                 <div>
                   <h3>{profileData.name}</h3>
@@ -321,6 +320,92 @@ function SellerProfile({ setSellerState }) {
                   ))}
                 </div>
               </YourSkills>
+              <YourEducation>
+                {" "}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "start",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <svg
+                    width="64px"
+                    height="64px"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                    <g
+                      id="SVGRepo_tracerCarrier"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    ></g>
+                    <g id="SVGRepo_iconCarrier">
+                      {" "}
+                      <path
+                        d="M11.5655 4.24138L3.64286 8.64286C3.36266 8.79852 3.36266 9.20148 3.64286 9.35714L11.5655 13.7586C11.8357 13.9087 12.1643 13.9087 12.4345 13.7586L20.5706 9.23853C20.7578 9.13456 20.7578 8.86544 20.5706 8.76147L12.4345 4.24138C12.1643 4.09126 11.8357 4.09126 11.5655 4.24138Z"
+                        stroke="#ffffff"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      ></path>{" "}
+                      <path
+                        d="M5.5 10.5L5.13149 15.2906C5.05583 16.2742 5.70934 17.1639 6.66043 17.426C7.28355 17.5976 7.96876 17.8017 8.5 18C9.26467 18.2854 10.1126 18.7657 10.7824 19.1841C11.5227 19.6465 12.4773 19.6465 13.2177 19.184C13.8874 18.7657 14.7354 18.2854 15.5 18C16.0312 17.8017 16.7165 17.5976 17.3396 17.4259C18.2907 17.1639 18.9442 16.2742 18.8686 15.2906L18.5 10.5"
+                        stroke="#ffffff"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      ></path>{" "}
+                      <path
+                        d="M11.5 10.5L9.00772 11.9242C8.38457 12.2802 8 12.9429 8 13.6606V20"
+                        stroke="#ffffff"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      ></path>{" "}
+                    </g>
+                  </svg>
+                  <p
+                    style={{
+                      fontSize: "20px",
+                      marginLeft: "10px",
+                    }}
+                  >
+                    Education
+                  </p>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "start",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  {" "}
+                  {profileData.education != undefined && (
+                    <div>
+                      {profileData.education.map((eduData, idx) => (
+                        <div
+                          style={{
+                            margin: "10px",
+                            padding: "7px",
+                            borderRadius: "5px",
+                            border: "1px solid var(--line)",
+                            marginLeft: "0",
+                          }}
+                          key={idx}
+                        >
+                          {eduData}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </YourEducation>
             </YourDetail>
           ))}
           {displayGig.map((gigData, idx) => (
@@ -336,18 +421,12 @@ function SellerProfile({ setSellerState }) {
                 </div>
               </ServiceHead>
               <Offer>
-                <div>
-                  <span>Bear Market Price:</span>
-                  <p>$ {gigData.gigPrice}</p>
-                </div>
-                <div>
-                  <span>Bull Market Price:</span>
-                  <p>$ {gigData.gigBullPrice}</p>
-                </div>
-                <div>
-                  <span>Offer:</span>
-                  <p>{gigData.gigOffer}</p>
-                </div>
+                <span>Bear Market Price:</span>
+                <h4>$ {gigData.gigPrice}</h4>
+                <br />
+                <br />
+                <span>Bull Market Price:</span>
+                <h4>$ {gigData.gigBullPrice}</h4>
               </Offer>
               <ServiceDes>
                 <span>Service Description: </span>
@@ -389,23 +468,18 @@ const Container = styled.div`
 
 const GigContent = styled.div`
   display: grid;
-  grid-template-columns: auto auto 30%;
-  @media (max-width: 914px) {
-    grid-template-columns: auto;
-  }
+  grid-template-columns: 70% auto;
+  height: fit-content;
+  grid-gap: 20px;
 `;
 
 const ServiceHead = styled.div`
-  border: 1px solid var(--gray);
-  background: var(--darkBg);
-  margin-bottom: 10px;
-  margin-right: 10px;
   grid-column: 1/3;
+  height: fit-content;
   padding: 20px;
+  border: 1px solid var(--line);
+  background: var(--darkBg);
   border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
   h2 {
     font-size: 28px;
     margin-bottom: 10px;
@@ -421,38 +495,21 @@ const ServiceHead = styled.div`
   }
 `;
 const Offer = styled.div`
-  border: 1px solid var(--gray);
-  background: var(--darkBg);
-  margin-bottom: 10px;
-  margin-left: 10px;
+  border: 2px solid red;
+  height: fit-content;
+  grid-column: 2/3;
   padding: 20px;
+  border: 1px solid var(--line);
+  background: var(--darkBg);
   border-radius: 10px;
-  div {
-    margin-bottom: 30px;
+  h4 {
+    font-size: 20px;
+    margin-top: 10px;
   }
   span {
-    color: var(--darkText);
     font-size: 16px;
-  }
-  p {
-    font-size: 18px;
-    white-space: pre-line;
-    margin-top: 7px;
-  }
-  @media (max-width: 914px) {
-    grid-column: auto;
-    margin-left: 0;
-  }
-`;
-const ServiceDes = styled.div`
-  border: 1px solid var(--gray);
-  background: var(--darkBg);
-  margin-top: 10px;
-  grid-column: 1/4;
-  padding: 20px;
-  border-radius: 10px;
-  span {
     color: var(--darkText);
+    font-weight: 500;
   }
   p {
     margin-top: 10px;
@@ -461,6 +518,23 @@ const ServiceDes = styled.div`
   }
   @media (max-width: 914px) {
     grid-column: auto;
+    margin-left: 0;
+  }
+`;
+const ServiceDes = styled.div`
+  grid-column: 1/2;
+  grid-row: 2/3;
+  padding: 20px;
+  border: 1px solid var(--line);
+  background: var(--darkBg);
+  border-radius: 10px;
+  span {
+    color: var(--darkText);
+  }
+  p {
+    margin-top: 10px;
+    font-size: 16px;
+    white-space: pre-line;
   }
 `;
 
@@ -675,6 +749,19 @@ const YourDes = styled.div`
 const YourSkills = styled.div`
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
+  width: 95%;
+  margin: 0 auto;
+  padding: 20px 0;
+  div {
+    display: flex;
+  }
+  svg {
+    width: 30px;
+    height: 30px;
+  }
+`;
+
+const YourEducation = styled.div`
   width: 95%;
   margin: 0 auto;
   padding: 20px 0;

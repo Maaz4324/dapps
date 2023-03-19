@@ -67,8 +67,8 @@ function Gig({ sellerState }) {
         <CategoryRow>
           <ul>
             {listCategory.map((gig, key) => (
-              <a href={"#" + gig}>
-                <li key={key}>{gig}</li>
+              <a key={key} href={"#" + gig}>
+                <li>{gig}</li>
               </a>
             ))}
           </ul>
@@ -110,6 +110,10 @@ function Gig({ sellerState }) {
                             <p>
                               Bear Market Price
                               <span> ${value.data.gigPrice}</span>
+                            </p>
+                            <p style={{ marginTop: "10px" }}>
+                              Bull Market Price
+                              <span> ${value.data.gigBullPrice}</span>
                             </p>
                           </CardText>
                         </Card>
@@ -161,20 +165,42 @@ const CategoryRow = styled.section`
   margin-top: 20px;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
+  .toGigList {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
   ul {
     display: flex;
     align-items: center;
     justify-content: start;
     flex-wrap: wrap;
+    @media (max-width: 833px) {
+      width: 100%;
+      min-width: 0;
+      align-items: stretch;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
   }
   li {
     list-style: none;
     font-size: 18px;
     padding: 20px;
-    /* border: 2px solid blue; */
     cursor: pointer;
     &:hover {
       background: var(--text);
+    }
+    @media (max-width: 833px) {
+      width: 100%;
+      border: 0;
+      flex-basis: 33.333%;
+      flex-grow: 0;
+      flex-shrink: 0;
     }
   }
   a {
@@ -196,7 +222,18 @@ const CardContainer = styled.section`
     grid-template-columns: 50% auto;
   }
   @media (max-width: 590px) {
-    grid-template-columns: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-wrap: wrap;
+    width: 100%;
+    min-width: 0;
+    align-items: stretch;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
   }
 `;
 
@@ -225,6 +262,12 @@ const Card = styled.section`
   div {
     border-top-right-radius: 8px;
     border-top-left-radius: 8px;
+  }
+  @media (max-width: 590px) {
+    width: 90%;
+    flex-basis: 90%;
+    flex-grow: 0;
+    flex-shrink: 0;
   }
 `;
 

@@ -19,6 +19,7 @@ function Selling() {
   const [twitterLink, setTwitterLink] = useState();
   const [skill, setSkill] = useState();
   const [lang, setLang] = useState();
+  const [education, setEducation] = useState();
   const [img, setImg] = useState();
   const [gigImg, setGigImg] = useState();
   const [gigHead, setGigHead] = useState();
@@ -76,6 +77,7 @@ function Selling() {
     setTwitterLink(profileFormItem[0].twitterLink);
     setSkill(profileFormItem[0].skill);
     setLang(profileFormItem[0].language);
+    setEducation(profileFormItem[0].education);
     setGigImg(gigFormItem[0].gigImg);
     setGigHead(gigFormItem[0].gigHead);
     setGigDescrip(gigFormItem[0].gigDescription);
@@ -194,6 +196,7 @@ function Selling() {
         skill: skill,
         image: img,
         language: lang,
+        education: education,
       };
       const gig = {
         gigImg: gigImg,
@@ -237,6 +240,7 @@ function Selling() {
           skill: skill,
           image: img,
           language: lang,
+          education: education,
         };
         const gig = {
           gigImg: gigImg,
@@ -273,7 +277,7 @@ function Selling() {
     saveEdit()
       .then(() =>
         messageToWaitForMM(
-          "Your profile will be updated after metamask is completed"
+          "Your profile will be updated after metamask transaction is completed"
         )
       )
       .catch((reason) => messageToWaitForMM(reason));
@@ -581,6 +585,92 @@ function Selling() {
                       ))}
                     </div>
                   </YourSkills>
+                  <YourEducation>
+                    {" "}
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "start",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <svg
+                        width="64px"
+                        height="64px"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                        <g
+                          id="SVGRepo_tracerCarrier"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        ></g>
+                        <g id="SVGRepo_iconCarrier">
+                          {" "}
+                          <path
+                            d="M11.5655 4.24138L3.64286 8.64286C3.36266 8.79852 3.36266 9.20148 3.64286 9.35714L11.5655 13.7586C11.8357 13.9087 12.1643 13.9087 12.4345 13.7586L20.5706 9.23853C20.7578 9.13456 20.7578 8.86544 20.5706 8.76147L12.4345 4.24138C12.1643 4.09126 11.8357 4.09126 11.5655 4.24138Z"
+                            stroke="#ffffff"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></path>{" "}
+                          <path
+                            d="M5.5 10.5L5.13149 15.2906C5.05583 16.2742 5.70934 17.1639 6.66043 17.426C7.28355 17.5976 7.96876 17.8017 8.5 18C9.26467 18.2854 10.1126 18.7657 10.7824 19.1841C11.5227 19.6465 12.4773 19.6465 13.2177 19.184C13.8874 18.7657 14.7354 18.2854 15.5 18C16.0312 17.8017 16.7165 17.5976 17.3396 17.4259C18.2907 17.1639 18.9442 16.2742 18.8686 15.2906L18.5 10.5"
+                            stroke="#ffffff"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></path>{" "}
+                          <path
+                            d="M11.5 10.5L9.00772 11.9242C8.38457 12.2802 8 12.9429 8 13.6606V20"
+                            stroke="#ffffff"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></path>{" "}
+                        </g>
+                      </svg>
+                      <p
+                        style={{
+                          fontSize: "20px",
+                          marginLeft: "10px",
+                        }}
+                      >
+                        Education
+                      </p>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "start",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      {" "}
+                      {profileData.education != undefined && (
+                        <div>
+                          {profileData.education.map((eduData, idx) => (
+                            <div
+                              style={{
+                                margin: "10px",
+                                padding: "7px",
+                                borderRadius: "5px",
+                                border: "1px solid var(--line)",
+                                marginLeft: "0",
+                              }}
+                              key={idx}
+                            >
+                              {eduData}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </YourEducation>
                 </YourDetail>
               ))}
               {displayGig.map((gigData, idx) => (
@@ -599,6 +689,7 @@ function Selling() {
                   <Offer>
                     <span>Bear Market Price:</span>
                     <h4>$ {gigData.gigPrice}</h4>
+                    <br />
                     <br />
                     <span>Bull Market Price:</span>
                     <h4>$ {gigData.gigBullPrice}</h4>
@@ -740,14 +831,17 @@ function Selling() {
                     placeHolder="Languages you can speak"
                   />
 
-                  <label>Mention Your Educational Background</label>
-                  <textarea
-                    // value={lang}
-                    // onChange={setLang}
+                  <label>
+                    Mention Your Educational Background then press 'enter' on
+                    your keyboard
+                  </label>
+                  <TagsInput
+                    value={education}
+                    onChange={setEducation}
                     required
-                    style={{ background: "black !important", width: "100%" }}
-                    name="languages"
-                    placeHolder="Education"
+                    style={{ background: "black !important" }}
+                    name="education"
+                    placeHolder="Qualifications"
                   />
                   <BtnContainer>
                     <button onClick={() => setUserLogin(true)}>Back</button>
@@ -1195,7 +1289,6 @@ const ServiceHead = styled.div`
 `;
 
 const Offer = styled.div`
-  border: 2px solid red;
   height: fit-content;
   grid-column: 2/3;
   padding: 20px;
@@ -1245,6 +1338,19 @@ const ServiceImg = styled.div`
 const YourSkills = styled.div`
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
+  width: 95%;
+  margin: 0 auto;
+  padding: 20px 0;
+  div {
+    display: flex;
+  }
+  svg {
+    width: 30px;
+    height: 30px;
+  }
+`;
+
+const YourEducation = styled.div`
   width: 95%;
   margin: 0 auto;
   padding: 20px 0;
