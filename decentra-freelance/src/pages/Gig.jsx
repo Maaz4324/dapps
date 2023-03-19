@@ -60,7 +60,6 @@ function Gig({ sellerState }) {
       <Container>
         <Head>All Web3 Freelancers Are Listed here!</Head>
         <Text>
-          {" "}
           SkillSwap is fully focused on NFTs. Start your NFT Web3 freelancing
           journey here, or hire someone to help you build the future of your NFT
           Web3 startup.
@@ -109,8 +108,8 @@ function Gig({ sellerState }) {
                             <h4>{value.data.gigHead}</h4>
                             <Line />
                             <p>
-                              starting at
-                              <span> {value.data.gigPrice}Eth</span>
+                              Bear Market Price
+                              <span> ${value.data.gigPrice}</span>
                             </p>
                           </CardText>
                         </Card>
@@ -159,10 +158,9 @@ const Box = styled.section``;
 const GigHead = styled.section``;
 
 const CategoryRow = styled.section`
-  /* border: 2px solid red; */
   margin-top: 20px;
-  border-top: 1px solid var(--darkText);
-  border-bottom: 1px solid var(--darkText);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
   ul {
     display: flex;
     align-items: center;

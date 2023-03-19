@@ -92,8 +92,8 @@ function Buying({ category, sellerState }) {
                   <h4>{data.gigHead}</h4>
                   <Line />
                   <p>
-                    starting at
-                    <span> {data.gigPrice}Eth</span>
+                    Bear Market Price
+                    <span> ${data.gigPrice}</span>
                   </p>
                 </CardText>
               </Card>

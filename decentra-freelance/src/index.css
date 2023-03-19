@@ -3,11 +3,12 @@
 :root {
   --text: rgba(0, 0, 0, 0.67);
   --darkText: rgba(252, 252, 252, 0.551);
-  --darkBg: rgb(29, 29, 33);
+  --darkBg: #1d1d21;
   --black: #151517;
   --primary: #5fd3f3;
   --primaryLight: #80ffff;
   --gray: rgb(75, 75, 75);
+  --line: rgb(47, 47, 47);
   --bg: linear-gradient(30deg, #101015, #1a1c35, #181a3d);
 }
 

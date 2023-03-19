@@ -15,7 +15,7 @@ function HeroSec() {
       <Main>
         <div>
           <h2>
-            Decentralized <br /> Freelancing
+            Decentralized <br /> Freelancing <span>BETA</span>
           </h2>
           <h5>
             SkillSwap is fully focused on NFTs. Start your NFT Web3 freelancing
@@ -203,7 +203,9 @@ const Main = styled.div`
   align-items: flex-end;
   justify-content: center;
   flex-direction: column;
-  /* border: 2px solid red; */
+  span {
+    font-size: 14px;
+  }
   h2 {
     font-size: 50px;
   }

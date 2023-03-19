@@ -16,6 +16,7 @@ function Selling() {
   const [country, setCountry] = useState();
   const [description, setDescription] = useState();
   const [urlS, setUrl] = useState();
+  const [twitterLink, setTwitterLink] = useState();
   const [skill, setSkill] = useState();
   const [lang, setLang] = useState();
   const [img, setImg] = useState();
@@ -26,7 +27,6 @@ function Selling() {
   const [gigKeywords, setGigKeywords] = useState();
   const [gigPrice, setGigPrice] = useState();
   const [gigBullPrice, setGigBullPrice] = useState();
-  const [gigOffer, setGigOffer] = useState();
   const [firstPage, setFirstPage] = useState(true);
   const [displayProfile, setDisplayProfile] = useState([]);
   const [displayGig, setDisplayGig] = useState([]);
@@ -73,6 +73,7 @@ function Selling() {
     setCountry(profileFormItem[0].country);
     setDescription(profileFormItem[0].description);
     setUrl(profileFormItem[0].urlS);
+    setTwitterLink(profileFormItem[0].twitterLink);
     setSkill(profileFormItem[0].skill);
     setLang(profileFormItem[0].language);
     setGigImg(gigFormItem[0].gigImg);
@@ -81,7 +82,6 @@ function Selling() {
     setGigKeywords(gigFormItem[0].gigKeywords);
     setGigPrice(gigFormItem[0].gigPrice);
     setGigBullPrice(gigFormItem[0].gigBullPrice);
-    setGigOffer(gigFormItem[0].gigOffer);
     setGigCategory(gigFormItem[0].gigCategory);
   }
 
@@ -190,6 +190,7 @@ function Selling() {
         description: description,
         country: country,
         urlS: urlS,
+        twitterLink: twitterLink,
         skill: skill,
         image: img,
         language: lang,
@@ -201,7 +202,6 @@ function Selling() {
         gigCategory: gigCategory,
         gigPrice: gigPrice,
         gigBullPrice: gigBullPrice,
-        gigOffer: gigOffer,
         gigKeywords: gigKeywords,
       };
 
@@ -233,6 +233,7 @@ function Selling() {
           description: description,
           country: country,
           urlS: urlS,
+          twitterLink: twitterLink,
           skill: skill,
           image: img,
           language: lang,
@@ -244,7 +245,6 @@ function Selling() {
           gigCategory: gigCategory,
           gigPrice: gigPrice,
           gigBullPrice: gigBullPrice,
-          gigOffer: gigOffer,
           gigKeywords: gigKeywords,
         };
 
@@ -291,7 +291,10 @@ function Selling() {
           {loading ? (
             <Loading />
           ) : (
-            <div>
+            //
+            //Profile section starts here
+            //
+            <ProfileContent>
               {displayProfile.map((profileData, idx) => (
                 <YourDetail key={idx}>
                   <PPContainer>
@@ -303,69 +306,78 @@ function Selling() {
                   <YourName>
                     <div>
                       <h3>{profileData.name}</h3>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "end",
+                          width: "20%",
+                        }}
+                      >
+                        <svg
+                          width="64px"
+                          height="64px"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          style={{ cursor: "pointer" }}
+                          onClick={copyLink}
+                        >
+                          <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                          <g
+                            id="SVGRepo_tracerCarrier"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></g>
+                          <g id="SVGRepo_iconCarrier">
+                            {" "}
+                            <path
+                              d="M18 20.75H6C5.27065 20.75 4.57118 20.4603 4.05546 19.9445C3.53973 19.4288 3.25 18.7293 3.25 18V6C3.25 5.27065 3.53973 4.57118 4.05546 4.05546C4.57118 3.53973 5.27065 3.25 6 3.25H12C12.1989 3.25 12.3897 3.32902 12.5303 3.46967C12.671 3.61032 12.75 3.80109 12.75 4C12.75 4.19891 12.671 4.38968 12.5303 4.53033C12.3897 4.67098 12.1989 4.75 12 4.75H6C5.66848 4.75 5.35054 4.8817 5.11612 5.11612C4.8817 5.35054 4.75 5.66848 4.75 6V18C4.75 18.3315 4.8817 18.6495 5.11612 18.8839C5.35054 19.1183 5.66848 19.25 6 19.25H18C18.3315 19.25 18.6495 19.1183 18.8839 18.8839C19.1183 18.6495 19.25 18.3315 19.25 18V12C19.25 11.8011 19.329 11.6103 19.4697 11.4697C19.6103 11.329 19.8011 11.25 20 11.25C20.1989 11.25 20.3897 11.329 20.5303 11.4697C20.671 11.6103 20.75 11.8011 20.75 12V18C20.75 18.7293 20.4603 19.4288 19.9445 19.9445C19.4288 20.4603 18.7293 20.75 18 20.75Z"
+                              fill="#ffffff"
+                            ></path>{" "}
+                            <path
+                              d="M20 8.75C19.8019 8.74741 19.6126 8.66756 19.4725 8.52747C19.3324 8.38737 19.2526 8.19811 19.25 8V4.75H16C15.8011 4.75 15.6103 4.67098 15.4697 4.53033C15.329 4.38968 15.25 4.19891 15.25 4C15.25 3.80109 15.329 3.61032 15.4697 3.46967C15.6103 3.32902 15.8011 3.25 16 3.25H20C20.1981 3.25259 20.3874 3.33244 20.5275 3.47253C20.6676 3.61263 20.7474 3.80189 20.75 4V8C20.7474 8.19811 20.6676 8.38737 20.5275 8.52747C20.3874 8.66756 20.1981 8.74741 20 8.75Z"
+                              fill="#ffffff"
+                            ></path>{" "}
+                            <path
+                              d="M13.5 11.25C13.3071 11.2352 13.1276 11.1455 13 11C12.877 10.8625 12.809 10.6845 12.809 10.5C12.809 10.3155 12.877 10.1375 13 10L19.5 3.5C19.5687 3.42631 19.6515 3.36721 19.7435 3.32622C19.8355 3.28523 19.9348 3.26319 20.0355 3.26141C20.1362 3.25963 20.2362 3.27816 20.3296 3.31588C20.423 3.3536 20.5078 3.40974 20.579 3.48096C20.6503 3.55218 20.7064 3.63701 20.7441 3.7304C20.7818 3.82379 20.8004 3.92382 20.7986 4.02452C20.7968 4.12523 20.7748 4.22454 20.7338 4.31654C20.6928 4.40854 20.6337 4.49134 20.56 4.56L14 11C13.8724 11.1455 13.6929 11.2352 13.5 11.25Z"
+                              fill="#ffffff"
+                            ></path>{" "}
+                          </g>
+                        </svg>
+                        <svg
+                          title="Edit profile"
+                          onClick={handleEditProfile}
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          style={{ cursor: "pointer", marginLeft: "20px" }}
+                        >
+                          <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                          <g
+                            id="SVGRepo_tracerCarrier"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></g>
+                          <g id="SVGRepo_iconCarrier">
+                            {" "}
+                            <path
+                              d="M18.9445 9.1875L14.9445 5.1875M18.9445 9.1875L13.946 14.1859C13.2873 14.8446 12.4878 15.3646 11.5699 15.5229C10.6431 15.6828 9.49294 15.736 8.94444 15.1875C8.39595 14.639 8.44915 13.4888 8.609 12.562C8.76731 11.6441 9.28735 10.8446 9.946 10.1859L14.9445 5.1875M18.9445 9.1875C18.9445 9.1875 21.9444 6.1875 19.9444 4.1875C17.9444 2.1875 14.9445 5.1875 14.9445 5.1875M20.5 12C20.5 18.5 18.5 20.5 12 20.5C5.5 20.5 3.5 18.5 3.5 12C3.5 5.5 5.5 3.5 12 3.5"
+                              stroke="#ffffff"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            ></path>{" "}
+                          </g>
+                        </svg>
+                      </div>
+                    </div>
+                    <div>
                       <p
                         style={{ color: "var(--darkText)", marginTop: "10px" }}
                       >
                         {profileData.profileTitle}
                       </p>
-                    </div>
-                    <div>
-                      <svg
-                        width="64px"
-                        height="64px"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        style={{ cursor: "pointer" }}
-                        onClick={copyLink}
-                      >
-                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                        <g
-                          id="SVGRepo_tracerCarrier"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        ></g>
-                        <g id="SVGRepo_iconCarrier">
-                          {" "}
-                          <path
-                            d="M18 20.75H6C5.27065 20.75 4.57118 20.4603 4.05546 19.9445C3.53973 19.4288 3.25 18.7293 3.25 18V6C3.25 5.27065 3.53973 4.57118 4.05546 4.05546C4.57118 3.53973 5.27065 3.25 6 3.25H12C12.1989 3.25 12.3897 3.32902 12.5303 3.46967C12.671 3.61032 12.75 3.80109 12.75 4C12.75 4.19891 12.671 4.38968 12.5303 4.53033C12.3897 4.67098 12.1989 4.75 12 4.75H6C5.66848 4.75 5.35054 4.8817 5.11612 5.11612C4.8817 5.35054 4.75 5.66848 4.75 6V18C4.75 18.3315 4.8817 18.6495 5.11612 18.8839C5.35054 19.1183 5.66848 19.25 6 19.25H18C18.3315 19.25 18.6495 19.1183 18.8839 18.8839C19.1183 18.6495 19.25 18.3315 19.25 18V12C19.25 11.8011 19.329 11.6103 19.4697 11.4697C19.6103 11.329 19.8011 11.25 20 11.25C20.1989 11.25 20.3897 11.329 20.5303 11.4697C20.671 11.6103 20.75 11.8011 20.75 12V18C20.75 18.7293 20.4603 19.4288 19.9445 19.9445C19.4288 20.4603 18.7293 20.75 18 20.75Z"
-                            fill="#ffffff"
-                          ></path>{" "}
-                          <path
-                            d="M20 8.75C19.8019 8.74741 19.6126 8.66756 19.4725 8.52747C19.3324 8.38737 19.2526 8.19811 19.25 8V4.75H16C15.8011 4.75 15.6103 4.67098 15.4697 4.53033C15.329 4.38968 15.25 4.19891 15.25 4C15.25 3.80109 15.329 3.61032 15.4697 3.46967C15.6103 3.32902 15.8011 3.25 16 3.25H20C20.1981 3.25259 20.3874 3.33244 20.5275 3.47253C20.6676 3.61263 20.7474 3.80189 20.75 4V8C20.7474 8.19811 20.6676 8.38737 20.5275 8.52747C20.3874 8.66756 20.1981 8.74741 20 8.75Z"
-                            fill="#ffffff"
-                          ></path>{" "}
-                          <path
-                            d="M13.5 11.25C13.3071 11.2352 13.1276 11.1455 13 11C12.877 10.8625 12.809 10.6845 12.809 10.5C12.809 10.3155 12.877 10.1375 13 10L19.5 3.5C19.5687 3.42631 19.6515 3.36721 19.7435 3.32622C19.8355 3.28523 19.9348 3.26319 20.0355 3.26141C20.1362 3.25963 20.2362 3.27816 20.3296 3.31588C20.423 3.3536 20.5078 3.40974 20.579 3.48096C20.6503 3.55218 20.7064 3.63701 20.7441 3.7304C20.7818 3.82379 20.8004 3.92382 20.7986 4.02452C20.7968 4.12523 20.7748 4.22454 20.7338 4.31654C20.6928 4.40854 20.6337 4.49134 20.56 4.56L14 11C13.8724 11.1455 13.6929 11.2352 13.5 11.25Z"
-                            fill="#ffffff"
-                          ></path>{" "}
-                        </g>
-                      </svg>
-                      <svg
-                        title="Edit profile"
-                        onClick={handleEditProfile}
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        style={{ cursor: "pointer", marginLeft: "20px" }}
-                      >
-                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                        <g
-                          id="SVGRepo_tracerCarrier"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        ></g>
-                        <g id="SVGRepo_iconCarrier">
-                          {" "}
-                          <path
-                            d="M18.9445 9.1875L14.9445 5.1875M18.9445 9.1875L13.946 14.1859C13.2873 14.8446 12.4878 15.3646 11.5699 15.5229C10.6431 15.6828 9.49294 15.736 8.94444 15.1875C8.39595 14.639 8.44915 13.4888 8.609 12.562C8.76731 11.6441 9.28735 10.8446 9.946 10.1859L14.9445 5.1875M18.9445 9.1875C18.9445 9.1875 21.9444 6.1875 19.9444 4.1875C17.9444 2.1875 14.9445 5.1875 14.9445 5.1875M20.5 12C20.5 18.5 18.5 20.5 12 20.5C5.5 20.5 3.5 18.5 3.5 12C3.5 5.5 5.5 3.5 12 3.5"
-                            stroke="#ffffff"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          ></path>{" "}
-                        </g>
-                      </svg>
                     </div>
                   </YourName>
                   <YourOthers>
@@ -392,6 +404,28 @@ function Selling() {
                           </g>
                         </svg>
                         <a href={profileData.urlS}>{profileData.urlS}</a>
+                      </li>
+                      <li>
+                        <svg
+                          fill="#ffffff"
+                          xmlns="http://www.w3.org/2000/svg"
+                          preserveAspectRatio="xMidYMid"
+                          viewBox="0 0 31.812 26"
+                        >
+                          <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                          <g
+                            id="SVGRepo_tracerCarrier"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></g>
+                          <g id="SVGRepo_iconCarrier">
+                            {" "}
+                            <path d="M20.877,2.000 C22.519,2.000 24.382,2.652 25.426,3.738 C26.724,3.486 27.949,3.025 29.050,2.386 C28.625,3.687 27.718,4.779 26.540,5.469 C27.693,5.332 28.797,5.035 29.820,4.590 C29.054,5.707 28.087,6.690 26.971,7.477 C26.981,7.715 26.987,7.955 26.987,8.195 C26.987,15.562 21.445,24.000 10.939,24.000 C7.715,24.000 4.507,23.133 1.982,21.551 C2.428,21.605 2.883,21.631 3.343,21.631 C6.019,21.631 8.482,20.740 10.439,19.242 C7.937,19.199 5.827,17.586 5.103,15.373 C5.450,15.437 5.810,15.473 6.178,15.473 C6.696,15.473 7.203,15.406 7.681,15.277 C5.068,14.768 3.100,12.514 3.100,9.813 C3.100,9.787 3.100,9.764 3.100,9.740 C3.871,10.158 4.750,10.410 5.687,10.440 C4.154,9.437 3.147,7.734 3.147,5.799 C3.147,4.777 3.428,3.818 3.919,2.998 C6.735,6.367 10.945,8.588 15.693,8.822 C15.594,8.414 15.543,7.984 15.543,7.553 C15.543,4.473 17.721,2.000 20.877,2.000 M29.820,4.590 L29.825,4.590 M20.877,-0.000 C17.033,-0.000 14.060,2.753 13.614,6.552 C10.425,5.905 7.524,4.204 5.440,1.711 C5.061,1.257 4.503,0.998 3.919,0.998 C3.867,0.998 3.815,1.000 3.763,1.004 C3.123,1.055 2.547,1.413 2.216,1.966 C1.525,3.122 1.159,4.447 1.159,5.799 C1.159,6.700 1.321,7.579 1.625,8.400 C1.300,8.762 1.113,9.238 1.113,9.740 L1.113,9.813 C1.113,11.772 1.882,13.589 3.160,14.952 C3.087,15.294 3.103,15.655 3.215,15.998 C3.657,17.348 4.459,18.510 5.499,19.396 C4.800,19.552 4.079,19.631 3.343,19.631 C2.954,19.631 2.577,19.609 2.222,19.565 C2.141,19.556 2.061,19.551 1.981,19.551 C1.148,19.551 0.391,20.078 0.108,20.886 C-0.202,21.770 0.140,22.753 0.932,23.249 C3.764,25.023 7.318,26.000 10.939,26.000 C17.778,26.000 22.025,22.843 24.383,20.195 C27.243,16.984 28.907,12.718 28.972,8.455 C29.899,7.682 30.717,6.790 31.410,5.792 C31.661,5.458 31.810,5.041 31.810,4.590 C31.810,3.909 31.473,3.308 30.958,2.946 C31.181,2.176 30.925,1.342 30.303,0.833 C29.940,0.537 29.496,0.386 29.049,0.386 C28.708,0.386 28.365,0.474 28.056,0.654 C27.391,1.040 26.680,1.344 25.931,1.562 C24.555,0.592 22.688,-0.000 20.877,-0.000 L20.877,-0.000 Z"></path>{" "}
+                          </g>
+                        </svg>
+                        <a href={profileData.twitterLink}>
+                          {profileData.twitterLink}
+                        </a>
                       </li>
                       <li>
                         <svg
@@ -423,54 +457,9 @@ function Selling() {
                             ></path>
                           </g>
                         </svg>
-                        {profileData.country}
-                      </li>
-                      <li>
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                          <g
-                            id="SVGRepo_tracerCarrier"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          ></g>
-                          <g id="SVGRepo_iconCarrier">
-                            <g clipPath="url(#clip0_429_11195)">
-                              <path
-                                d="M15 22L14.3066 23.0401C14.6902 23.2958 15.1834 23.3196 15.5898 23.1021C15.9963 22.8846 16.25 22.461 16.25 22H15ZM12 20L12.6934 18.96C12.2735 18.68 11.7265 18.68 11.3066 18.96L12 20ZM9.00002 22H7.75002C7.75002 22.461 8.00375 22.8846 8.41019 23.1021C8.81664 23.3196 9.30982 23.2958 9.69339 23.0401L9.00002 22ZM8.75086 3.53713L8.65048 4.7831L8.75086 3.53713ZM10.4347 2.83967L9.48267 2.02962L9.48267 2.02962L10.4347 2.83967ZM6.53191 5.68606L5.28595 5.78644L6.53191 5.68606ZM8.68606 3.53191L8.78644 2.28595L8.68606 3.53191ZM5.83967 7.43468L6.64972 8.38669L6.64972 8.38668L5.83967 7.43468ZM6.53713 5.75086L7.7831 5.65048L6.53713 5.75086ZM5.79016 10.5232L4.98011 11.4752L4.98012 11.4752L5.79016 10.5232ZM5.79016 7.4768L4.98012 6.52479L4.98011 6.5248L5.79016 7.4768ZM6.53713 12.2492L5.29117 12.1488L5.29117 12.1488L6.53713 12.2492ZM5.83967 10.5654L6.64972 9.61335L6.64972 9.61334L5.83967 10.5654ZM8.68606 14.4681L8.78644 15.7141H8.78644L8.68606 14.4681ZM6.53191 12.314L7.77788 12.4143L7.77788 12.4143L6.53191 12.314ZM10.4347 15.1604L11.3867 14.3503L11.3867 14.3503L10.4347 15.1604ZM8.75086 14.4629L8.65048 13.2169H8.65048L8.75086 14.4629ZM13.5232 15.2099L14.4752 16.0199L14.4752 16.0199L13.5232 15.2099ZM10.4768 15.2099L9.52479 16.0199L9.5248 16.0199L10.4768 15.2099ZM15.2492 14.4629L15.3496 13.2169H15.3496L15.2492 14.4629ZM13.5654 15.1604L12.6133 14.3503L12.6133 14.3503L13.5654 15.1604ZM17.4681 12.314L18.7141 12.2136V12.2136L17.4681 12.314ZM15.314 14.4681L15.2136 15.7141H15.2136L15.314 14.4681ZM18.1604 10.5654L18.9704 11.5174L18.9704 11.5174L18.1604 10.5654ZM17.4629 12.2492L16.2169 12.3496V12.3496L17.4629 12.2492ZM18.2099 7.4768L19.0199 6.5248L19.0199 6.5248L18.2099 7.4768ZM18.2099 10.5232L17.3998 9.57122L17.3998 9.57122L18.2099 10.5232ZM17.4629 5.75086L16.2169 5.65048V5.65048L17.4629 5.75086ZM18.1604 7.43468L17.3503 8.38668L17.3503 8.38668L18.1604 7.43468ZM15.314 3.53191L15.2136 2.28595L15.2136 2.28595L15.314 3.53191ZM17.4681 5.68606L18.7141 5.78644V5.78644L17.4681 5.68606ZM13.5654 2.83967L14.5174 2.02962L14.5174 2.02962L13.5654 2.83967ZM15.2492 3.53713L15.3496 4.7831L15.3496 4.7831L15.2492 3.53713ZM13.5232 2.79016L12.5712 3.60021L12.5712 3.60022L13.5232 2.79016ZM10.4768 2.79016L11.4288 3.60021L11.4288 3.60021L10.4768 2.79016ZM9.00002 14.4584L9.05526 13.2096L9.00002 14.4584ZM15.6934 20.96L12.6934 18.96L11.3066 21.0401L14.3066 23.0401L15.6934 20.96ZM11.3066 18.96L8.30664 20.96L9.69339 23.0401L12.6934 21.0401L11.3066 18.96ZM12.5712 3.60022L12.6134 3.64973L14.5174 2.02962L14.4752 1.98011L12.5712 3.60022ZM15.3496 4.7831L15.4144 4.77788L15.2136 2.28595L15.1488 2.29117L15.3496 4.7831ZM16.2222 5.58568L16.2169 5.65048L18.7089 5.85124L18.7141 5.78644L16.2222 5.58568ZM17.3503 8.38668L17.3998 8.42881L19.0199 6.5248L18.9704 6.48267L17.3503 8.38668ZM17.3998 9.57122L17.3503 9.61335L18.9704 11.5174L19.0199 11.4752L17.3998 9.57122ZM16.2169 12.3496L16.2222 12.4144L18.7141 12.2136L18.7089 12.1488L16.2169 12.3496ZM15.4144 13.2222L15.3496 13.2169L15.1488 15.7089L15.2136 15.7141L15.4144 13.2222ZM12.6133 14.3503L12.5712 14.3998L14.4752 16.0199L14.5174 15.9704L12.6133 14.3503ZM11.4288 14.3998L11.3867 14.3503L9.48266 15.9704L9.52479 16.0199L11.4288 14.3998ZM8.65048 13.2169L8.58568 13.2222L8.78644 15.7141L8.85124 15.7089L8.65048 13.2169ZM7.77788 12.4143L7.7831 12.3495L5.29117 12.1488L5.28595 12.2136L7.77788 12.4143ZM6.64972 9.61334L6.60021 9.57122L4.98012 11.4752L5.02963 11.5174L6.64972 9.61334ZM6.60021 8.42881L6.64972 8.38669L5.02963 6.48266L4.98012 6.52479L6.60021 8.42881ZM7.7831 5.65048L7.77788 5.58568L5.28595 5.78644L5.29117 5.85124L7.7831 5.65048ZM8.58568 4.77788L8.65048 4.7831L8.85124 2.29117L8.78644 2.28595L8.58568 4.77788ZM11.3867 3.64972L11.4288 3.60021L9.5248 1.98011L9.48267 2.02962L11.3867 3.64972ZM8.65048 4.7831C9.69169 4.86698 10.7098 4.44528 11.3867 3.64972L9.48267 2.02962C9.32645 2.21321 9.09152 2.31053 8.85124 2.29117L8.65048 4.7831ZM7.77788 5.58568C7.74077 5.12504 8.12504 4.74077 8.58568 4.77788L8.78644 2.28595C6.79035 2.12514 5.12514 3.79035 5.28595 5.78644L7.77788 5.58568ZM6.64972 8.38668C7.44528 7.70975 7.86698 6.69169 7.7831 5.65048L5.29117 5.85124C5.31053 6.09152 5.21321 6.32645 5.02962 6.48267L6.64972 8.38668ZM6.60021 9.57122C6.24825 9.27174 6.24825 8.72829 6.60021 8.42881L4.98011 6.5248C3.45495 7.82253 3.45495 10.1775 4.98011 11.4752L6.60021 9.57122ZM7.7831 12.3496C7.86698 11.3083 7.44528 10.2903 6.64972 9.61335L5.02962 11.5174C5.21321 11.6736 5.31053 11.9085 5.29117 12.1488L7.7831 12.3496ZM8.58568 13.2222C8.12504 13.2593 7.74077 12.875 7.77788 12.4143L5.28595 12.2136C5.12514 14.2097 6.79035 15.8749 8.78644 15.7141L8.58568 13.2222ZM12.5712 14.3998C12.2717 14.7518 11.7283 14.7518 11.4288 14.3998L9.5248 16.0199C10.8225 17.5451 13.1775 17.5451 14.4752 16.0199L12.5712 14.3998ZM16.2222 12.4143C16.2593 12.875 15.875 13.2593 15.4143 13.2222L15.2136 15.7141C17.2097 15.8749 18.8749 14.2097 18.7141 12.2136L16.2222 12.4143ZM17.3503 9.61335C16.5547 10.2903 16.1331 11.3083 16.2169 12.3496L18.7089 12.1488C18.6895 11.9085 18.7868 11.6736 18.9704 11.5174L17.3503 9.61335ZM17.3998 8.42881C17.7518 8.72829 17.7518 9.27174 17.3998 9.57122L19.0199 11.4752C20.5451 10.1775 20.5451 7.82253 19.0199 6.5248L17.3998 8.42881ZM16.2169 5.65048C16.1331 6.69169 16.5547 7.70975 17.3503 8.38668L18.9704 6.48267C18.7868 6.32645 18.6895 6.09152 18.7089 5.85124L16.2169 5.65048ZM15.4144 4.77788C15.875 4.74077 16.2593 5.12504 16.2222 5.58568L18.7141 5.78644C18.8749 3.79035 17.2097 2.12514 15.2136 2.28595L15.4144 4.77788ZM12.6133 3.64972C13.2903 4.44528 14.3083 4.86698 15.3496 4.7831L15.1488 2.29117C14.9085 2.31053 14.6736 2.21321 14.5174 2.02962L12.6133 3.64972ZM14.4752 1.98011C13.1775 0.454954 10.8225 0.454952 9.5248 1.98011L11.4288 3.60021C11.7283 3.24825 12.2717 3.24825 12.5712 3.60021L14.4752 1.98011ZM11.3867 14.3503C10.7978 13.6583 9.95101 13.2492 9.05526 13.2096L8.94477 15.7072C9.15141 15.7163 9.34686 15.8108 9.48267 15.9704L11.3867 14.3503ZM9.05526 13.2096C8.9211 13.2037 8.78593 13.206 8.65048 13.2169L8.85124 15.7089C8.88266 15.7063 8.91388 15.7058 8.94477 15.7072L9.05526 13.2096ZM10.25 22V14.4584H7.75002V22H10.25ZM15.3496 13.2169C15.2141 13.206 15.0789 13.2037 14.9448 13.2096L15.0553 15.7072C15.0861 15.7058 15.1174 15.7063 15.1488 15.7089L15.3496 13.2169ZM14.9448 13.2096C14.049 13.2492 13.2022 13.6583 12.6133 14.3503L14.5174 15.9704C14.6532 15.8108 14.8486 15.7163 15.0553 15.7072L14.9448 13.2096ZM13.75 14.4584V22H16.25V14.4584H13.75Z"
-                                fill="#ffffff"
-                              ></path>
-                              <path
-                                d="M14 8L11 11L10 10"
-                                stroke="#ffffff"
-                                strokeWidth="2.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              ></path>
-                            </g>
-                            <defs>
-                              <clipPath id="clip0_429_11195">
-                                <rect
-                                  width="24"
-                                  height="24"
-                                  fill="white"
-                                ></rect>{" "}
-                              </clipPath>{" "}
-                            </defs>{" "}
-                          </g>
-                        </svg>
-                        <div
-                          style={{ display: "flex", flexDirection: "column" }}
-                        >
-                          {profileData.skill.map((skillData, idx) => (
-                            <div style={{ margin: "1px" }} key={idx}>
-                              {skillData}
-                            </div>
-                          ))}
-                        </div>
+                        <p style={{ marginLeft: "7px" }}>
+                          {profileData.country}
+                        </p>
                       </li>
                       <li>
                         <svg
@@ -492,10 +481,15 @@ function Selling() {
                           </g>
                         </svg>
                         <div
-                          style={{ display: "flex", flexDirection: "column" }}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "start",
+                            flexWrap: "wrap",
+                          }}
                         >
                           {profileData.language.map((langData, idx) => (
-                            <div style={{ margin: "1px" }} key={idx}>
+                            <div style={{ margin: "0 10px" }} key={idx}>
                               {langData}
                             </div>
                           ))}
@@ -504,9 +498,89 @@ function Selling() {
                     </ul>
                   </YourOthers>
                   <YourDes>
-                    <span>About</span>
+                    <span>About Me</span>
                     <p>{profileData.description}</p>
                   </YourDes>
+                  <YourSkills>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "start",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <svg
+                        width="64px"
+                        height="64px"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g
+                          id="SVGRepo_tracerCarrier"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        ></g>
+                        <g id="SVGRepo_iconCarrier">
+                          {" "}
+                          <path
+                            d="M19 9C19 10.45 18.57 11.78 17.83 12.89C16.75 14.49 15.04 15.62 13.05 15.91C12.71 15.97 12.36 16 12 16C11.64 16 11.29 15.97 10.95 15.91C8.96 15.62 7.25 14.49 6.17 12.89C5.43 11.78 5 10.45 5 9C5 5.13 8.13 2 12 2C15.87 2 19 5.13 19 9Z"
+                            stroke="#ffffff"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>{" "}
+                          <path
+                            d="M21.25 18.47L19.6 18.86C19.23 18.95 18.94 19.23 18.86 19.6L18.51 21.07C18.32 21.87 17.3 22.11 16.77 21.48L12 16L7.22996 21.49C6.69996 22.12 5.67996 21.88 5.48996 21.08L5.13996 19.61C5.04996 19.24 4.75996 18.95 4.39996 18.87L2.74996 18.48C1.98996 18.3 1.71996 17.35 2.26996 16.8L6.16996 12.9C7.24996 14.5 8.95996 15.63 10.95 15.92C11.29 15.98 11.64 16.01 12 16.01C12.36 16.01 12.71 15.98 13.05 15.92C15.04 15.63 16.75 14.5 17.83 12.9L21.73 16.8C22.28 17.34 22.01 18.29 21.25 18.47Z"
+                            stroke="#ffffff"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>{" "}
+                          <path
+                            d="M12.58 5.98L13.17 7.15999C13.25 7.31999 13.46 7.48 13.65 7.51L14.72 7.68999C15.4 7.79999 15.56 8.3 15.07 8.79L14.24 9.61998C14.1 9.75998 14.02 10.03 14.07 10.23L14.31 11.26C14.5 12.07 14.07 12.39 13.35 11.96L12.35 11.37C12.17 11.26 11.87 11.26 11.69 11.37L10.69 11.96C9.96997 12.38 9.53997 12.07 9.72997 11.26L9.96997 10.23C10.01 10.04 9.93997 9.75998 9.79997 9.61998L8.96997 8.79C8.47997 8.3 8.63997 7.80999 9.31997 7.68999L10.39 7.51C10.57 7.48 10.78 7.31999 10.86 7.15999L11.45 5.98C11.74 5.34 12.26 5.34 12.58 5.98Z"
+                            stroke="#ffffff"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>{" "}
+                        </g>
+                      </svg>
+                      <p
+                        style={{
+                          fontSize: "20px",
+                          marginLeft: "10px",
+                        }}
+                      >
+                        Skills
+                      </p>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "start",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      {profileData.skill.map((skillData, idx) => (
+                        <div
+                          style={{
+                            margin: "10px",
+                            padding: "7px",
+                            borderRadius: "5px",
+                            border: "1px solid var(--line)",
+                            marginLeft: "0",
+                          }}
+                          key={idx}
+                        >
+                          {skillData}
+                        </div>
+                      ))}
+                    </div>
+                  </YourSkills>
                 </YourDetail>
               ))}
               {displayGig.map((gigData, idx) => (
@@ -523,11 +597,11 @@ function Selling() {
                     ></ServiceImg>
                   </ServiceHead>
                   <Offer>
-                    <span>Starting from:</span>
-                    <h4> {gigData.gigPrice} ETH</h4>
-                    <br /> <br />
-                    <span>Offer:</span>
-                    <p>{gigData.gigOffer}</p>
+                    <span>Bear Market Price:</span>
+                    <h4>$ {gigData.gigPrice}</h4>
+                    <br />
+                    <span>Bull Market Price:</span>
+                    <h4>$ {gigData.gigBullPrice}</h4>
                   </Offer>
                   <ServiceDes>
                     <span>Service Description: </span>
@@ -535,7 +609,7 @@ function Selling() {
                   </ServiceDes>
                 </YourService>
               ))}
-            </div>
+            </ProfileContent>
           )}
         </Container>
       ) : (
@@ -543,8 +617,12 @@ function Selling() {
           {loading ? (
             <Loading />
           ) : (
+            //
+            //form starts from here
+            //
             <form onSubmit={editButton ? saveChanges : uploadFileToStorage}>
               {firstPage ? (
+                //profile form
                 <ProfileContainer>
                   <h2>About Yourself</h2>
                   <WarningTxt>
@@ -590,7 +668,7 @@ function Selling() {
                     required
                     spellCheck="true"
                     placeholder="Title to yourself"
-                    maxLength="70"
+                    maxLength="100"
                     value={profileTitle}
                     onChange={(e) => setProfileTitle(e.target.value)}
                   />
@@ -619,14 +697,23 @@ function Selling() {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                   ></textarea>
-                  <label>Your Social Media Or Website Link</label>
+                  <label>Your Website Link</label>
                   <input
                     type="url"
-                    placeholder="Website link"
+                    placeholder="Website Link"
                     required
                     spellCheck="true"
                     value={urlS}
                     onChange={(e) => setUrl(e.target.value)}
+                  />
+                  <label>Your Twitter Link</label>
+                  <input
+                    type="url"
+                    placeholder="Twitter Handle"
+                    required
+                    spellCheck="true"
+                    value={twitterLink}
+                    onChange={(e) => setTwitterLink(e.target.value)}
                   />
                   <label>
                     Type your skills, after each skill press 'Enter' on your
@@ -652,6 +739,16 @@ function Selling() {
                     name="languages"
                     placeHolder="Languages you can speak"
                   />
+
+                  <label>Mention Your Educational Background</label>
+                  <textarea
+                    // value={lang}
+                    // onChange={setLang}
+                    required
+                    style={{ background: "black !important", width: "100%" }}
+                    name="languages"
+                    placeHolder="Education"
+                  />
                   <BtnContainer>
                     <button onClick={() => setUserLogin(true)}>Back</button>
                     <button onClick={() => setFirstPage(false)}>
@@ -660,6 +757,7 @@ function Selling() {
                   </BtnContainer>
                 </ProfileContainer>
               ) : (
+                //gig form
                 <GigContainer>
                   <h2>Your Service</h2>
                   <label>Upload Your Gig Picture</label>
@@ -734,31 +832,20 @@ function Selling() {
                       Discord Server Specialist
                     </option>
                   </select>
-                  <label>What are you offering in this gig</label>
-                  <textarea
-                    name="offer"
-                    cols="30"
-                    rows="10"
-                    placeholder="Gig offer"
-                    required
-                    spellCheck="true"
-                    defaultValue={gigOffer}
-                    onChange={(e) => setGigOffer(e.target.value)}
-                  ></textarea>
-                  <label>Set Bear Market Price</label>
+                  <label>Set Bear Market Price In USD</label>
                   <input
                     type="number"
-                    placeholder="Bear Market"
+                    placeholder="Bear Market In USD"
                     className="noscroll"
                     spellCheck="true"
                     defaultValue={gigPrice}
                     onChange={(e) => setGigPrice(e.target.value)}
                     required
                   />
-                  <label>Set Bull Market Price</label>
+                  <label>Set Bull Market Price In USD</label>
                   <input
                     type="number"
-                    placeholder="Bull Market"
+                    placeholder="Bull Market In USD"
                     className="noscroll"
                     spellCheck="true"
                     defaultValue={gigBullPrice}
@@ -809,7 +896,7 @@ const Wrapper = styled.div`
 const Container = styled.div`
   display: flex;
   width: 98%;
-  max-width: 1147px;
+  max-width: 1347px;
   align-items: center;
   justify-content: center;
   flex-direction: column;
@@ -845,6 +932,12 @@ const Container = styled.div`
       cursor: pointer;
     }
   }
+`;
+
+const ProfileContent = styled.div`
+  display: grid;
+  grid-template-columns: 30% auto;
+  grid-gap: 20px;
 `;
 
 const ProfileContainer = styled.div`
@@ -897,33 +990,20 @@ const GigContainer = styled.div`
 `;
 
 const YourDetail = styled.div`
-  border: 1px solid var(--gray);
-  margin: 20px 0;
   background: var(--darkBg);
-  padding: 40px 30px;
-  display: grid;
-  grid-gap: 30px;
-  grid-template-columns: 30% 70%;
-  grid-template-rows: auto auto auto;
   border-radius: 10px;
-  @media (max-width: 970px) {
-    grid-template-columns: auto auto;
-    grid-template-rows: auto auto auto;
-  }
-  @media (max-width: 812px) {
-    grid-template-columns: 60% 40%;
-  }
-  @media (max-width: 575px) {
-    grid-template-columns: auto;
-    grid-template-rows: auto auto auto auto;
-  }
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  padding: 10px;
 `;
 
 const PPContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  grid-row: 1/3;
   margin: 20px 0;
   border-radius: 10px;
   img {
@@ -963,18 +1043,25 @@ const PPContainer = styled.div`
 `;
 
 const YourName = styled.div`
-  grid-row: 1/2;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  flex-direction: column;
   padding: 20px 10px;
-  padding-right: 30px;
+  margin: 0 auto;
+  width: 95%;
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
   h3 {
     font-size: 22px;
   }
   svg {
-    width: 30px;
-    height: 30px;
+    width: 22px;
+    height: 22px;
   }
   button {
     padding: 7px 20px;
@@ -1008,9 +1095,13 @@ const YourName = styled.div`
 `;
 
 const YourOthers = styled.div`
-  grid-row: 3/4;
   display: flex;
   justify-content: center;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  width: 95%;
+  margin: 0 auto;
+  padding: 20px 0;
   ul {
     width: 100%;
     display: grid;
@@ -1019,7 +1110,6 @@ const YourOthers = styled.div`
     padding: 0 10px;
     li {
       word-wrap: break-word;
-      margin: 10px;
       list-style: none;
       display: flex;
       align-items: center;
@@ -1030,12 +1120,13 @@ const YourOthers = styled.div`
         width: 160px;
         height: 1.2em;
         white-space: nowrap;
+        margin-left: 7px;
       }
     }
   }
   svg {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     @media (max-width: 770px) {
       width: 30px;
       height: 30px;
@@ -1085,36 +1176,31 @@ const YourDes = styled.div`
 
 const YourService = styled.div`
   display: grid;
-  grid-template-columns: auto auto 30%;
-  @media (max-width: 914px) {
-    grid-template-columns: auto;
-  }
+  grid-template-columns: 60% auto;
+  height: fit-content;
+  grid-gap: 20px;
 `;
 
 const ServiceHead = styled.div`
-  border: 1px solid var(--gray);
-  background: var(--darkBg);
-  margin-bottom: 10px;
-  margin-right: 10px;
   grid-column: 1/3;
+  height: fit-content;
   padding: 20px;
+  border: 1px solid var(--line);
+  background: var(--darkBg);
   border-radius: 10px;
   h2 {
     font-size: 28px;
     margin-bottom: 10px;
   }
-  @media (max-width: 914px) {
-    grid-column: auto;
-    margin-right: 0;
-  }
 `;
 
 const Offer = styled.div`
-  border: 1px solid var(--gray);
-  background: var(--darkBg);
-  margin-bottom: 10px;
-  margin-left: 10px;
+  border: 2px solid red;
+  height: fit-content;
+  grid-column: 2/3;
   padding: 20px;
+  border: 1px solid var(--line);
+  background: var(--darkBg);
   border-radius: 10px;
   h4 {
     font-size: 20px;
@@ -1130,18 +1216,14 @@ const Offer = styled.div`
     font-size: 18px;
     white-space: pre-line;
   }
-  @media (max-width: 914px) {
-    grid-column: auto;
-    margin-left: 0;
-  }
 `;
 
 const ServiceDes = styled.div`
-  border: 1px solid var(--gray);
-  background: var(--darkBg);
-  margin-top: 10px;
-  grid-column: 1/4;
+  grid-column: 1/2;
+  grid-row: 2/3;
   padding: 20px;
+  border: 1px solid var(--line);
+  background: var(--darkBg);
   border-radius: 10px;
   span {
     color: var(--darkText);
@@ -1151,15 +1233,27 @@ const ServiceDes = styled.div`
     font-size: 16px;
     white-space: pre-line;
   }
-  @media (max-width: 914px) {
-    grid-column: auto;
-  }
 `;
 
 const ServiceImg = styled.div`
-  height: 50vh;
+  min-height: 70vh;
   img {
     width: 100%;
+  }
+`;
+
+const YourSkills = styled.div`
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  width: 95%;
+  margin: 0 auto;
+  padding: 20px 0;
+  div {
+    display: flex;
+  }
+  svg {
+    width: 30px;
+    height: 30px;
   }
 `;
 
