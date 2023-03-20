@@ -10,6 +10,7 @@
   --gray: rgb(75, 75, 75);
   --line: rgb(47, 47, 47);
   --bg: linear-gradient(30deg, #101015, #1a1c35, #181a3d);
+  --link: #177dc2;
 }
 
 * {

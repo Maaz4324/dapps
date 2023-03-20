@@ -83,7 +83,7 @@ function SellerProfile({ setSellerState }) {
                       width="64px"
                       height="64px"
                       viewBox="0 0 24 24"
-                      fill="none"
+                      fill="#5fd3f3"
                       xmlns="http://www.w3.org/2000/svg"
                       style={{ cursor: "pointer" }}
                       onClick={copyLink}
@@ -98,15 +98,15 @@ function SellerProfile({ setSellerState }) {
                         {" "}
                         <path
                           d="M18 20.75H6C5.27065 20.75 4.57118 20.4603 4.05546 19.9445C3.53973 19.4288 3.25 18.7293 3.25 18V6C3.25 5.27065 3.53973 4.57118 4.05546 4.05546C4.57118 3.53973 5.27065 3.25 6 3.25H12C12.1989 3.25 12.3897 3.32902 12.5303 3.46967C12.671 3.61032 12.75 3.80109 12.75 4C12.75 4.19891 12.671 4.38968 12.5303 4.53033C12.3897 4.67098 12.1989 4.75 12 4.75H6C5.66848 4.75 5.35054 4.8817 5.11612 5.11612C4.8817 5.35054 4.75 5.66848 4.75 6V18C4.75 18.3315 4.8817 18.6495 5.11612 18.8839C5.35054 19.1183 5.66848 19.25 6 19.25H18C18.3315 19.25 18.6495 19.1183 18.8839 18.8839C19.1183 18.6495 19.25 18.3315 19.25 18V12C19.25 11.8011 19.329 11.6103 19.4697 11.4697C19.6103 11.329 19.8011 11.25 20 11.25C20.1989 11.25 20.3897 11.329 20.5303 11.4697C20.671 11.6103 20.75 11.8011 20.75 12V18C20.75 18.7293 20.4603 19.4288 19.9445 19.9445C19.4288 20.4603 18.7293 20.75 18 20.75Z"
-                          fill="#ffffff"
+                          fill="#5fd3f3"
                         ></path>{" "}
                         <path
                           d="M20 8.75C19.8019 8.74741 19.6126 8.66756 19.4725 8.52747C19.3324 8.38737 19.2526 8.19811 19.25 8V4.75H16C15.8011 4.75 15.6103 4.67098 15.4697 4.53033C15.329 4.38968 15.25 4.19891 15.25 4C15.25 3.80109 15.329 3.61032 15.4697 3.46967C15.6103 3.32902 15.8011 3.25 16 3.25H20C20.1981 3.25259 20.3874 3.33244 20.5275 3.47253C20.6676 3.61263 20.7474 3.80189 20.75 4V8C20.7474 8.19811 20.6676 8.38737 20.5275 8.52747C20.3874 8.66756 20.1981 8.74741 20 8.75Z"
-                          fill="#ffffff"
+                          fill="#5fd3f3"
                         ></path>{" "}
                         <path
                           d="M13.5 11.25C13.3071 11.2352 13.1276 11.1455 13 11C12.877 10.8625 12.809 10.6845 12.809 10.5C12.809 10.3155 12.877 10.1375 13 10L19.5 3.5C19.5687 3.42631 19.6515 3.36721 19.7435 3.32622C19.8355 3.28523 19.9348 3.26319 20.0355 3.26141C20.1362 3.25963 20.2362 3.27816 20.3296 3.31588C20.423 3.3536 20.5078 3.40974 20.579 3.48096C20.6503 3.55218 20.7064 3.63701 20.7441 3.7304C20.7818 3.82379 20.8004 3.92382 20.7986 4.02452C20.7968 4.12523 20.7748 4.22454 20.7338 4.31654C20.6928 4.40854 20.6337 4.49134 20.56 4.56L14 11C13.8724 11.1455 13.6929 11.2352 13.5 11.25Z"
-                          fill="#ffffff"
+                          fill="#5fd3f3"
                         ></path>{" "}
                       </g>
                     </svg>
@@ -126,7 +126,7 @@ function SellerProfile({ setSellerState }) {
                   <li>
                     <svg
                       viewBox="0 0 24 24"
-                      fill="none"
+                      fill="#5fd3f3"
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -140,15 +140,15 @@ function SellerProfile({ setSellerState }) {
                           fillRule="evenodd"
                           clipRule="evenodd"
                           d="M10.975 14.51a1.05 1.05 0 0 0 0-1.485 2.95 2.95 0 0 1 0-4.172l3.536-3.535a2.95 2.95 0 1 1 4.172 4.172l-1.093 1.092a1.05 1.05 0 0 0 1.485 1.485l1.093-1.092a5.05 5.05 0 0 0-7.142-7.142L9.49 7.368a5.05 5.05 0 0 0 0 7.142c.41.41 1.075.41 1.485 0zm2.05-5.02a1.05 1.05 0 0 0 0 1.485 2.95 2.95 0 0 1 0 4.172l-3.5 3.5a2.95 2.95 0 1 1-4.171-4.172l1.025-1.025a1.05 1.05 0 0 0-1.485-1.485L3.87 12.99a5.05 5.05 0 0 0 7.142 7.142l3.5-3.5a5.05 5.05 0 0 0 0-7.142 1.05 1.05 0 0 0-1.485 0z"
-                          fill="#ffffff"
+                          fill="#5fd3f3"
                         ></path>
                       </g>
                     </svg>
-                    <a href={profileData.urlS}>{profileData.urlS}</a>
+                    <a href={profileData.urlS}>Website</a>
                   </li>
                   <li>
                     <svg
-                      fill="#ffffff"
+                      fill="#5fd3f3"
                       xmlns="http://www.w3.org/2000/svg"
                       preserveAspectRatio="xMidYMid"
                       viewBox="0 0 31.812 26"
@@ -165,15 +165,14 @@ function SellerProfile({ setSellerState }) {
                       </g>
                     </svg>
                     <a href={profileData.twitterLink}>
-                      {profileData.twitterLink}
+                      {profileData.twitterLink.replace(
+                        "https://twitter.com/",
+                        ""
+                      )}
                     </a>
                   </li>
                   <li>
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                       <g
                         id="SVGRepo_tracerCarrier"
@@ -184,14 +183,14 @@ function SellerProfile({ setSellerState }) {
                         {" "}
                         <path
                           d="M12.8159 20.6077C16.8509 18.5502 20 15.1429 20 11C20 6.58172 16.4183 3 12 3C7.58172 3 4 6.58172 4 11C4 15.1429 7.14909 18.5502 11.1841 20.6077C11.6968 20.8691 12.3032 20.8691 12.8159 20.6077Z"
-                          stroke="#ffffff"
+                          stroke="#5fd3f3"
                           strokeWidth="1.5"
                           strokeLinecap="round"
                           strokeLinejoin="round"
                         ></path>{" "}
                         <path
                           d="M15 11C15 12.6569 13.6569 14 12 14C10.3431 14 9 12.6569 9 11C9 9.34315 10.3431 8 12 8C13.6569 8 15 9.34315 15 11Z"
-                          stroke="#ffffff"
+                          stroke="#5fd3f3"
                           strokeWidth="1.5"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -203,7 +202,7 @@ function SellerProfile({ setSellerState }) {
                   <li>
                     <svg
                       viewBox="0 0 24 24"
-                      fill="none"
+                      fill="#5fd3f3"
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
@@ -215,7 +214,7 @@ function SellerProfile({ setSellerState }) {
                       <g id="SVGRepo_iconCarrier">
                         <path
                           d="M20.58 19.37L17.59 11.01C17.38 10.46 16.91 10.12 16.37 10.12C15.83 10.12 15.37 10.46 15.14 11.03L12.16 19.37C12.02 19.76 12.22 20.19 12.61 20.33C13 20.47 13.43 20.27 13.57 19.88L14.19 18.15H18.54L19.16 19.88C19.27 20.19 19.56 20.38 19.87 20.38C19.95 20.38 20.04 20.37 20.12 20.34C20.51 20.2 20.71 19.77 20.57 19.38L20.58 19.37ZM14.74 16.64L16.38 12.05L18.02 16.64H14.74ZM12.19 7.85C9.92999 11.42 7.89 13.58 5.41 15.02C5.29 15.09 5.16 15.12 5.04 15.12C4.78 15.12 4.53 14.99 4.39 14.75C4.18 14.39 4.3 13.93 4.66 13.73C6.75999 12.51 8.48 10.76 10.41 7.86H4.12C3.71 7.86 3.37 7.52 3.37 7.11C3.37 6.7 3.71 6.36 4.12 6.36H7.87V4.38C7.87 3.97 8.21 3.63 8.62 3.63C9.02999 3.63 9.37 3.97 9.37 4.38V6.36H13.12C13.53 6.36 13.87 6.7 13.87 7.11C13.87 7.52 13.53 7.86 13.12 7.86H12.18L12.19 7.85ZM12.23 15.12C12.1 15.12 11.97 15.09 11.85 15.02C11.2 14.64 10.57 14.22 9.97999 13.78C9.64999 13.53 9.58 13.06 9.83 12.73C10.08 12.4 10.55 12.33 10.88 12.58C11.42 12.99 12.01 13.37 12.61 13.72C12.97 13.93 13.09 14.39 12.88 14.75C12.74 14.99 12.49 15.12 12.23 15.12Z"
-                          fill="#ffffff"
+                          fill="##5fd3f3"
                         ></path>
                       </g>
                     </svg>
@@ -253,37 +252,37 @@ function SellerProfile({ setSellerState }) {
                     width="64px"
                     height="64px"
                     viewBox="0 0 24 24"
-                    fill="none"
+                    fill="#5fd3f3"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                     <g
                       id="SVGRepo_tracerCarrier"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     ></g>
                     <g id="SVGRepo_iconCarrier">
                       {" "}
                       <path
                         d="M19 9C19 10.45 18.57 11.78 17.83 12.89C16.75 14.49 15.04 15.62 13.05 15.91C12.71 15.97 12.36 16 12 16C11.64 16 11.29 15.97 10.95 15.91C8.96 15.62 7.25 14.49 6.17 12.89C5.43 11.78 5 10.45 5 9C5 5.13 8.13 2 12 2C15.87 2 19 5.13 19 9Z"
-                        stroke="#ffffff"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        stroke="#1d1d21"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       ></path>{" "}
                       <path
                         d="M21.25 18.47L19.6 18.86C19.23 18.95 18.94 19.23 18.86 19.6L18.51 21.07C18.32 21.87 17.3 22.11 16.77 21.48L12 16L7.22996 21.49C6.69996 22.12 5.67996 21.88 5.48996 21.08L5.13996 19.61C5.04996 19.24 4.75996 18.95 4.39996 18.87L2.74996 18.48C1.98996 18.3 1.71996 17.35 2.26996 16.8L6.16996 12.9C7.24996 14.5 8.95996 15.63 10.95 15.92C11.29 15.98 11.64 16.01 12 16.01C12.36 16.01 12.71 15.98 13.05 15.92C15.04 15.63 16.75 14.5 17.83 12.9L21.73 16.8C22.28 17.34 22.01 18.29 21.25 18.47Z"
-                        stroke="#ffffff"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        stroke="#1d1d21"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       ></path>{" "}
                       <path
                         d="M12.58 5.98L13.17 7.15999C13.25 7.31999 13.46 7.48 13.65 7.51L14.72 7.68999C15.4 7.79999 15.56 8.3 15.07 8.79L14.24 9.61998C14.1 9.75998 14.02 10.03 14.07 10.23L14.31 11.26C14.5 12.07 14.07 12.39 13.35 11.96L12.35 11.37C12.17 11.26 11.87 11.26 11.69 11.37L10.69 11.96C9.96997 12.38 9.53997 12.07 9.72997 11.26L9.96997 10.23C10.01 10.04 9.93997 9.75998 9.79997 9.61998L8.96997 8.79C8.47997 8.3 8.63997 7.80999 9.31997 7.68999L10.39 7.51C10.57 7.48 10.78 7.31999 10.86 7.15999L11.45 5.98C11.74 5.34 12.26 5.34 12.58 5.98Z"
-                        stroke="#ffffff"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        stroke="#1d1d21"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       ></path>{" "}
                     </g>
                   </svg>
@@ -347,21 +346,21 @@ function SellerProfile({ setSellerState }) {
                       {" "}
                       <path
                         d="M11.5655 4.24138L3.64286 8.64286C3.36266 8.79852 3.36266 9.20148 3.64286 9.35714L11.5655 13.7586C11.8357 13.9087 12.1643 13.9087 12.4345 13.7586L20.5706 9.23853C20.7578 9.13456 20.7578 8.86544 20.5706 8.76147L12.4345 4.24138C12.1643 4.09126 11.8357 4.09126 11.5655 4.24138Z"
-                        stroke="#ffffff"
+                        stroke="#5fd3f3"
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                       ></path>{" "}
                       <path
                         d="M5.5 10.5L5.13149 15.2906C5.05583 16.2742 5.70934 17.1639 6.66043 17.426C7.28355 17.5976 7.96876 17.8017 8.5 18C9.26467 18.2854 10.1126 18.7657 10.7824 19.1841C11.5227 19.6465 12.4773 19.6465 13.2177 19.184C13.8874 18.7657 14.7354 18.2854 15.5 18C16.0312 17.8017 16.7165 17.5976 17.3396 17.4259C18.2907 17.1639 18.9442 16.2742 18.8686 15.2906L18.5 10.5"
-                        stroke="#ffffff"
+                        stroke="#5fd3f3"
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                       ></path>{" "}
                       <path
                         d="M11.5 10.5L9.00772 11.9242C8.38457 12.2802 8 12.9429 8 13.6606V20"
-                        stroke="#ffffff"
+                        stroke="#5fd3f3"
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -421,12 +420,38 @@ function SellerProfile({ setSellerState }) {
                 </div>
               </ServiceHead>
               <Offer>
+                <span>Fixed Weekly Payment:</span>
+                <h4>
+                  <span style={{ color: "#5fd3f3" }}>$</span>{" "}
+                  {gigData.weeklyPrice}
+                </h4>
+                <br />
+                <br />
+                <span>Fixed Monthly Payment:</span>
+                <h4>
+                  <span style={{ color: "#5fd3f3" }}>$</span>{" "}
+                  {gigData.monthlyPrice}
+                </h4>
+                <br />
+                <br />
+                <span>Fixed Price:</span>
+                <h4>
+                  <span style={{ color: "#5fd3f3" }}>$</span>{" "}
+                  {gigData.fixedPrice}
+                </h4>
+                <br />
+                <br />
                 <span>Bear Market Price:</span>
-                <h4>$ {gigData.gigPrice}</h4>
+                <h4>
+                  <span style={{ color: "#5fd3f3" }}>$</span> {gigData.gigPrice}
+                </h4>
                 <br />
                 <br />
                 <span>Bull Market Price:</span>
-                <h4>$ {gigData.gigBullPrice}</h4>
+                <h4>
+                  <span style={{ color: "#5fd3f3" }}>$</span>{" "}
+                  {gigData.gigBullPrice}
+                </h4>
               </Offer>
               <ServiceDes>
                 <span>Service Description: </span>
@@ -528,6 +553,7 @@ const ServiceDes = styled.div`
   border: 1px solid var(--line);
   background: var(--darkBg);
   border-radius: 10px;
+  height: fit-content;
   span {
     color: var(--darkText);
   }
@@ -686,7 +712,7 @@ const YourOthers = styled.div`
       display: flex;
       align-items: center;
       a {
-        color: white;
+        color: var(--link);
         text-overflow: ellipsis;
         overflow: hidden;
         width: 160px;
