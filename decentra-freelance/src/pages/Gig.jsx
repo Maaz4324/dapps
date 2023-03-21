@@ -66,67 +66,72 @@ function Gig({ sellerState }) {
         </Text>
         <CategoryRow>
           <ul>
-            {listCategory.map((gig, key) => (
-              <a key={key} href={"#" + gig}>
-                <li>{gig}</li>
-              </a>
-            ))}
+            {listCategory
+              .filter((item, index) => listCategory.indexOf(item) === index)
+              .map((gig, key) => (
+                <a key={key} href={"#" + gig}>
+                  <li>{gig}</li>
+                </a>
+              ))}
           </ul>
         </CategoryRow>
         {loading ? (
           <Loading />
         ) : (
           <div>
-            {listCategory.map((gig, idx) => (
-              <GigSection key={idx}>
-                <GigHead>
-                  <h3>{gig}</h3>
-                  {categoryData.map((c, no) => (
-                    <div key={no}>
-                      {c.head.toLowerCase() == gig.toLowerCase() && (
-                        <Des>{c.text}</Des>
-                      )}
-                    </div>
-                  ))}
-                </GigHead>
-                <Box>
-                  {listGig.map((value, id) => (
-                    <CardContainer id={gig}>
-                      {value.data.gigCategory == gig && (
-                        <Card
-                          key={id}
-                          onClick={(e) => RenderSeller(e, value.address)}
-                        >
-                          <div
-                            style={{
-                              backgroundImage: `url(https://gateway.ipfscdn.io/ipfs/${value.data.gigImg})`,
-                              backgroundPosition: "center",
-                              backgroundSize: "cover",
-                              backgroundRepeat: "no-repeat",
-                              width: "100%",
-                              height: "30vh",
-                            }}
-                          ></div>
-                          <CardText>
-                            <h5>{value.data.userName}</h5>
-                            <h4>{value.data.gigHead}</h4>
-                            <Line />
-                            <p>
-                              Bear Market Price
-                              <span> ${value.data.gigPrice}</span>
-                            </p>
-                            <p style={{ marginTop: "10px" }}>
-                              Bull Market Price
-                              <span> ${value.data.gigBullPrice}</span>
-                            </p>
-                          </CardText>
-                        </Card>
-                      )}
-                    </CardContainer>
-                  ))}
-                </Box>
-              </GigSection>
-            ))}
+            {listCategory
+              .filter((item, index) => listCategory.indexOf(item) === index)
+              .map((gig, idx) => (
+                <GigSection key={idx}>
+                  <GigHead>
+                    <h3>{gig}</h3>
+                    {categoryData.map((c, no) => (
+                      <div key={no}>
+                        {c.head.toLowerCase() == gig.toLowerCase() && (
+                          <Des>{c.text}</Des>
+                        )}
+                      </div>
+                    ))}
+                  </GigHead>
+                  <Box>
+                    {listGig.map(
+                      (value, id) =>
+                        value.data.gigCategory == gig && (
+                          // <CardContainer id={gig}>
+                          <Card
+                            key={id}
+                            onClick={(e) => RenderSeller(e, value.address)}
+                          >
+                            <div
+                              style={{
+                                backgroundImage: `url(https://gateway.ipfscdn.io/ipfs/${value.data.gigImg})`,
+                                backgroundPosition: "center",
+                                backgroundSize: "cover",
+                                backgroundRepeat: "no-repeat",
+                                width: "100%",
+                                height: "30vh",
+                              }}
+                            ></div>
+                            <CardText>
+                              <h5>{value.data.userName}</h5>
+                              <h4>{value.data.gigHead}</h4>
+                              <Line />
+                              <p>
+                                Bear Market Price
+                                <span> ${value.data.gigPrice}</span>
+                              </p>
+                              <p style={{ marginTop: "10px" }}>
+                                Bull Market Price
+                                <span> ${value.data.gigBullPrice}</span>
+                              </p>
+                            </CardText>
+                          </Card>
+                          // </CardContainer>
+                        )
+                    )}
+                  </Box>
+                </GigSection>
+              ))}
           </div>
         )}
       </Container>
@@ -161,7 +166,17 @@ const GigSection = styled.section`
   }
 `;
 
-const Box = styled.section``;
+const Box = styled.section`
+  display: grid;
+  grid-template-columns: 33% 33% auto;
+  grid-gap: 20px;
+  @media (max-width: 930px) {
+    grid-template-columns: 50% auto;
+  }
+  @media (max-width: 590px) {
+    grid-template-columns: auto;
+  }
+`;
 
 const GigHead = styled.section``;
 
@@ -236,7 +251,8 @@ const Des = styled.p`
 `;
 
 const CardContainer = styled.section`
-  display: grid;
+  border: 2px solid red;
+  /* display: grid;
   grid-template-columns: 33% 33% auto;
   grid-gap: 20px;
   @media (max-width: 930px) {
@@ -255,7 +271,7 @@ const CardContainer = styled.section`
     flex-wrap: nowrap;
     overflow-x: auto;
     overflow-y: hidden;
-  }
+  } */
 `;
 
 const Card = styled.section`
@@ -263,6 +279,7 @@ const Card = styled.section`
   background: var(--darkBg);
   cursor: pointer;
   border-radius: 8px;
+  height: 100%;
   img {
     width: 100%;
   }
@@ -284,12 +301,13 @@ const Card = styled.section`
     border-top-right-radius: 8px;
     border-top-left-radius: 8px;
   }
-  @media (max-width: 590px) {
+  /* @media (max-width: 590px) {
     width: 90%;
     flex-basis: 90%;
     flex-grow: 0;
     flex-shrink: 0;
-  }
+    height: 100%;
+  } */
 `;
 
 const Head = styled.h1`

@@ -291,7 +291,7 @@ function Selling() {
           "Your profile will be created after the metamask transaction is completed"
         )
       )
-      .catch((reason) => messageToWaitForMM(reason));
+      .catch((reason) => alert(reason));
   }
 
   function saveChanges() {
@@ -302,7 +302,7 @@ function Selling() {
           "Your profile will be updated after the metamask transaction is completed"
         )
       )
-      .catch((reason) => messageToWaitForMM("problem " + reason));
+      .catch((reason) => alert("Problem " + reason));
   }
 
   function closeSidebar() {

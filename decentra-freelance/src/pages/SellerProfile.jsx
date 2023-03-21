@@ -1027,6 +1027,7 @@ const YourDetail = styled.div`
   border: 1px solid var(--line);
   padding: 10px;
   transition: width 0.3s ease;
+  width: 98%;
 `;
 
 const PPContainer = styled.div`

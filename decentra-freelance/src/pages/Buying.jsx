@@ -135,7 +135,7 @@ const Container = styled.div`
 const CardContainer = styled.div`
   margin-top: 40px;
   display: grid;
-  grid-template-columns: 33% 33% 33%;
+  grid-template-columns: 33% 33% auto;
   grid-gap: 20px;
 `;
 const CardText = styled.div`
