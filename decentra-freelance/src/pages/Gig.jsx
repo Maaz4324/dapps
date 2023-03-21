@@ -82,7 +82,11 @@ function Gig({ sellerState }) {
                 <GigHead>
                   <h3>{gig}</h3>
                   {categoryData.map((c, no) => (
-                    <div key={no}>{c.head == gig && <Des>{c.text}</Des>}</div>
+                    <div key={no}>
+                      {c.head.toLowerCase() == gig.toLowerCase() && (
+                        <Des>{c.text}</Des>
+                      )}
+                    </div>
                   ))}
                 </GigHead>
                 <Box>
@@ -189,11 +193,11 @@ const CategoryRow = styled.section`
   }
   li {
     list-style: none;
-    font-size: 18px;
-    padding: 20px;
+    font-size: 14px;
+    /* padding: 20px; */
     cursor: pointer;
     &:hover {
-      background: var(--text);
+      /* background: var(--text); */
     }
     @media (max-width: 833px) {
       width: 100%;
@@ -201,10 +205,27 @@ const CategoryRow = styled.section`
       flex-basis: 33.333%;
       flex-grow: 0;
       flex-shrink: 0;
+      white-space: nowrap;
     }
   }
+
   a {
     color: white;
+    padding: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    margin: 10px;
+    border: 1px solid white;
+    border-radius: 10px;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    &:hover {
+      transition: all 0.3s;
+      background-color: white;
+      color: black;
+    }
   }
 `;
 

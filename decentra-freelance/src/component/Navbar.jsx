@@ -24,21 +24,20 @@ function Navbar({ searchState }) {
     document.getElementById("main").style.marginLeft = "250px";
   }
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
-
-  const abi = SkillSwap.abi;
-
-  const contractAddress = "0x239C71B812e5394e28B75De4d2DCDEBB654a3df1";
-
-  const skillswap = new ethers.Contract(contractAddress, abi, signer);
-
   useEffect(() => {
     async function getHiredTextLoad() {
       if (window.ethereum) {
         const account = await window.ethereum.request({
           method: "eth_requestAccounts",
         });
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+
+        const abi = SkillSwap.abi;
+
+        const contractAddress = "0x239C71B812e5394e28B75De4d2DCDEBB654a3df1";
+
+        const skillswap = new ethers.Contract(contractAddress, abi, signer);
         const noOfuser = await skillswap.noOfSellers();
 
         const isSeller = await skillswap.isSeller(account[0]);

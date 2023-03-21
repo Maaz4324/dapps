@@ -40,7 +40,6 @@ function Selling() {
   const [editButton, setEditButton] = useState(false);
   const [loading, setLoading] = useState(false);
   const [currentAcc, setCurrentAcc] = useState();
-  const windowSize = useRef([window.innerWidth, window.innerHeight]);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(true);
 
@@ -191,7 +190,7 @@ function Selling() {
   }
 
   async function uploadFileToStorage(e) {
-    e.preventDefault();
+    // e.preventDefault();
     setLoading(true);
     try {
       const profile = {
@@ -222,9 +221,6 @@ function Selling() {
       const uri = await storage.upload({ profile: profile, gig: gig });
       const url = await storage.resolveScheme(uri);
       const profileSet = await skillswap.setProfile(url);
-      setTimeout(function () {
-        window.location.reload(false);
-      }, 8000);
     } catch (e) {
       alert("Error sending file to IPFS");
     }
@@ -233,6 +229,7 @@ function Selling() {
 
   async function saveEdit() {
     setLoading(true);
+    console.log("working2");
     const account = await window.ethereum.request({
       method: "eth_requestAccounts",
     });
@@ -298,13 +295,14 @@ function Selling() {
   }
 
   function saveChanges() {
+    console.log("working1");
     saveEdit()
       .then(() =>
         messageToWaitForMM(
           "Your profile will be updated after the metamask transaction is completed"
         )
       )
-      .catch((reason) => messageToWaitForMM(reason));
+      .catch((reason) => messageToWaitForMM("problem " + reason));
   }
 
   function closeSidebar() {
@@ -479,11 +477,12 @@ function Selling() {
                                 <path d="M20.877,2.000 C22.519,2.000 24.382,2.652 25.426,3.738 C26.724,3.486 27.949,3.025 29.050,2.386 C28.625,3.687 27.718,4.779 26.540,5.469 C27.693,5.332 28.797,5.035 29.820,4.590 C29.054,5.707 28.087,6.690 26.971,7.477 C26.981,7.715 26.987,7.955 26.987,8.195 C26.987,15.562 21.445,24.000 10.939,24.000 C7.715,24.000 4.507,23.133 1.982,21.551 C2.428,21.605 2.883,21.631 3.343,21.631 C6.019,21.631 8.482,20.740 10.439,19.242 C7.937,19.199 5.827,17.586 5.103,15.373 C5.450,15.437 5.810,15.473 6.178,15.473 C6.696,15.473 7.203,15.406 7.681,15.277 C5.068,14.768 3.100,12.514 3.100,9.813 C3.100,9.787 3.100,9.764 3.100,9.740 C3.871,10.158 4.750,10.410 5.687,10.440 C4.154,9.437 3.147,7.734 3.147,5.799 C3.147,4.777 3.428,3.818 3.919,2.998 C6.735,6.367 10.945,8.588 15.693,8.822 C15.594,8.414 15.543,7.984 15.543,7.553 C15.543,4.473 17.721,2.000 20.877,2.000 M29.820,4.590 L29.825,4.590 M20.877,-0.000 C17.033,-0.000 14.060,2.753 13.614,6.552 C10.425,5.905 7.524,4.204 5.440,1.711 C5.061,1.257 4.503,0.998 3.919,0.998 C3.867,0.998 3.815,1.000 3.763,1.004 C3.123,1.055 2.547,1.413 2.216,1.966 C1.525,3.122 1.159,4.447 1.159,5.799 C1.159,6.700 1.321,7.579 1.625,8.400 C1.300,8.762 1.113,9.238 1.113,9.740 L1.113,9.813 C1.113,11.772 1.882,13.589 3.160,14.952 C3.087,15.294 3.103,15.655 3.215,15.998 C3.657,17.348 4.459,18.510 5.499,19.396 C4.800,19.552 4.079,19.631 3.343,19.631 C2.954,19.631 2.577,19.609 2.222,19.565 C2.141,19.556 2.061,19.551 1.981,19.551 C1.148,19.551 0.391,20.078 0.108,20.886 C-0.202,21.770 0.140,22.753 0.932,23.249 C3.764,25.023 7.318,26.000 10.939,26.000 C17.778,26.000 22.025,22.843 24.383,20.195 C27.243,16.984 28.907,12.718 28.972,8.455 C29.899,7.682 30.717,6.790 31.410,5.792 C31.661,5.458 31.810,5.041 31.810,4.590 C31.810,3.909 31.473,3.308 30.958,2.946 C31.181,2.176 30.925,1.342 30.303,0.833 C29.940,0.537 29.496,0.386 29.049,0.386 C28.708,0.386 28.365,0.474 28.056,0.654 C27.391,1.040 26.680,1.344 25.931,1.562 C24.555,0.592 22.688,-0.000 20.877,-0.000 L20.877,-0.000 Z"></path>{" "}
                               </g>
                             </svg>
-                            <a href={profileData.twitterLink}>
-                              {profileData.twitterLink.replace(
-                                "https://twitter.com/",
-                                ""
-                              )}
+                            <a
+                              href={
+                                "https://twitter.com/" + profileData.twitterLink
+                              }
+                            >
+                              {profileData.twitterLink}
                             </a>
                           </li>
                           <li>
@@ -863,11 +862,12 @@ function Selling() {
                               <path d="M20.877,2.000 C22.519,2.000 24.382,2.652 25.426,3.738 C26.724,3.486 27.949,3.025 29.050,2.386 C28.625,3.687 27.718,4.779 26.540,5.469 C27.693,5.332 28.797,5.035 29.820,4.590 C29.054,5.707 28.087,6.690 26.971,7.477 C26.981,7.715 26.987,7.955 26.987,8.195 C26.987,15.562 21.445,24.000 10.939,24.000 C7.715,24.000 4.507,23.133 1.982,21.551 C2.428,21.605 2.883,21.631 3.343,21.631 C6.019,21.631 8.482,20.740 10.439,19.242 C7.937,19.199 5.827,17.586 5.103,15.373 C5.450,15.437 5.810,15.473 6.178,15.473 C6.696,15.473 7.203,15.406 7.681,15.277 C5.068,14.768 3.100,12.514 3.100,9.813 C3.100,9.787 3.100,9.764 3.100,9.740 C3.871,10.158 4.750,10.410 5.687,10.440 C4.154,9.437 3.147,7.734 3.147,5.799 C3.147,4.777 3.428,3.818 3.919,2.998 C6.735,6.367 10.945,8.588 15.693,8.822 C15.594,8.414 15.543,7.984 15.543,7.553 C15.543,4.473 17.721,2.000 20.877,2.000 M29.820,4.590 L29.825,4.590 M20.877,-0.000 C17.033,-0.000 14.060,2.753 13.614,6.552 C10.425,5.905 7.524,4.204 5.440,1.711 C5.061,1.257 4.503,0.998 3.919,0.998 C3.867,0.998 3.815,1.000 3.763,1.004 C3.123,1.055 2.547,1.413 2.216,1.966 C1.525,3.122 1.159,4.447 1.159,5.799 C1.159,6.700 1.321,7.579 1.625,8.400 C1.300,8.762 1.113,9.238 1.113,9.740 L1.113,9.813 C1.113,11.772 1.882,13.589 3.160,14.952 C3.087,15.294 3.103,15.655 3.215,15.998 C3.657,17.348 4.459,18.510 5.499,19.396 C4.800,19.552 4.079,19.631 3.343,19.631 C2.954,19.631 2.577,19.609 2.222,19.565 C2.141,19.556 2.061,19.551 1.981,19.551 C1.148,19.551 0.391,20.078 0.108,20.886 C-0.202,21.770 0.140,22.753 0.932,23.249 C3.764,25.023 7.318,26.000 10.939,26.000 C17.778,26.000 22.025,22.843 24.383,20.195 C27.243,16.984 28.907,12.718 28.972,8.455 C29.899,7.682 30.717,6.790 31.410,5.792 C31.661,5.458 31.810,5.041 31.810,4.590 C31.810,3.909 31.473,3.308 30.958,2.946 C31.181,2.176 30.925,1.342 30.303,0.833 C29.940,0.537 29.496,0.386 29.049,0.386 C28.708,0.386 28.365,0.474 28.056,0.654 C27.391,1.040 26.680,1.344 25.931,1.562 C24.555,0.592 22.688,-0.000 20.877,-0.000 L20.877,-0.000 Z"></path>{" "}
                             </g>
                           </svg>
-                          <a href={profileData.twitterLink}>
-                            {profileData.twitterLink.replace(
-                              "https://twitter.com/",
-                              ""
-                            )}
+                          <a
+                            href={
+                              "https://twitter.com/" + profileData.twitterLink
+                            }
+                          >
+                            {profileData.twitterLink}
                           </a>
                         </li>
                         <li>
@@ -1112,7 +1112,6 @@ function Selling() {
                   </YourDetail>
                 </div>
               ))}
-              {/* <Collapse onClick={toggleProfile}></Collapse> */}
               {displayGig.map((gigData, idx) => (
                 <YourService
                   key={idx}
@@ -1267,10 +1266,10 @@ function Selling() {
                     value={urlS}
                     onChange={(e) => setUrl(e.target.value)}
                   />
-                  <label>Your Twitter Link</label>
+                  <label>Your Twitter Handle</label>
                   <input
                     type="url"
-                    placeholder="Twitter Handle"
+                    placeholder="@something"
                     required
                     spellCheck="true"
                     value={twitterLink}
@@ -1372,9 +1371,9 @@ function Selling() {
                     <option value="">Category...</option>
                     <option value="Collection Artist">Collection Artist</option>
                     <option value="Art director">Art director</option>
-                    <option value="Project manager">Project manager</option>
+                    <option value="Project manager">Project Manager</option>
                     <option value="NFT specialist / Adviser">
-                      NFT specialist / Adviser
+                      NFT Specialist / Adviser
                     </option>
                     <option value="Collabs Manager">Collabs Manager</option>
                     <option value="Influencer">Influencer</option>
@@ -1398,38 +1397,18 @@ function Selling() {
                   </select>
 
                   <WarningTxt style={{ marginTop: "40px" }}>
-                    <span>WARNING:</span> The best option for your gig depends
-                    on your individual needs. Fixed Weekly payments are best for
-                    short-term gigs that require regular payments. Fixed Monthly
-                    payments are best for long-term projects that require
-                    regular payments. Fixed Price is best for one-time projects.
-                    Bear Market Price is best for gigs that require flexibility
-                    in pricing, allowing for changes depending on the market.
-                    Lastly, Bull Market Price is best for gigs that require high
-                    prices when the market is up and lower prices when it is
-                    down.
+                    <span>PAY ATTENTION: </span>The best payment option for your
+                    gig depends on your individual needs. Fixed Weekly payments
+                    are best for short-term gigs that require regular payments.
+                    Fixed Monthly payments are best for long-term projects that
+                    require regular payments. Fixed Price is best for one-time
+                    projects. Bear Market Price is best for gigs that require
+                    flexibility in pricing, allowing for changes depending on
+                    the market. Lastly, Bull Market Price is best for gigs that
+                    require high prices when the market is up and lower prices
+                    when it is down.
                   </WarningTxt>
 
-                  <label>Set Fixed Weekly Payment In USD</label>
-                  <input
-                    type="number"
-                    placeholder="Fixed Weekly Payment In USD"
-                    className="noscroll"
-                    spellCheck="true"
-                    defaultValue={weeklyPrice}
-                    onChange={(e) => setWeeklyPrice(e.target.value)}
-                    required
-                  />
-                  <label>Set Fixed Monthly Payment In USD</label>
-                  <input
-                    type="number"
-                    placeholder="Fixed Monthly Payment In USD"
-                    className="noscroll"
-                    spellCheck="true"
-                    defaultValue={monthlyPrice}
-                    onChange={(e) => setMonthlyPrice(e.target.value)}
-                    required
-                  />
                   <label>Set Fixed Price In USD</label>
                   <input
                     type="number"
@@ -1440,7 +1419,27 @@ function Selling() {
                     onChange={(e) => setFixedPrice(e.target.value)}
                     required
                   />
-                  <label>Set Bear Market Price In USD</label>
+
+                  <label>Set Fixed Weekly Payment In USD (optional)</label>
+                  <input
+                    type="number"
+                    placeholder="Fixed Weekly Payment In USD"
+                    className="noscroll"
+                    spellCheck="true"
+                    defaultValue={weeklyPrice}
+                    onChange={(e) => setWeeklyPrice(e.target.value)}
+                  />
+                  <label>Set Fixed Monthly Payment In USD (optional)</label>
+                  <input
+                    type="number"
+                    placeholder="Fixed Monthly Payment In USD"
+                    className="noscroll"
+                    spellCheck="true"
+                    defaultValue={monthlyPrice}
+                    onChange={(e) => setMonthlyPrice(e.target.value)}
+                  />
+
+                  <label>Set Bear Market Price In USD (optional)</label>
                   <input
                     type="number"
                     placeholder="Bear Market In USD"
@@ -1448,9 +1447,8 @@ function Selling() {
                     spellCheck="true"
                     defaultValue={gigPrice}
                     onChange={(e) => setGigPrice(e.target.value)}
-                    required
                   />
-                  <label>Set Bull Market Price In USD</label>
+                  <label>Set Bull Market Price In USD (optional)</label>
                   <input
                     type="number"
                     placeholder="Bull Market In USD"
@@ -1458,7 +1456,6 @@ function Selling() {
                     spellCheck="true"
                     defaultValue={gigBullPrice}
                     onChange={(e) => setGigBullPrice(e.target.value)}
-                    required
                   />
                   <label>Set The Keywords To Help Buyer Find Your Gig</label>
 
@@ -1663,12 +1660,6 @@ const PPContainer = styled.div`
     border-radius: 10px;
     box-shadow: 0.6px 2px 3px black;
     align-self: flex-start;
-    @media (max-width: 970px) {
-      border-radius: 10px;
-    }
-    @media (max-width: 575px) {
-      border-radius: 10px;
-    }
   }
   @media (max-width: 970px) {
     grid-row: 1/3;
@@ -1784,9 +1775,8 @@ const YourOthers = styled.div`
 `;
 
 const YourDes = styled.div`
-  grid-row: 2/4;
   padding: 20px 10px;
-  padding-right: 30px;
+  padding-right: 20px;
   p {
     font-size: 16px;
     margin: 10px 0;
@@ -1796,15 +1786,6 @@ const YourDes = styled.div`
   span {
     font-size: 17px;
     color: var(--darkText);
-  }
-  @media (max-width: 970px) {
-    grid-row: 3/4;
-    grid-column: 1/3;
-    width: 100%;
-  }
-  @media (max-width: 575px) {
-    grid-row: auto;
-    grid-column: auto;
   }
   @media (max-width: 375px) {
     width: 90%;
@@ -1976,7 +1957,7 @@ const CloseBtn = styled.div`
   width: 10px;
   height: 100%;
   margin-left: 10px;
-  border-top-left-radius: 30px;
+  border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   background: var(--darkBg);
   border: 1px solid var(--line);
