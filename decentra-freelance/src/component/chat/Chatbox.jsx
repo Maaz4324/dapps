@@ -15,6 +15,7 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { ethers } from "ethers";
+import send from "../../images/send.svg";
 
 function Chatbox({ sellerChangeState }) {
   const [msgText, setMsgText] = useState("");
@@ -29,24 +30,27 @@ function Chatbox({ sellerChangeState }) {
   const [openOfferModal, setOpenOfferModal] = useState(false);
   const [currentAcc, setCurrentAcc] = useState();
   const [senderOfferDeleteId, setSenderOfferDeleteId] = useState();
+  const [sellersName, setSellersName] = useState();
+  const [offerSide, setOfferSide] = useState(false);
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
 
   const abi = SkillSwap.abi;
 
-  const contractAddress = "0x239C71B812e5394e28B75De4d2DCDEBB654a3df1";
+  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
   const skillswap = new ethers.Contract(contractAddress, abi, signer);
 
   const messagesEndRef = useRef(null);
 
-  useEffect(() => {
-    setSendTo(localStorage.getItem("sellerId").toLowerCase());
-  }, [sendTo]);
+  // useEffect(() => {
+  //   setSendTo(localStorage.getItem("sellerId").toLowerCase());
+  // }, [sendTo]);
 
   useEffect(() => {
     setSendTo(localStorage.getItem("sellerId").toLowerCase());
+    setSellersName(localStorage.getItem("sellerName"));
   }, [sellerChangeState]);
 
   const scrollToBottom = () => {
@@ -368,16 +372,9 @@ function Chatbox({ sellerChangeState }) {
     try {
       const amount = JSON.stringify(budget);
       console.log("🚀 ~ file: Chatbox.jsx:367 ~ makeOrder ~ amount:", amount);
-      console.log(budget);
 
-      console.log(sendTo);
       let deadlineSec = deadline * 86400;
-      console.log(deadlineSec);
       const EtherToWei = ethers.utils.parseUnits(budget, "ether");
-      console.log(
-        "🚀 ~ file: Chatbox.jsx:374 ~ makeOrder ~ EtherToWei:",
-        EtherToWei.toString()
-      );
       let totalBudget = parseInt(EtherToWei) + parseInt(EtherToWei) * (1 / 10);
       console.log(
         "🚀 ~ file: Chatbox.jsx:376 ~ makeOrder ~ totalBudget:",
@@ -471,30 +468,44 @@ function Chatbox({ sellerChangeState }) {
       )}
       <Main>
         <MainHead>
-          <h1>{sendTo}</h1>
+          <h1>{sellersName}</h1>
+          <span>{sendTo}</span>
         </MainHead>
         <Container>
           <MesContent>
             {displayMsg.map((msgData, idx) => (
               <Mes key={idx} className={msgData.createdBy}>
-                <ShowMes>
+                <ShowMes className={msgData.createdBy + "content"}>
                   <p>{msgData.message}</p>
                 </ShowMes>
-                <span>{msgData.createdAt}</span>
+                <span className={msgData.createdBy + "Date"}>
+                  {msgData.createdAt}
+                </span>
               </Mes>
             ))}
           </MesContent>
-          {/* <div ref={messagesEndRef} /> */}
         </Container>
-        <InputCont>
+        {displayOffer.length != 0 && (
+          <AboveInput>
+            <DisplayOfferUser />
+          </AboveInput>
+        )}
+        <InputCont className={displayOffer.length == 0 ? `` : `toGridCol`}>
           <input
             type="text"
-            placeholder="Chat"
+            placeholder="Type your message..."
             onChange={(e) => setMsgText(e.target.value)}
             value={msgText}
           />
-          <span onClick={() => setModalOpen(true)}>offer</span>
-          <button onClick={handleSubmit}>Send</button>
+          {displayOffer.length == 0 && (
+            <OfferBox onClick={() => setModalOpen(true)}>
+              <p>Create Offer</p>
+            </OfferBox>
+          )}
+          <SendBtn onClick={handleSubmit}>
+            <img src={send} alt="" />
+          </SendBtn>
+          {/* <button onClick={handleSubmit}>Send</button> */}
         </InputCont>
       </Main>
       <Side>
@@ -510,7 +521,7 @@ function Chatbox({ sellerChangeState }) {
                 <h3>{offerData.data.offerDeadLine} Days</h3>
                 {displayOffer[0].data.createdBy == currentAcc ? (
                   <button onClick={() => handleDeleteOffer(offerData.id)}>
-                    withdraw offer
+                    Withdraw Offer
                   </button>
                 ) : (
                   <div>
@@ -543,7 +554,7 @@ export default Chatbox;
 
 const Wrapper = styled.div`
   display: grid;
-  width: 100%;
+  width: 98%;
   grid-template-columns: 69% 29%;
   grid-gap: 10px;
   .modalBack {
@@ -559,40 +570,57 @@ const Wrapper = styled.div`
   .openModalAlt {
     display: none;
   }
+  border: 2px solid green;
+  @media (max-width: 1158px) {
+    grid-template-columns: auto;
+  }
 `;
 
 const Container = styled.div`
-  /* border: 3px solid green; */
-  width: 100%;
+  border-top: 1px solid var(--line);
+  width: 95%;
   overflow-y: scroll;
   overflow-x: hidden;
   height: 70vh;
+  padding: 0 10px;
+  border: 2px solid red;
   .openModalAlt {
     display: none;
+  }
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  @media (max-width: 707px) {
+    width: 80%;
+    max-width: 700px;
+  }
+`;
+
+const Main = styled.div`
+  .toGridCol {
+    grid-template-columns: 90% auto;
+  }
+  &::-webkit-scrollbar {
+    width: 10px;
   }
 `;
 
 const InputCont = styled.div`
-  /* border: 3px solid blue; */
   display: grid;
-  grid-template-columns: 70% 10% 20%;
+  grid-template-columns: 70% auto auto;
   align-self: flex-end;
-  border-radius: 20px;
-  width: 100%;
+  width: 97%;
+  margin-top: 10px;
+  box-shadow: 2px 3px 10px var(--text);
+  background: white;
+  border-radius: 5px;
   input {
-    padding: 10px 20px;
-    font-size: 20px;
+    padding: 20px;
+    font-size: 16px;
     border: 0;
     outline: none;
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-  }
-  button {
-    padding: 10px;
-    font-size: medium;
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
-    border: 0;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
   }
   span {
     background: white;
@@ -604,10 +632,12 @@ const InputCont = styled.div`
 `;
 
 const Mes = styled.div`
+  border: 2px solid red;
   margin: 10px 0;
 `;
 
 const MesContent = styled.div`
+  border: 2px solid red;
   display: flex;
   align-items: flex-start;
   justify-content: start;
@@ -619,16 +649,22 @@ const MesContent = styled.div`
   .msgByCurrUser {
     align-self: flex-end;
   }
+  .msgByCurrUsercontent {
+    background: var(--primary);
+  }
+  .msgByCurrUserDate {
+    float: right;
+  }
 `;
 
 const ShowMes = styled.div`
   padding: 10px 20px;
   width: fit-content;
-  background: var(--primary);
   color: black;
   font-weight: 600;
   font-style: italic;
   border-radius: 20px;
+  background-color: white;
 `;
 
 const Modal = styled.div`
@@ -709,14 +745,12 @@ const OfferContent = styled.div`
 `;
 
 const OfferModal = styled.div`
-  background: black;
   min-height: 40vh;
   padding: 10px;
-  border-radius: 10px;
-  p,
-  h3 {
-    margin: 5px 0;
-  }
+  border-radius: 5px;
+  box-shadow: 2px 3px 10px var(--text);
+  padding: 30px 10px;
+
   button {
     padding: 7px 10px;
     cursor: pointer;
@@ -724,19 +758,93 @@ const OfferModal = styled.div`
   }
 `;
 
-const Offer = styled.div``;
-
-const Main = styled.div`
-  &::-webkit-scrollbar {
-    width: 10px;
+const Offer = styled.div`
+  p {
+    word-wrap: break-word;
+    font-size: 14px;
+  }
+  p {
+    margin: 15px 0;
+  }
+  h3 {
+    border-top: 1px solid var(--line);
+    padding: 10px 0;
+    margin-bottom: 10px;
   }
 `;
 
-const Side = styled.div``;
+const Side = styled.div`
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 88vh;
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  padding: 10px;
+  @media (max-width: 1158px) {
+    display: none;
+  }
+`;
 
-const MainHead = styled.div`
+const OfferBox = styled.div`
+  border: 2px solid var(--line);
   display: flex;
   align-items: center;
   justify-content: center;
+  height: fit-content;
+  margin: auto 10px;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover {
+    transition: all 0.3s;
+    background-color: black;
+  }
+  &:hover p {
+    transition: all 0.3s;
+    color: white;
+  }
+  p {
+    color: black;
+  }
+`;
+
+const SendBtn = styled.div`
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  cursor: pointer;
+  img {
+    width: 70%;
+    margin: auto;
+    @media (max-width: 1158px) {
+      width: 40%;
+    }
+    @media (max-width: 730px) {
+      width: 40px;
+    }
+  }
+`;
+
+const MainHead = styled.div`
+  border: 2px solid red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  span {
+    color: var(--darkText);
+  }
   padding: 20px;
+`;
+
+const AboveInput = styled.div`
+  display: none;
+  border: 2px solid red;
+  @media (max-width: 1158px) {
+    display: block;
+  }
 `;

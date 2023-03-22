@@ -48,7 +48,7 @@ function Selling() {
 
   const abi = SkillSwap.abi;
 
-  const contractAddress = "0x239C71B812e5394e28B75De4d2DCDEBB654a3df1";
+  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
   const skillswap = new ethers.Contract(contractAddress, abi, signer);
 
@@ -192,38 +192,34 @@ function Selling() {
   async function uploadFileToStorage(e) {
     // e.preventDefault();
     setLoading(true);
-    try {
-      const profile = {
-        name: name,
-        profileTitle: profileTitle,
-        description: description,
-        country: country,
-        urlS: urlS,
-        twitterLink: twitterLink,
-        skill: skill,
-        image: img,
-        language: lang,
-        education: education,
-      };
-      const gig = {
-        gigImg: gigImg,
-        gigHead: gigHead,
-        gigDescription: gigDescrip,
-        gigCategory: gigCategory,
-        gigPrice: gigPrice,
-        weeklyPrice: weeklyPrice,
-        monthlyPrice: monthlyPrice,
-        fixedPrice: fixedPrice,
-        gigBullPrice: gigBullPrice,
-        gigKeywords: gigKeywords,
-      };
+    const profile = {
+      name: name,
+      profileTitle: profileTitle,
+      description: description,
+      country: country,
+      urlS: urlS,
+      twitterLink: twitterLink,
+      skill: skill,
+      image: img,
+      language: lang,
+      education: education,
+    };
+    const gig = {
+      gigImg: gigImg,
+      gigHead: gigHead,
+      gigDescription: gigDescrip,
+      gigCategory: gigCategory,
+      gigPrice: gigPrice,
+      weeklyPrice: weeklyPrice,
+      monthlyPrice: monthlyPrice,
+      fixedPrice: fixedPrice,
+      gigBullPrice: gigBullPrice,
+      gigKeywords: gigKeywords,
+    };
 
-      const uri = await storage.upload({ profile: profile, gig: gig });
-      const url = await storage.resolveScheme(uri);
-      const profileSet = await skillswap.setProfile(url);
-    } catch (e) {
-      alert("Error sending file to IPFS");
-    }
+    const uri = await storage.upload({ profile: profile, gig: gig });
+    const url = await storage.resolveScheme(uri);
+    const profileSet = await skillswap.setProfile(url);
     setLoading(false);
   }
 

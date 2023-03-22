@@ -22,82 +22,22 @@ function Chat() {
   const [modalOpen, setModalOpen] = useState(false);
   const [buyerName, setBuyerName] = useState();
   const [currentAcc, setCurrentAcc] = useState();
+  const [sideBarOpen, setSideBarOpen] = useState(false);
 
-  // useEffect(() => {
-  //   async function getBuyerName() {
-  //     const account = await window.ethereum.request({
-  //       method: "eth_requestAccounts",
-  //     });
-  //     const provider = new ethers.providers.Web3Provider(window.ethereum);
-  //     const signer = provider.getSigner();
-
-  //     const abi = SkillSwap.abi;
-
-  //     const contractAddress = "0x239C71B812e5394e28B75De4d2DCDEBB654a3df1";
-
-  //     const skillswap = new ethers.Contract(contractAddress, abi, signer);
-
-  //     const isSeller = await skillswap.isSeller(account[0]);
-  //     setCurrentAcc(account[0].toLowerCase());
-
-  //     const { data, error } = await supabase.from("BuyersName").select();
-
-  //     if (error) {
-  //       console.log(error);
-  //     }
-  //     if (data) {
-  //       let allAddArray = [];
-  //       for (let i in data) {
-  //         allAddArray.push(data[i].address);
-  //       }
-  //       if (!allAddArray.includes(account[0].toLowerCase()) && !isSeller) {
-  //         setModalOpen(true);
-  //       }
-  //     }
-  //   }
-  //   getBuyerName();
-  // }, []);
-
-  // async function submitName() {
-  //   if (!buyerName) {
-  //     return;
-  //   }
-  //   if (buyerName.trim() != "") {
-  //     try {
-  //       console.log("clicked");
-  //       console.log(buyerName);
-  //       const { data, error } = await supabase
-  //         .from("BuyersName")
-  //         .insert([{ name: buyerName, address: currentAcc }]);
-  //       if (error) {
-  //         alert(error);
-  //       }
-  //       if (data) {
-  //         console.log(data);
-  //       }
-  //       window.location.reload(false);
-  //     } catch (error) {
-  //       alert(error);
-  //     }
-  //   }
-  // }
+  function toggleSidebar() {
+    setSideBarOpen(!sideBarOpen);
+  }
 
   return (
     <Wrapper>
-      {/* {modalOpen == true && (
-        <NameModal>
-          <label>Set your name</label>
-          <input
-            type="text"
-            required
-            onChange={(e) => setBuyerName(e.target.value)}
-          />
-          <button onClick={submitName}>Submit</button>
-        </NameModal>
-      )} */}
-      <Container>
-        <Sidebar idChange={setChangeSellerId} />
-        <Chatbox sellerChangeState={changeSellerId} />
+      <Container className={sideBarOpen ? "oneGridCol" : "twoGridCol"}>
+        <div className={sideBarOpen ? "noSide" : ""}>
+          <Sidebar idChange={setChangeSellerId} />
+        </div>
+        <BarOpen onClick={toggleSidebar}></BarOpen>
+        <div style={{ display: `${sideBarOpen ? "block" : "none"}` }}>
+          <Chatbox sellerChangeState={changeSellerId} />
+        </div>
       </Container>
     </Wrapper>
   );
@@ -107,26 +47,52 @@ export default Chat;
 
 const Wrapper = styled.div`
   width: 100%;
-  /* min-height: 100vh; */
   color: rgb(255, 255, 255);
-  padding-top: 100px;
+  padding-top: 70px;
   background: var(--black);
+  overflow-x: hidden;
   @media (max-width: 930px) {
     padding-top: 60px;
+  }
+  .oneGridCol {
+    @media (max-width: 1280px) {
+      grid-template-columns: auto 96%;
+    }
+  }
+  .twoGridCol {
+    @media (max-width: 1280px) {
+      grid-template-columns: 90% auto;
+    }
   }
 `;
 
 const Container = styled.div`
   background: var(--darkBg);
-  width: 100%;
-  max-width: 1347px;
+  width: 95%;
+  max-width: 1196px;
   margin: 0 auto;
   min-height: 80vh;
   border-radius: 10px;
   display: grid;
-  grid-template-columns: 25% 75%;
+  grid-template-columns: auto 75%;
+  grid-gap: 20px;
   margin-bottom: 80px;
   padding: 20px;
+  border: 1px solid var(--line);
+  @media (max-width: 930px) {
+    width: 90%;
+  }
+  .noSide {
+    display: block;
+    @media (max-width: 1280px) {
+      display: none;
+    }
+  }
+
+  /* @media (max-width: 1280px) {
+    grid-template-columns: auto 97%;
+    padding: 20px 0;
+  } */
 `;
 
 const NameModal = styled.div`
@@ -162,5 +128,17 @@ const NameModal = styled.div`
     cursor: pointer;
     background: var(--primary);
     margin-top: 10px;
+  }
+`;
+
+const BarOpen = styled.div`
+  display: none;
+  box-shadow: 2px 3px 10px var(--border);
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  width: 15px;
+  margin-right: 10px;
+  @media (max-width: 1280px) {
+    display: block;
   }
 `;

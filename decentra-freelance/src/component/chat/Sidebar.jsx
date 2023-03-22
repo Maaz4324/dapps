@@ -12,8 +12,9 @@ function Sidebar({ idChange }) {
   const [receiverAccs, setReceiverAccs] = useState([]);
   const [msgAccs, setMsgAccs] = useState([]);
 
-  async function goToChat(to) {
+  async function goToChat(to, name) {
     localStorage.setItem("sellerId", "0x" + to);
+    localStorage.setItem("sellerName", name);
     idChange("0x" + to);
   }
 
@@ -26,7 +27,7 @@ function Sidebar({ idChange }) {
 
         const abi = SkillSwap.abi;
 
-        const contractAddress = "0x239C71B812e5394e28B75De4d2DCDEBB654a3df1";
+        const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
         const skillswap = new ethers.Contract(contractAddress, abi, signer);
 
@@ -90,19 +91,18 @@ function Sidebar({ idChange }) {
 
   return (
     <Wrapper>
+      <h3>Chat</h3>
       {loading ? (
         <Loading />
       ) : (
         <div>
           {msgAccs &&
             msgAccs.map((data, idx) => (
-              <User key={idx} onClick={() => goToChat(data.address)}>
+              <User key={idx} onClick={() => goToChat(data.address, data.name)}>
                 <Profile>
                   <Img>
                     {data.img == "img" ? (
                       <svg
-                        width="64px"
-                        height="64px"
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -156,22 +156,42 @@ function Sidebar({ idChange }) {
 export default Sidebar;
 
 const Wrapper = styled.div`
-  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 2px 3px 10px var(--text);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 88vh;
+  width: 98%;
+  border: 2px solid red;
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  h3 {
+    font-size: 28px;
+    padding-top: 20px;
+    padding-left: 10px;
+    text-align: center;
+  }
+  border: 2px solid blue;
+  @media (max-width: 1280px) {
+    /* display: none; */
+  }
 `;
 
 const Profile = styled.div`
   width: 100%;
-
-  display: grid;
-  grid-template-columns: 20% 60%;
-  div {
+  display: flex;
+  align-items: flex-start;
+  justify-content: start;
+  padding: 20px 12px;
+  svg {
+    width: 100%;
   }
   img {
     width: 100%;
   }
   h4 {
     padding: 0;
-    padding-top: 6px;
     width: 200px;
     word-wrap: break-word;
     margin-left: 10px;
@@ -189,15 +209,12 @@ const Profile = styled.div`
 `;
 
 const User = styled.div`
-  border-bottom: 1px solid var(--gray);
-  margin: 10px 0;
+  border-bottom: 1px solid var(--line);
   cursor: pointer;
 `;
 
 const Img = styled.div`
-  width: 100%;
-  grid-column: 1/2;
-  grid-row: 1/3;
+  width: 15%;
 `;
 
 const ProfilePic = styled.img`
