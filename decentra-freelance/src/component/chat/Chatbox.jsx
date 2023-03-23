@@ -31,7 +31,7 @@ function Chatbox({ sellerChangeState }) {
   const [currentAcc, setCurrentAcc] = useState();
   const [senderOfferDeleteId, setSenderOfferDeleteId] = useState();
   const [sellersName, setSellersName] = useState();
-  const [offerSide, setOfferSide] = useState(false);
+  const [offerShow, setOfferShow] = useState(false);
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -421,7 +421,7 @@ function Chatbox({ sellerChangeState }) {
 
   return (
     <Wrapper>
-      {modalOpen || openOfferModal ? (
+      {modalOpen || openOfferModal || offerShow ? (
         <div className="modalBack"></div>
       ) : (
         <div className="openModalAlt"></div>
@@ -486,7 +486,7 @@ function Chatbox({ sellerChangeState }) {
           </MesContent>
         </Container>
         {displayOffer.length != 0 && (
-          <AboveInput>
+          <AboveInput onClick={() => setOfferShow(true)}>
             <DisplayOfferUser />
           </AboveInput>
         )}
@@ -546,6 +546,49 @@ function Chatbox({ sellerChangeState }) {
           </OfferModal>
         )}
       </Side>
+      {displayOffer.length != 0 && (
+        <OfferModal
+          className="offermodalOpen"
+          style={{ display: `${offerShow ? "block" : "none"}` }}
+        >
+          {" "}
+          <div className="closeModal" onClick={() => setOfferShow(false)}>
+            ×
+          </div>
+          <OfferContent>
+            <DisplayOfferUser />
+          </OfferContent>
+          {displayOffer.map((offerData, idx) => (
+            <Offer key={idx}>
+              <p>{offerData.data.offerDes}</p>
+              <h3>{offerData.data.offerBudget}ETH</h3>
+              <h3>{offerData.data.offerDeadLine} Days</h3>
+              {displayOffer[0].data.createdBy == currentAcc ? (
+                <button onClick={() => handleDeleteOffer(offerData.id)}>
+                  Withdraw Offer
+                </button>
+              ) : (
+                <div>
+                  <button
+                    onClick={() =>
+                      makeOrder(
+                        offerData.data.offerBudget,
+                        offerData.data.offerDeadLine,
+                        offerData.id
+                      )
+                    }
+                  >
+                    Accept offer
+                  </button>
+                  <button onClick={() => handleDeleteOffer(offerData.id)}>
+                    Decline
+                  </button>
+                </div>
+              )}
+            </Offer>
+          ))}
+        </OfferModal>
+      )}
     </Wrapper>
   );
 }
@@ -561,7 +604,6 @@ const Wrapper = styled.div`
     position: absolute;
     top: 0;
     left: 0;
-    border: 2px solid white;
     min-height: 128vh;
     width: 100%;
     filter: blur(20px);
@@ -570,9 +612,43 @@ const Wrapper = styled.div`
   .openModalAlt {
     display: none;
   }
-  border: 2px solid green;
   @media (max-width: 1158px) {
     grid-template-columns: auto;
+  }
+  @media (max-width: 730px) {
+    width: 96%;
+  }
+  @media (max-width: 694px) {
+    width: 84%;
+  }
+  @media (max-width: 612px) {
+    width: 75%;
+  }
+  @media (max-width: 549px) {
+    width: 65%;
+  }
+  @media (max-width: 482px) {
+    width: 55%;
+  }
+  @media (max-width: 405px) {
+    width: 40%;
+  }
+  .offermodalOpen {
+    display: none;
+    position: absolute;
+    top: 20%;
+    left: 0;
+    background: var(--darkBg);
+    margin: 0 10px;
+    @media (max-width: 1158px) {
+      display: block;
+    }
+    .closeModal {
+      width: fit-content;
+      cursor: pointer;
+      font-size: 28px;
+      float: right;
+    }
   }
 `;
 
@@ -583,16 +659,29 @@ const Container = styled.div`
   overflow-x: hidden;
   height: 70vh;
   padding: 0 10px;
-  border: 2px solid red;
   .openModalAlt {
     display: none;
   }
   ::-webkit-scrollbar {
     width: 5px;
   }
-  @media (max-width: 707px) {
+  @media (max-width: 730px) {
+    width: 96%;
+  }
+  @media (max-width: 694px) {
     width: 80%;
-    max-width: 700px;
+  }
+  @media (max-width: 612px) {
+    width: 70%;
+  }
+  @media (max-width: 549px) {
+    width: 60%;
+  }
+  @media (max-width: 482px) {
+    width: 52%;
+  }
+  @media (max-width: 405px) {
+    width: 38%;
   }
 `;
 
@@ -629,15 +718,28 @@ const InputCont = styled.div`
     cursor: pointer;
     padding: 10px;
   }
+  @media (max-width: 694px) {
+    width: 83%;
+  }
+  @media (max-width: 612px) {
+    width: 73%;
+  }
+  @media (max-width: 549px) {
+    width: 60%;
+  }
+  @media (max-width: 482px) {
+    width: 54%;
+  }
+  @media (max-width: 405px) {
+    width: 36%;
+  }
 `;
 
 const Mes = styled.div`
-  border: 2px solid red;
   margin: 10px 0;
 `;
 
 const MesContent = styled.div`
-  border: 2px solid red;
   display: flex;
   align-items: flex-start;
   justify-content: start;
@@ -796,6 +898,9 @@ const OfferBox = styled.div`
   padding: 10px;
   border-radius: 4px;
   cursor: pointer;
+  @media (max-width: 482px) {
+    margin: auto 0;
+  }
   &:hover {
     transition: all 0.3s;
     background-color: black;
@@ -806,6 +911,9 @@ const OfferBox = styled.div`
   }
   p {
     color: black;
+    @media (max-width: 482px) {
+      font-size: 12px;
+    }
   }
 `;
 
@@ -830,20 +938,66 @@ const SendBtn = styled.div`
 `;
 
 const MainHead = styled.div`
-  border: 2px solid red;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  h1 {
+    word-wrap: break-word;
+    width: 98%;
+  }
   span {
     color: var(--darkText);
+    word-wrap: break-word;
+    width: 98%;
   }
   padding: 20px;
+  @media (max-width: 730px) {
+    width: 94%;
+  }
+  @media (max-width: 694px) {
+    width: 80%;
+  }
+  @media (max-width: 612px) {
+    width: 70%;
+  }
+  @media (max-width: 549px) {
+    width: 58%;
+  }
+  @media (max-width: 482px) {
+    width: 48%;
+  }
+  @media (max-width: 405px) {
+    width: 36%;
+  }
 `;
 
 const AboveInput = styled.div`
   display: none;
   border: 2px solid red;
+  text-align: center;
+  h3 {
+    color: var(--primary);
+    text-decoration: underline;
+  }
+  @media (max-width: 730px) {
+    width: 94%;
+  }
+  @media (max-width: 694px) {
+    width: 80%;
+  }
+  @media (max-width: 612px) {
+    width: 70%;
+  }
+  @media (max-width: 549px) {
+    width: 58%;
+  }
+  @media (max-width: 482px) {
+    width: 48%;
+  }
+  @media (max-width: 405px) {
+    width: 36%;
+  }
   @media (max-width: 1158px) {
     display: block;
   }

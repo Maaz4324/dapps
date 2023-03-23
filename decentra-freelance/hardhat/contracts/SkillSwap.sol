@@ -22,27 +22,45 @@ contract SkillSwap{
     }
 
     struct Profile{
-        address seller;
+        address account;
         uint256 id;
         string uri;
     }
     uint256 public noOfSellers;
+    uint256 public noOfBuyers;
 
     mapping(uint256=>Profile) public sellerProfile;
     mapping(address=>bool) public isSeller;
+    
+    mapping(uint256=>Profile) public buyerProfile;
+    mapping(address=>bool) public isBuyer;
 
-    function setProfile(string memory _uri) public {
+    function setProfile(string memory _uri, uint8 userId) public {
         require(isSeller[msg.sender]==false, "Already a seller");
-        ++noOfSellers;
-        sellerProfile[noOfSellers] = Profile(msg.sender, noOfSellers, _uri);
-        isSeller[msg.sender]=true;
+        require(isBuyer[msg.sender]==false, "Already a buyer");
+        require(userId <= 1, "invalid choice");
+        if(userId == 0){
+            ++noOfSellers;
+            sellerProfile[noOfSellers] = Profile(msg.sender, noOfSellers, _uri);
+            isSeller[msg.sender]=true;
+        }else if(userId == 1) {
+            ++noOfBuyers;
+            buyerProfile[noOfBuyers] = Profile(msg.sender, noOfBuyers, _uri);
+            isBuyer[msg.sender]=true;
+        }
     }
 
-    function updateProfile(string memory _uri, uint256 _id) public{
-        require(isSeller[msg.sender]==true, "not a seller");
-        require(sellerProfile[_id].seller == msg.sender, "NOT your profile");
-        Profile storage profile = sellerProfile[_id];
-        profile.uri = _uri;
+    function updateProfile(string memory _uri, uint256 _id, uint8 userId) public{
+        require(userId <= 1, "invalid choice");
+        if(userId == 0){
+            require(isSeller[msg.sender]==true, "not a seller");
+            require(sellerProfile[_id].account == msg.sender, "NOT your profile");
+             sellerProfile[_id].uri = _uri;
+        }else if(userId == 1){
+            require(isBuyer[msg.sender]==true, "not a buyer");
+            require(buyerProfile[_id].account == msg.sender, "NOT your profile");
+            buyerProfile[_id].uri = _uri;
+        }
     }
 
     mapping(address=>mapping(address=>Deal)) public deal;
@@ -57,9 +75,10 @@ contract SkillSwap{
         Transaction[_seller][msg.sender] = escrow.ordered;
     }
 
-    function confirmDelivery(address _seller) public {
+    function confirmDelivery(address _seller, string memory _uri, uint256 _id) public {
         require(Transaction[_seller][msg.sender] == escrow.ordered, "order not yet placed");
         deal[_seller][msg.sender].duration = block.timestamp;
+        sellerProfile[_id].uri = _uri;
         Transaction[_seller][msg.sender] = escrow.delivered;
     }
 

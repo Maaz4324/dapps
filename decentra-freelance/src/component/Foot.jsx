@@ -75,6 +75,7 @@ const Container = styled.section`
   }
   @media (max-width: 445px) {
     justify-content: center;
-    flex-direction: column;
+    flex-direction: column-reverse;
+    align-items: flex-start;
   }
 `;

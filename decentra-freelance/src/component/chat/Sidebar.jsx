@@ -56,7 +56,7 @@ function Sidebar({ idChange }) {
 
                 for (let j = 1; j <= noOfSeller.toString(); j++) {
                   const user = await skillswap.sellerProfile(j);
-                  if (user.seller.toLowerCase() == "0x" + listOfSellers[i]) {
+                  if (user.account.toLowerCase() == "0x" + listOfSellers[i]) {
                     const response = await fetch(user.uri);
                     const metadata = await response.json();
                     let sellerObj = {
@@ -160,9 +160,8 @@ const Wrapper = styled.div`
   box-shadow: 2px 3px 10px var(--text);
   overflow-y: scroll;
   overflow-x: hidden;
-  max-height: 88vh;
+  height: 88vh;
   width: 98%;
-  border: 2px solid red;
   ::-webkit-scrollbar {
     width: 5px;
   }
@@ -172,7 +171,6 @@ const Wrapper = styled.div`
     padding-left: 10px;
     text-align: center;
   }
-  border: 2px solid blue;
   @media (max-width: 1280px) {
     /* display: none; */
   }

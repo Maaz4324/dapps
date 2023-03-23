@@ -19,9 +19,6 @@ import SkillSwap from "../artifacts/contracts/SkillSwap.sol/SkillSwap.json";
 
 function Chat() {
   const [changeSellerId, setChangeSellerId] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [buyerName, setBuyerName] = useState();
-  const [currentAcc, setCurrentAcc] = useState();
   const [sideBarOpen, setSideBarOpen] = useState(false);
 
   function toggleSidebar() {
@@ -35,7 +32,10 @@ function Chat() {
           <Sidebar idChange={setChangeSellerId} />
         </div>
         <BarOpen onClick={toggleSidebar}></BarOpen>
-        <div style={{ display: `${sideBarOpen ? "block" : "none"}` }}>
+        <div className="chatBoxVisible">
+          <Chatbox sellerChangeState={changeSellerId} />
+        </div>
+        <div className={`chattrue ${sideBarOpen ? "" : "nochat"}`}>
           <Chatbox sellerChangeState={changeSellerId} />
         </div>
       </Container>
@@ -46,7 +46,7 @@ function Chat() {
 export default Chat;
 
 const Wrapper = styled.div`
-  width: 100%;
+  width: 99%;
   color: rgb(255, 255, 255);
   padding-top: 70px;
   background: var(--black);
@@ -54,15 +54,30 @@ const Wrapper = styled.div`
   @media (max-width: 930px) {
     padding-top: 60px;
   }
+  .chatBoxVisible {
+    display: block;
+    @media (max-width: 1280px) {
+      display: none;
+    }
+  }
   .oneGridCol {
     @media (max-width: 1280px) {
-      grid-template-columns: auto 96%;
+      grid-template-columns: 6% auto;
     }
   }
   .twoGridCol {
     @media (max-width: 1280px) {
       grid-template-columns: 90% auto;
     }
+  }
+  .chattrue {
+    display: none;
+    @media (max-width: 1280px) {
+      display: block;
+    }
+  }
+  .nochat {
+    display: none;
   }
 `;
 
@@ -82,13 +97,18 @@ const Container = styled.div`
   @media (max-width: 930px) {
     width: 90%;
   }
+  @media (max-width: 730px) {
+    width: fit-content;
+  }
   .noSide {
     display: block;
     @media (max-width: 1280px) {
       display: none;
     }
   }
-
+  @media (max-width: 649px) {
+    grid-gap: 0px;
+  }
   /* @media (max-width: 1280px) {
     grid-template-columns: auto 97%;
     padding: 20px 0;

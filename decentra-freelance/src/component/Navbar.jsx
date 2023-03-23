@@ -12,7 +12,7 @@ function Navbar({ searchState }) {
   const navigate = useNavigate();
   const [connectBtn, setConnectBtn] = useState("Connect");
   const [searchResult, setSearchResult] = useState("");
-  const [hiredText, setHiredText] = useState("Get hired");
+  const [hiredText, setHiredText] = useState("Create Account");
 
   function closeNav() {
     document.getElementById("mySidebar").style.width = "0";
@@ -38,23 +38,35 @@ function Navbar({ searchState }) {
         const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
         const skillswap = new ethers.Contract(contractAddress, abi, signer);
-        const noOfuser = await skillswap.noOfSellers();
+        const noOfseller = await skillswap.noOfSellers();
+        const noOfbuyer = await skillswap.noOfBuyers();
 
         const isSeller = await skillswap.isSeller(account[0]);
-        if (!isSeller) {
+        const isBuyer = await skillswap.isBuyer(account[0]);
+        if (!isSeller || !isBuyer) {
           setConnectBtn("Connected");
-        } else {
-          for (let index = 1; index <= noOfuser.toString(); index++) {
+        }
+        if (isSeller) {
+          setHiredText("My profile");
+          for (let index = 1; index <= noOfseller.toString(); index++) {
             const user = await skillswap.sellerProfile(index);
-            if (user.seller.toLowerCase() == account[0]) {
+            if (user.account.toLowerCase() == account[0]) {
               setConnectBtn(
                 account[0].substring(0, 4) + "..." + account[0].slice(-3)
               );
             }
           }
         }
-        if (isSeller) {
+        if (isBuyer) {
           setHiredText("My profile");
+          for (let index = 1; index <= noOfbuyer.toString(); index++) {
+            const user = await skillswap.buyerProfile(index);
+            if (user.account.toLowerCase() == account[0]) {
+              setConnectBtn(
+                account[0].substring(0, 4) + "..." + account[0].slice(-3)
+              );
+            }
+          }
         }
       }
     }
@@ -203,26 +215,28 @@ const Wrapper = styled.section`
   top: 0;
   width: 100%;
   z-index: 9999;
-  border: 2px solid transparentd red;
 `;
 
 const Container = styled.section`
   display: grid;
-  grid-template-columns: 30% 40% 30%;
+  grid-template-columns: 20% 40% auto;
   padding: 0 40px;
   @media (max-width: 1080px) {
-    grid-template-columns: 20% 45% 35%;
     button {
       outline: none;
     }
   }
-  @media (max-width: 930px) {
-    grid-template-columns: 10% 90%;
-    grid-template-rows: auto auto;
-    padding: 0 30px;
+  @media (max-width: 997px) {
+    grid-template-columns: 10% 50% auto;
   }
-  @media (max-width: 600px) {
-    grid-template-columns: 50% 50%;
+  @media (max-width: 930px) {
+    grid-template-columns: 25% 60% auto;
+    grid-gap: 10px;
+    padding: 0;
+    padding-right: 10px;
+  }
+  @media (max-width: 500px) {
+    grid-template-columns: 18% 60% auto;
   }
 `;
 
@@ -282,8 +296,7 @@ const Search = styled.section`
   border: 0.6px solid var(--gray);
   border-radius: 10px;
   @media (max-width: 930px) {
-    grid-row: 2/3;
-    grid-column: 1/3;
+    /* width: 70%; */
     margin-top: 6px;
     background: transparent;
     backdrop-filter: blur(10px);

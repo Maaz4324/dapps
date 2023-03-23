@@ -43,7 +43,7 @@ function Gig({ sellerState }) {
         categoryArr.push(categoryWords);
         let result = {
           data: metadata.gig,
-          address: user.seller,
+          address: user.account,
         };
         gigsArr.push(result);
       }

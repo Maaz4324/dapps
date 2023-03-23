@@ -32,7 +32,7 @@ function SellerProfile({ setSellerState }) {
     for (let index = 1; index <= noOfuser.toString(); index++) {
       const user = await skillswap.sellerProfile(index);
 
-      if (user.seller.toLowerCase() == setSellerState.toLowerCase()) {
+      if (user.account.toLowerCase() == setSellerState.toLowerCase()) {
         const response = await fetch(user.uri);
         const metadata = await response.json();
         setDisplayProfile([metadata.profile]);

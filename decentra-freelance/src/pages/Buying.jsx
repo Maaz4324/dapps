@@ -39,11 +39,11 @@ function Buying({ category, sellerState }) {
           .replace(",", " ")
           .includes(category.toLowerCase())
       ) {
-        if (!listAddr.includes(user.seller)) {
+        if (!listAddr.includes(user.account)) {
           const result = metadata.gig;
           result.userName = metadata.profile.name;
-          result.address = user.seller;
-          setListAddr((prev) => [...prev, user.seller]);
+          result.address = user.account;
+          setListAddr((prev) => [...prev, user.account]);
           setListData((oldArray) => [...oldArray, result]);
         }
       }
