@@ -21,8 +21,8 @@ export const categoryData = [
   },
   {
     img: art1,
-    head: "Collection Artist",
-    text: "A NFT Collection Artist creates digital artworks and can be hired to create your entire collection! ",
+    head: "Artist",
+    text: "An NFT (collection) artist creates any type of digital artwork that you need and some artists can be hired to create your entire collection!",
     link: "Collection Artist",
   },
   {

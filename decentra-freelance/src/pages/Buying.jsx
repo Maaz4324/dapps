@@ -27,7 +27,9 @@ function Buying({ category, sellerState }) {
 
     for (let index = 1; index <= noOfuser.toString(); index++) {
       const user = await skillswap.sellerProfile(index);
-      const response = await fetch(user.uri);
+      const response = await fetch(
+        "https://gateway.ipfscdn.io/ipfs/" + user.uri + "/0"
+      );
       const metadata = await response.json();
       const categoryWords = metadata.gig.gigCategory;
       if (

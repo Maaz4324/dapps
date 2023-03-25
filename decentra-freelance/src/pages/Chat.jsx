@@ -2,20 +2,6 @@ import React, { useState, useEffect } from "react";
 import Chatbox from "../component/chat/Chatbox";
 import Sidebar from "../component/chat/Sidebar";
 import styled from "styled-components";
-import { db } from "../firebase";
-import {
-  collection,
-  doc,
-  addDoc,
-  setDoc,
-  Timestamp,
-  query,
-  orderBy,
-  onSnapshot,
-  deleteDoc,
-} from "firebase/firestore";
-import { ethers } from "ethers";
-import SkillSwap from "../artifacts/contracts/SkillSwap.sol/SkillSwap.json";
 
 function Chat() {
   const [changeSellerId, setChangeSellerId] = useState("");

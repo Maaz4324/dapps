@@ -219,15 +219,24 @@ const Wrapper = styled.section`
 
 const Container = styled.section`
   display: grid;
-  grid-template-columns: 20% 40% auto;
+  grid-template-columns: 30% 40% auto;
   padding: 0 40px;
   @media (max-width: 1080px) {
     button {
       outline: none;
     }
   }
-  @media (max-width: 997px) {
-    grid-template-columns: 10% 50% auto;
+  @media (max-width: 1368px) {
+    grid-template-columns: 20% 45% auto;
+  }
+  @media (max-width: 1210px) {
+    grid-template-columns: 20% 40% auto;
+  }
+  @media (max-width: 1045px) {
+    grid-template-columns: 20% 35% auto;
+  }
+  @media (max-width: 998px) {
+    grid-template-columns: 10% 45% auto;
   }
   @media (max-width: 930px) {
     grid-template-columns: 25% 60% auto;

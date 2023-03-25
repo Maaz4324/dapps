@@ -17,6 +17,8 @@ function Selling() {
   const [description, setDescription] = useState();
   const [urlS, setUrl] = useState();
   const [twitterLink, setTwitterLink] = useState();
+  const [emailAdd, setEmailAdd] = useState();
+  const [phoneNo, setPhoneNo] = useState();
   const [skill, setSkill] = useState();
   const [lang, setLang] = useState();
   const [education, setEducation] = useState();
@@ -82,6 +84,8 @@ function Selling() {
     setDescription(profileFormItem[0].description);
     setUrl(profileFormItem[0].urlS);
     setTwitterLink(profileFormItem[0].twitterLink);
+    setEmailAdd(profileFormItem[0].emailAdd);
+    setPhoneNo(profileFormItem[0].phoneNo);
     setSkill(profileFormItem[0].skill);
     setLang(profileFormItem[0].language);
     setEducation(profileFormItem[0].education);
@@ -113,11 +117,8 @@ function Selling() {
           "https://gateway.ipfscdn.io/ipfs/" + user.uri + "/0"
         );
         const metadata = await response.json();
-        console.log(
-          "🚀 ~ file: Selling.jsx:116 ~ loadBuyer ~ metadata:",
-          metadata
-        );
         setDisplayBuyer([metadata.profile]);
+        setProfileFormItem([metadata.profile]);
       }
     }
     setLoading(false);
@@ -263,27 +264,19 @@ function Selling() {
       country: country,
       urlS: urlS,
       twitterLink: twitterLink,
+      emailAdd: emailAdd,
+      phoneNo: phoneNo,
       image: img,
     };
     const uri = await storage.upload({ profile: profile });
-    console.log(
-      "🚀 ~ file: Selling.jsx:239 ~ uploadBuyerToStorage ~ uri:",
-      uri
-    );
     const urlRemoved = uri.replace("ipfs://", "");
     const url = urlRemoved.replace("/0", "");
-    console.log(url);
-    const profileSet = await skillswap.setProfile(url, 1);
-    console.log(
-      "🚀 ~ file: Selling.jsx:243 ~ uploadBuyerToStorage ~ profileSet:",
-      profileSet
-    );
+    await skillswap.setProfile(url, 1);
     setLoading(false);
   }
 
   async function saveEdit() {
     setLoading(true);
-    console.log("working2");
     const account = await window.ethereum.request({
       method: "eth_requestAccounts",
     });
@@ -318,8 +311,39 @@ function Selling() {
         };
 
         const uri = await storage.upload({ profile: profile, gig: gig });
-        const url = await storage.resolveScheme(uri);
-        const edited = await skillswap.updateProfile(url, i);
+        const urlRemoved = uri.replace("ipfs://", "");
+        const url = urlRemoved.replace("/0", "");
+        await skillswap.updateProfile(url, i, 0);
+      }
+    }
+    setLoading(false);
+  }
+  async function saveBuyerEdit() {
+    setLoading(true);
+    const account = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+
+    const noOfuser = await skillswap.noOfBuyers();
+    for (let i = 1; i <= noOfuser.toString(); i++) {
+      const element = await skillswap.buyerProfile(i);
+      if (element.account.toLowerCase() == account[0].toLowerCase()) {
+        const profile = {
+          name: name,
+          profileTitle: profileTitle,
+          description: description,
+          country: country,
+          urlS: urlS,
+          twitterLink: twitterLink,
+          emailAdd: emailAdd,
+          phoneNo: phoneNo,
+          image: img,
+        };
+
+        const uri = await storage.upload({ profile: profile });
+        const urlRemoved = uri.replace("ipfs://", "");
+        const url = urlRemoved.replace("/0", "");
+        const edited = await skillswap.updateProfile(url, i, 1);
       }
     }
     setLoading(false);
@@ -338,6 +362,11 @@ function Selling() {
     alert(reason);
   }
 
+  function displayError(msg) {
+    setLoading(false);
+    alert(msg);
+  }
+
   function makeAccount() {
     uploadFileToStorage()
       .then(() =>
@@ -345,7 +374,7 @@ function Selling() {
           "Your profile will be created after the metamask transaction is completed"
         )
       )
-      .catch((reason) => alert(reason));
+      .catch((reason) => displayError(reason));
   }
 
   function makeBuyerAccount() {
@@ -355,18 +384,27 @@ function Selling() {
           "Your profile will be created after the metamask transaction is completed"
         )
       )
-      .catch((reason) => alert(reason));
+      .catch((reason) => displayError(reason));
   }
 
   function saveChanges() {
-    console.log("working1");
     saveEdit()
       .then(() =>
         messageToWaitForMM(
           "Your profile will be updated after the metamask transaction is completed"
         )
       )
-      .catch((reason) => alert("Problem " + reason));
+      .catch((reason) => displayError("Problem " + reason));
+  }
+
+  function saveBuyerChanges() {
+    saveBuyerEdit()
+      .then(() =>
+        messageToWaitForMM(
+          "Your profile will be updated after the metamask transaction is completed"
+        )
+      )
+      .catch((reason) => displayError("Problem " + reason));
   }
 
   function closeSidebar() {
@@ -396,7 +434,6 @@ function Selling() {
         setUserLogin(true);
         setIsUserSelected(true);
         setSelectUser("client");
-        console.log("user");
         loadBuyer();
       } else {
         setUserLogin(false);
@@ -1283,18 +1320,263 @@ function Selling() {
                 </ProfileContent>
               )}
               {selectUser == "client" && (
-                <ProfileContent>
+                <ProfileBuyerContent>
                   {displayBuyer.map((profileData, idx) => (
                     <div key={idx}>
-                      <div>{profileData.name}</div>
-                      <div>{profileData.profileTitle}</div>
-                      <div>{profileData.description}</div>
-                      <div>{profileData.country}</div>
-                      <div>{profileData.twitterLink}</div>
-                      <div>{profileData.urlS}</div>
+                      <YourDetail>
+                        <PPBuyerContainer>
+                          <img
+                            src={`https://gateway.ipfscdn.io/ipfs/${profileData.image}`}
+                            alt={profileData.name}
+                          />
+                        </PPBuyerContainer>
+                        <YourName>
+                          <div>
+                            <h3>{profileData.name}</h3>
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "end",
+                                width: "20%",
+                              }}
+                            >
+                              <svg
+                                width="64px"
+                                height="64px"
+                                viewBox="0 0 24 24"
+                                fill="#5fd3f3"
+                                xmlns="http://www.w3.org/2000/svg"
+                                style={{ cursor: "pointer" }}
+                                onClick={copyLink}
+                              >
+                                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                                <g
+                                  id="SVGRepo_tracerCarrier"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                ></g>
+                                <g id="SVGRepo_iconCarrier">
+                                  {" "}
+                                  <path
+                                    d="M18 20.75H6C5.27065 20.75 4.57118 20.4603 4.05546 19.9445C3.53973 19.4288 3.25 18.7293 3.25 18V6C3.25 5.27065 3.53973 4.57118 4.05546 4.05546C4.57118 3.53973 5.27065 3.25 6 3.25H12C12.1989 3.25 12.3897 3.32902 12.5303 3.46967C12.671 3.61032 12.75 3.80109 12.75 4C12.75 4.19891 12.671 4.38968 12.5303 4.53033C12.3897 4.67098 12.1989 4.75 12 4.75H6C5.66848 4.75 5.35054 4.8817 5.11612 5.11612C4.8817 5.35054 4.75 5.66848 4.75 6V18C4.75 18.3315 4.8817 18.6495 5.11612 18.8839C5.35054 19.1183 5.66848 19.25 6 19.25H18C18.3315 19.25 18.6495 19.1183 18.8839 18.8839C19.1183 18.6495 19.25 18.3315 19.25 18V12C19.25 11.8011 19.329 11.6103 19.4697 11.4697C19.6103 11.329 19.8011 11.25 20 11.25C20.1989 11.25 20.3897 11.329 20.5303 11.4697C20.671 11.6103 20.75 11.8011 20.75 12V18C20.75 18.7293 20.4603 19.4288 19.9445 19.9445C19.4288 20.4603 18.7293 20.75 18 20.75Z"
+                                    fill="#5fd3f3"
+                                  ></path>{" "}
+                                  <path
+                                    d="M20 8.75C19.8019 8.74741 19.6126 8.66756 19.4725 8.52747C19.3324 8.38737 19.2526 8.19811 19.25 8V4.75H16C15.8011 4.75 15.6103 4.67098 15.4697 4.53033C15.329 4.38968 15.25 4.19891 15.25 4C15.25 3.80109 15.329 3.61032 15.4697 3.46967C15.6103 3.32902 15.8011 3.25 16 3.25H20C20.1981 3.25259 20.3874 3.33244 20.5275 3.47253C20.6676 3.61263 20.7474 3.80189 20.75 4V8C20.7474 8.19811 20.6676 8.38737 20.5275 8.52747C20.3874 8.66756 20.1981 8.74741 20 8.75Z"
+                                    fill="#5fd3f3"
+                                  ></path>{" "}
+                                  <path
+                                    d="M13.5 11.25C13.3071 11.2352 13.1276 11.1455 13 11C12.877 10.8625 12.809 10.6845 12.809 10.5C12.809 10.3155 12.877 10.1375 13 10L19.5 3.5C19.5687 3.42631 19.6515 3.36721 19.7435 3.32622C19.8355 3.28523 19.9348 3.26319 20.0355 3.26141C20.1362 3.25963 20.2362 3.27816 20.3296 3.31588C20.423 3.3536 20.5078 3.40974 20.579 3.48096C20.6503 3.55218 20.7064 3.63701 20.7441 3.7304C20.7818 3.82379 20.8004 3.92382 20.7986 4.02452C20.7968 4.12523 20.7748 4.22454 20.7338 4.31654C20.6928 4.40854 20.6337 4.49134 20.56 4.56L14 11C13.8724 11.1455 13.6929 11.2352 13.5 11.25Z"
+                                    fill="#5fd3f3"
+                                  ></path>{" "}
+                                </g>
+                              </svg>
+                              <svg
+                                title="Edit profile"
+                                onClick={handleEditProfile}
+                                viewBox="0 0 24 24"
+                                fill="#1d1d21"
+                                xmlns="http://www.w3.org/2000/svg"
+                                style={{
+                                  cursor: "pointer",
+                                  marginLeft: "20px",
+                                }}
+                              >
+                                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                                <g
+                                  id="SVGRepo_tracerCarrier"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                ></g>
+                                <g id="SVGRepo_iconCarrier">
+                                  {" "}
+                                  <path
+                                    d="M18.9445 9.1875L14.9445 5.1875M18.9445 9.1875L13.946 14.1859C13.2873 14.8446 12.4878 15.3646 11.5699 15.5229C10.6431 15.6828 9.49294 15.736 8.94444 15.1875C8.39595 14.639 8.44915 13.4888 8.609 12.562C8.76731 11.6441 9.28735 10.8446 9.946 10.1859L14.9445 5.1875M18.9445 9.1875C18.9445 9.1875 21.9444 6.1875 19.9444 4.1875C17.9444 2.1875 14.9445 5.1875 14.9445 5.1875M20.5 12C20.5 18.5 18.5 20.5 12 20.5C5.5 20.5 3.5 18.5 3.5 12C3.5 5.5 5.5 3.5 12 3.5"
+                                    stroke="#5fd3f3"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  ></path>{" "}
+                                </g>
+                              </svg>
+                            </div>
+                          </div>
+                          <div>
+                            <p
+                              style={{
+                                color: "var(--darkText)",
+                                marginTop: "10px",
+                              }}
+                            >
+                              {profileData.profileTitle}
+                            </p>
+                          </div>
+                        </YourName>
+                        <YourOthers>
+                          <ul>
+                            <li>
+                              <svg
+                                viewBox="0 0 24 24"
+                                fill="#5fd3f3"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                                <g
+                                  id="SVGRepo_tracerCarrier"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                ></g>
+                                <g id="SVGRepo_iconCarrier">
+                                  <path
+                                    fillRule="evenodd"
+                                    clipRule="evenodd"
+                                    d="M10.975 14.51a1.05 1.05 0 0 0 0-1.485 2.95 2.95 0 0 1 0-4.172l3.536-3.535a2.95 2.95 0 1 1 4.172 4.172l-1.093 1.092a1.05 1.05 0 0 0 1.485 1.485l1.093-1.092a5.05 5.05 0 0 0-7.142-7.142L9.49 7.368a5.05 5.05 0 0 0 0 7.142c.41.41 1.075.41 1.485 0zm2.05-5.02a1.05 1.05 0 0 0 0 1.485 2.95 2.95 0 0 1 0 4.172l-3.5 3.5a2.95 2.95 0 1 1-4.171-4.172l1.025-1.025a1.05 1.05 0 0 0-1.485-1.485L3.87 12.99a5.05 5.05 0 0 0 7.142 7.142l3.5-3.5a5.05 5.05 0 0 0 0-7.142 1.05 1.05 0 0 0-1.485 0z"
+                                    fill="#5fd3f3"
+                                  ></path>
+                                </g>
+                              </svg>
+                              <a href={profileData.urlS}>Website</a>
+                            </li>
+                            <li>
+                              <svg
+                                fill="#5fd3f3"
+                                xmlns="http://www.w3.org/2000/svg"
+                                preserveAspectRatio="xMidYMid"
+                                viewBox="0 0 31.812 26"
+                              >
+                                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                                <g
+                                  id="SVGRepo_tracerCarrier"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                ></g>
+                                <g id="SVGRepo_iconCarrier">
+                                  {" "}
+                                  <path d="M20.877,2.000 C22.519,2.000 24.382,2.652 25.426,3.738 C26.724,3.486 27.949,3.025 29.050,2.386 C28.625,3.687 27.718,4.779 26.540,5.469 C27.693,5.332 28.797,5.035 29.820,4.590 C29.054,5.707 28.087,6.690 26.971,7.477 C26.981,7.715 26.987,7.955 26.987,8.195 C26.987,15.562 21.445,24.000 10.939,24.000 C7.715,24.000 4.507,23.133 1.982,21.551 C2.428,21.605 2.883,21.631 3.343,21.631 C6.019,21.631 8.482,20.740 10.439,19.242 C7.937,19.199 5.827,17.586 5.103,15.373 C5.450,15.437 5.810,15.473 6.178,15.473 C6.696,15.473 7.203,15.406 7.681,15.277 C5.068,14.768 3.100,12.514 3.100,9.813 C3.100,9.787 3.100,9.764 3.100,9.740 C3.871,10.158 4.750,10.410 5.687,10.440 C4.154,9.437 3.147,7.734 3.147,5.799 C3.147,4.777 3.428,3.818 3.919,2.998 C6.735,6.367 10.945,8.588 15.693,8.822 C15.594,8.414 15.543,7.984 15.543,7.553 C15.543,4.473 17.721,2.000 20.877,2.000 M29.820,4.590 L29.825,4.590 M20.877,-0.000 C17.033,-0.000 14.060,2.753 13.614,6.552 C10.425,5.905 7.524,4.204 5.440,1.711 C5.061,1.257 4.503,0.998 3.919,0.998 C3.867,0.998 3.815,1.000 3.763,1.004 C3.123,1.055 2.547,1.413 2.216,1.966 C1.525,3.122 1.159,4.447 1.159,5.799 C1.159,6.700 1.321,7.579 1.625,8.400 C1.300,8.762 1.113,9.238 1.113,9.740 L1.113,9.813 C1.113,11.772 1.882,13.589 3.160,14.952 C3.087,15.294 3.103,15.655 3.215,15.998 C3.657,17.348 4.459,18.510 5.499,19.396 C4.800,19.552 4.079,19.631 3.343,19.631 C2.954,19.631 2.577,19.609 2.222,19.565 C2.141,19.556 2.061,19.551 1.981,19.551 C1.148,19.551 0.391,20.078 0.108,20.886 C-0.202,21.770 0.140,22.753 0.932,23.249 C3.764,25.023 7.318,26.000 10.939,26.000 C17.778,26.000 22.025,22.843 24.383,20.195 C27.243,16.984 28.907,12.718 28.972,8.455 C29.899,7.682 30.717,6.790 31.410,5.792 C31.661,5.458 31.810,5.041 31.810,4.590 C31.810,3.909 31.473,3.308 30.958,2.946 C31.181,2.176 30.925,1.342 30.303,0.833 C29.940,0.537 29.496,0.386 29.049,0.386 C28.708,0.386 28.365,0.474 28.056,0.654 C27.391,1.040 26.680,1.344 25.931,1.562 C24.555,0.592 22.688,-0.000 20.877,-0.000 L20.877,-0.000 Z"></path>{" "}
+                                </g>
+                              </svg>
+                              <a
+                                href={
+                                  "https://twitter.com/" +
+                                  profileData.twitterLink
+                                }
+                              >
+                                {profileData.twitterLink}
+                              </a>
+                            </li>
+                            <li>
+                              <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                                <g
+                                  id="SVGRepo_tracerCarrier"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                ></g>
+                                <g id="SVGRepo_iconCarrier">
+                                  {" "}
+                                  <path
+                                    d="M4 7.00005L10.2 11.65C11.2667 12.45 12.7333 12.45 13.8 11.65L20 7"
+                                    stroke="#5fd3f3"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  ></path>{" "}
+                                  <rect
+                                    x="3"
+                                    y="5"
+                                    width="18"
+                                    height="14"
+                                    rx="2"
+                                    stroke="#5fd3f3"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                  ></rect>{" "}
+                                </g>
+                              </svg>
+
+                              <p style={{ marginLeft: "7px" }}>
+                                {profileData.emailAdd}
+                              </p>
+                            </li>
+                            <li>
+                              <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                                <g
+                                  id="SVGRepo_tracerCarrier"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                ></g>
+                                <g id="SVGRepo_iconCarrier">
+                                  {" "}
+                                  <g id="Communication / Phone">
+                                    {" "}
+                                    <path
+                                      id="Vector"
+                                      d="M9.50246 4.25722C9.19873 3.4979 8.46332 3 7.64551 3H4.89474C3.8483 3 3 3.8481 3 4.89453C3 13.7892 10.2108 21 19.1055 21C20.1519 21 21 20.1516 21 19.1052L21.0005 16.354C21.0005 15.5361 20.5027 14.8009 19.7434 14.4971L17.1069 13.4429C16.4249 13.1701 15.6483 13.2929 15.0839 13.7632L14.4035 14.3307C13.6089 14.9929 12.4396 14.9402 11.7082 14.2088L9.79222 12.2911C9.06079 11.5596 9.00673 10.3913 9.66895 9.59668L10.2363 8.9163C10.7066 8.35195 10.8305 7.57516 10.5577 6.89309L9.50246 4.25722Z"
+                                      stroke="#5fd3f3"
+                                      strokeWidth="2"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    ></path>{" "}
+                                  </g>{" "}
+                                </g>
+                              </svg>
+                              <p style={{ marginLeft: "7px" }}>
+                                {profileData.phoneNo}
+                              </p>
+                            </li>
+                            <li>
+                              <svg
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                                <g
+                                  id="SVGRepo_tracerCarrier"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                ></g>
+                                <g id="SVGRepo_iconCarrier">
+                                  {" "}
+                                  <path
+                                    d="M12.8159 20.6077C16.8509 18.5502 20 15.1429 20 11C20 6.58172 16.4183 3 12 3C7.58172 3 4 6.58172 4 11C4 15.1429 7.14909 18.5502 11.1841 20.6077C11.6968 20.8691 12.3032 20.8691 12.8159 20.6077Z"
+                                    stroke="#5fd3f3"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  ></path>{" "}
+                                  <path
+                                    d="M15 11C15 12.6569 13.6569 14 12 14C10.3431 14 9 12.6569 9 11C9 9.34315 10.3431 8 12 8C13.6569 8 15 9.34315 15 11Z"
+                                    stroke="#5fd3f3"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  ></path>
+                                </g>
+                              </svg>
+                              <p style={{ marginLeft: "7px" }}>
+                                {profileData.country}
+                              </p>
+                            </li>
+                          </ul>
+                        </YourOthers>
+                        <YourDes>
+                          <span>About Company</span>
+                          <p>{profileData.description}</p>
+                        </YourDes>
+                      </YourDetail>
                     </div>
                   ))}
-                </ProfileContent>
+                </ProfileBuyerContent>
               )}
             </div>
           )}
@@ -1511,9 +1793,7 @@ function Selling() {
                               required
                             >
                               <option value="">Category...</option>
-                              <option value="Collection Artist">
-                                Collection Artist
-                              </option>
+                              <option value="Artist">Artist</option>
                               <option value="Art director">Art director</option>
                               <option value="Project manager">
                                 Project Manager
@@ -1646,7 +1926,11 @@ function Selling() {
                   )}
                   {selectUser == "client" && (
                     <div>
-                      <form onSubmit={makeBuyerAccount}>
+                      <form
+                        onSubmit={
+                          editButton ? saveBuyerChanges : makeBuyerAccount
+                        }
+                      >
                         <ProfileContainer>
                           <h2>About Yourself</h2>
                           <WarningTxt>
@@ -1741,8 +2025,28 @@ function Selling() {
                             value={twitterLink}
                             onChange={(e) => setTwitterLink(e.target.value)}
                           />
+                          <label>Your Phone Number</label>
+                          <input
+                            type="number"
+                            placeholder="Phone Number"
+                            className="noscroll"
+                            spellCheck="true"
+                            defaultValue={phoneNo}
+                            onChange={(e) => setPhoneNo(e.target.value)}
+                          />
+                          <label>Your E-mail Address</label>
+                          <input
+                            type="email"
+                            placeholder="E-mail Address"
+                            required
+                            spellCheck="true"
+                            value={emailAdd}
+                            onChange={(e) => setEmailAdd(e.target.value)}
+                          />
                           <BtnContainer>
-                            <SubmitBtn type="submit">Submit</SubmitBtn>
+                            <SubmitBtn type="submit">
+                              {editButton ? "Save changes" : "Submit"}
+                            </SubmitBtn>
                           </BtnContainer>
                         </ProfileContainer>
                       </form>
@@ -1751,19 +2055,47 @@ function Selling() {
                 </div>
               ) : (
                 <SelectUser>
-                  <div>
-                    <div onClick={() => setSelectUser("freelancer")}>
-                      Freelancer
-                    </div>
-                    <div onClick={() => setSelectUser("client")}>Client</div>
-                  </div>
-                  {selectUser != "" && (
-                    <div>
-                      <button onClick={() => setIsUserSelected(true)}>
-                        Continue
-                      </button>
-                    </div>
-                  )}
+                  <SelectUserContainer>
+                    <h3>
+                      Thank you for making an account on SkillSwap. Before we
+                      proceed, please let us know if you are a freelancer
+                      looking for work or a project/founder looking for
+                      freelancers.
+                    </h3>
+                    <SelectUserContent>
+                      <div
+                        onClick={() => setSelectUser("freelancer")}
+                        style={{
+                          background: `${
+                            selectUser == "freelancer"
+                              ? `var(--primary)`
+                              : "transparent"
+                          } `,
+                        }}
+                      >
+                        I am a freelancer!
+                      </div>
+                      <div
+                        onClick={() => setSelectUser("client")}
+                        style={{
+                          background: `${
+                            selectUser == "client"
+                              ? `var(--primary)`
+                              : "transparent"
+                          } `,
+                        }}
+                      >
+                        Project/ founder
+                      </div>
+                    </SelectUserContent>
+                    {selectUser != "" && (
+                      <SelectUserBtn>
+                        <button onClick={() => setIsUserSelected(true)}>
+                          Continue
+                        </button>
+                      </SelectUserBtn>
+                    )}
+                  </SelectUserContainer>
                 </SelectUser>
               )}
             </div>
@@ -1877,6 +2209,18 @@ const ProfileContent = styled.div`
   }
 `;
 
+const ProfileBuyerContent = styled.div`
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 20px;
+  width: 98%;
+  max-width: 1147px;
+  margin: 0 auto;
+  img {
+    width: 70%;
+  }
+`;
+
 const ProfileContainer = styled.div`
   display: flex;
   border: 1px solid var(--gray);
@@ -1895,6 +2239,13 @@ const ProfileContainer = styled.div`
     padding: 40px 0;
     background: transparent;
     border: 0;
+  }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
   }
 `;
 
@@ -1936,6 +2287,45 @@ const YourDetail = styled.div`
   border: 1px solid var(--line);
   padding: 10px;
   transition: width 0.3s ease;
+`;
+
+const PPBuyerContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  margin: 20px 0;
+  border-radius: 10px;
+  padding-left: 20px;
+  img {
+    width: 40%;
+    border-radius: 10px;
+    box-shadow: 0.6px 2px 3px black;
+    align-self: flex-start;
+  }
+  @media (max-width: 970px) {
+    padding-left: 0;
+    justify-content: center;
+    grid-row: 1/3;
+    grid-column: 1/2;
+    width: 100%;
+    margin: 0;
+    justify-content: start;
+    img {
+      width: 100%;
+      padding: 10px;
+    }
+  }
+  @media (max-width: 575px) {
+    grid-row: auto;
+    grid-column: auto;
+    border-radius: 10px;
+    img {
+      border-radius: 10px;
+    }
+  }
+  @media (max-width: 375px) {
+    width: 90%;
+  }
 `;
 
 const PPContainer = styled.div`
@@ -2044,10 +2434,6 @@ const YourOthers = styled.div`
     width: 20px;
     height: 20px;
     fill: "#5fd3f3";
-    @media (max-width: 770px) {
-      width: 30px;
-      height: 30px;
-    }
   }
   @media (max-width: 970px) {
     grid-row: 2/3;
@@ -2231,7 +2617,73 @@ const WarningTxt = styled.p`
   }
 `;
 
-const SelectUser = styled.div``;
+const SelectUser = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 80vh;
+`;
+
+const SelectUserBtn = styled.div`
+  margin-top: 20px;
+  button {
+    padding: 10px 40px;
+    font-size: 18px;
+    cursor: pointer;
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+    &:hover {
+      transition: all 0.3s;
+      background-color: white;
+      color: black;
+    }
+  }
+`;
+
+const SelectUserContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  max-width: 700px;
+  margin: auto;
+  padding: 30px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--darkBg);
+  h3 {
+    word-wrap: break-word;
+    text-align: center;
+    font-weight: 500;
+    margin-bottom: 30px;
+  }
+`;
+
+const SelectUserContent = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  div {
+    border: 1px solid var(--primary);
+    padding: 20px 40px;
+    margin: 10px;
+    transition: all 0.3s;
+    cursor: pointer;
+    text-align: center;
+    &:hover {
+      transition: all 0.3s;
+      background: var(--primary) !important;
+    }
+    @media (max-width: 662px) {
+      width: 150px;
+    }
+  }
+  @media (max-width: 662px) {
+    flex-direction: column;
+  }
+`;
 
 const CloseBtn = styled.div`
   float: right;

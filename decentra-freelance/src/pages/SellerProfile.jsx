@@ -33,7 +33,9 @@ function SellerProfile({ setSellerState }) {
       const user = await skillswap.sellerProfile(index);
 
       if (user.account.toLowerCase() == setSellerState.toLowerCase()) {
-        const response = await fetch(user.uri);
+        const response = await fetch(
+          "https://gateway.ipfscdn.io/ipfs/" + user.uri + "/0"
+        );
         const metadata = await response.json();
         setDisplayProfile([metadata.profile]);
         setDisplayGig([metadata.gig]);

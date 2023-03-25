@@ -37,7 +37,9 @@ function Gig({ sellerState }) {
       let gigsArr = [];
       for (let i = 1; i <= noOfSeller.toString(); i++) {
         const user = await skillswap.sellerProfile(i);
-        const response = await fetch(user.uri);
+        const response = await fetch(
+          "https://gateway.ipfscdn.io/ipfs/" + user.uri + "/0"
+        );
         const metadata = await response.json();
         const categoryWords = metadata.gig.gigCategory;
         categoryArr.push(categoryWords);
@@ -117,12 +119,8 @@ function Gig({ sellerState }) {
                               <h4>{value.data.gigHead}</h4>
                               <Line />
                               <p>
-                                Bear Market Price
-                                <span> ${value.data.gigPrice}</span>
-                              </p>
-                              <p style={{ marginTop: "10px" }}>
-                                Bull Market Price
-                                <span> ${value.data.gigBullPrice}</span>
+                                Fixed Price
+                                <span> ${value.data.fixedPrice}</span>
                               </p>
                             </CardText>
                           </Card>
