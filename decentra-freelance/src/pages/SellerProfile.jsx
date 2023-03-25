@@ -11,6 +11,7 @@ function SellerProfile({ setSellerState }) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(true);
+  const [isSeller, setIsSeller] = useState();
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -25,7 +26,7 @@ function SellerProfile({ setSellerState }) {
     navigate("/chat/");
   }
 
-  async function loadUser() {
+  async function loadSeller() {
     setLoading(true);
     const noOfuser = await skillswap.noOfSellers();
 
@@ -39,6 +40,24 @@ function SellerProfile({ setSellerState }) {
         const metadata = await response.json();
         setDisplayProfile([metadata.profile]);
         setDisplayGig([metadata.gig]);
+      }
+    }
+    setLoading(false);
+  }
+
+  async function loadBuyer() {
+    setLoading(true);
+    const noOfBuyer = await skillswap.noOfBuyers();
+
+    for (let index = 1; index <= noOfBuyer.toString(); index++) {
+      const user = await skillswap.buyerProfile(index);
+
+      if (user.account.toLowerCase() == setSellerState.toLowerCase()) {
+        const response = await fetch(
+          "https://gateway.ipfscdn.io/ipfs/" + user.uri + "/0"
+        );
+        const metadata = await response.json();
+        setDisplayProfile([metadata.profile]);
       }
     }
     setLoading(false);
@@ -64,7 +83,24 @@ function SellerProfile({ setSellerState }) {
   }
 
   useEffect(() => {
-    loadUser();
+    async function showAllUsers() {
+      const sellerBool = await skillswap.isSeller(setSellerState);
+      const buyerBool = await skillswap.isBuyer(setSellerState);
+      console.log(
+        "🚀 ~ file: SellerProfile.jsx:89 ~ showAllUsers ~ buyerBool:",
+        buyerBool
+      );
+
+      if (sellerBool) {
+        setIsSeller(true);
+        loadSeller();
+      } else if (buyerBool) {
+        console.log("buyer");
+        setIsSeller(false);
+        loadBuyer();
+      }
+    }
+    showAllUsers();
     // eslint-disable-next-line
   }, []);
 
@@ -72,7 +108,7 @@ function SellerProfile({ setSellerState }) {
     <Wrapper>
       {loading ? (
         <Loading />
-      ) : (
+      ) : isSeller == true ? (
         <Container className={` ${isOpen ? "" : "gridOneColumn"}`}>
           {displayProfile.map((profileData, idx) => (
             <div
@@ -869,6 +905,168 @@ function SellerProfile({ setSellerState }) {
             </GigContent>
           ))}
         </Container>
+      ) : (
+        <BuyerContainer>
+          {displayProfile.map((profileData, idx) => (
+            <div
+              key={idx}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gridTemplateColumns: "auto",
+              }}
+            >
+              <YourDetail>
+                <PPContainer>
+                  <img
+                    src={`https://gateway.ipfscdn.io/ipfs/${profileData.image}`}
+                    alt={profileData.name}
+                  />
+                </PPContainer>
+                <YourName>
+                  <div>
+                    <h3>{profileData.name}</h3>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "end",
+                        width: "20%",
+                      }}
+                    >
+                      <svg
+                        width="64px"
+                        height="64px"
+                        viewBox="0 0 24 24"
+                        fill="#5fd3f3"
+                        xmlns="http://www.w3.org/2000/svg"
+                        style={{ cursor: "pointer" }}
+                        onClick={copyLink}
+                      >
+                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                        <g
+                          id="SVGRepo_tracerCarrier"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        ></g>
+                        <g id="SVGRepo_iconCarrier">
+                          {" "}
+                          <path
+                            d="M18 20.75H6C5.27065 20.75 4.57118 20.4603 4.05546 19.9445C3.53973 19.4288 3.25 18.7293 3.25 18V6C3.25 5.27065 3.53973 4.57118 4.05546 4.05546C4.57118 3.53973 5.27065 3.25 6 3.25H12C12.1989 3.25 12.3897 3.32902 12.5303 3.46967C12.671 3.61032 12.75 3.80109 12.75 4C12.75 4.19891 12.671 4.38968 12.5303 4.53033C12.3897 4.67098 12.1989 4.75 12 4.75H6C5.66848 4.75 5.35054 4.8817 5.11612 5.11612C4.8817 5.35054 4.75 5.66848 4.75 6V18C4.75 18.3315 4.8817 18.6495 5.11612 18.8839C5.35054 19.1183 5.66848 19.25 6 19.25H18C18.3315 19.25 18.6495 19.1183 18.8839 18.8839C19.1183 18.6495 19.25 18.3315 19.25 18V12C19.25 11.8011 19.329 11.6103 19.4697 11.4697C19.6103 11.329 19.8011 11.25 20 11.25C20.1989 11.25 20.3897 11.329 20.5303 11.4697C20.671 11.6103 20.75 11.8011 20.75 12V18C20.75 18.7293 20.4603 19.4288 19.9445 19.9445C19.4288 20.4603 18.7293 20.75 18 20.75Z"
+                            fill="#5fd3f3"
+                          ></path>{" "}
+                          <path
+                            d="M20 8.75C19.8019 8.74741 19.6126 8.66756 19.4725 8.52747C19.3324 8.38737 19.2526 8.19811 19.25 8V4.75H16C15.8011 4.75 15.6103 4.67098 15.4697 4.53033C15.329 4.38968 15.25 4.19891 15.25 4C15.25 3.80109 15.329 3.61032 15.4697 3.46967C15.6103 3.32902 15.8011 3.25 16 3.25H20C20.1981 3.25259 20.3874 3.33244 20.5275 3.47253C20.6676 3.61263 20.7474 3.80189 20.75 4V8C20.7474 8.19811 20.6676 8.38737 20.5275 8.52747C20.3874 8.66756 20.1981 8.74741 20 8.75Z"
+                            fill="#5fd3f3"
+                          ></path>{" "}
+                          <path
+                            d="M13.5 11.25C13.3071 11.2352 13.1276 11.1455 13 11C12.877 10.8625 12.809 10.6845 12.809 10.5C12.809 10.3155 12.877 10.1375 13 10L19.5 3.5C19.5687 3.42631 19.6515 3.36721 19.7435 3.32622C19.8355 3.28523 19.9348 3.26319 20.0355 3.26141C20.1362 3.25963 20.2362 3.27816 20.3296 3.31588C20.423 3.3536 20.5078 3.40974 20.579 3.48096C20.6503 3.55218 20.7064 3.63701 20.7441 3.7304C20.7818 3.82379 20.8004 3.92382 20.7986 4.02452C20.7968 4.12523 20.7748 4.22454 20.7338 4.31654C20.6928 4.40854 20.6337 4.49134 20.56 4.56L14 11C13.8724 11.1455 13.6929 11.2352 13.5 11.25Z"
+                            fill="#5fd3f3"
+                          ></path>{" "}
+                        </g>
+                      </svg>
+                    </div>
+                  </div>
+                  <div>
+                    <p style={{ color: "var(--darkText)", marginTop: "10px" }}>
+                      {profileData.profileTitle}
+                    </p>
+                  </div>
+                  <div>
+                    <button onClick={goToChat}>Contact Buyer</button>
+                  </div>
+                </YourName>
+                <YourOthers>
+                  <ul>
+                    <li>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="#5fd3f3"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                        <g
+                          id="SVGRepo_tracerCarrier"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        ></g>
+                        <g id="SVGRepo_iconCarrier">
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M10.975 14.51a1.05 1.05 0 0 0 0-1.485 2.95 2.95 0 0 1 0-4.172l3.536-3.535a2.95 2.95 0 1 1 4.172 4.172l-1.093 1.092a1.05 1.05 0 0 0 1.485 1.485l1.093-1.092a5.05 5.05 0 0 0-7.142-7.142L9.49 7.368a5.05 5.05 0 0 0 0 7.142c.41.41 1.075.41 1.485 0zm2.05-5.02a1.05 1.05 0 0 0 0 1.485 2.95 2.95 0 0 1 0 4.172l-3.5 3.5a2.95 2.95 0 1 1-4.171-4.172l1.025-1.025a1.05 1.05 0 0 0-1.485-1.485L3.87 12.99a5.05 5.05 0 0 0 7.142 7.142l3.5-3.5a5.05 5.05 0 0 0 0-7.142 1.05 1.05 0 0 0-1.485 0z"
+                            fill="#5fd3f3"
+                          ></path>
+                        </g>
+                      </svg>
+                      <a href={profileData.urlS}>Website</a>
+                    </li>
+                    <li>
+                      <svg
+                        fill="#5fd3f3"
+                        xmlns="http://www.w3.org/2000/svg"
+                        preserveAspectRatio="xMidYMid"
+                        viewBox="0 0 31.812 26"
+                      >
+                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                        <g
+                          id="SVGRepo_tracerCarrier"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        ></g>
+                        <g id="SVGRepo_iconCarrier">
+                          {" "}
+                          <path d="M20.877,2.000 C22.519,2.000 24.382,2.652 25.426,3.738 C26.724,3.486 27.949,3.025 29.050,2.386 C28.625,3.687 27.718,4.779 26.540,5.469 C27.693,5.332 28.797,5.035 29.820,4.590 C29.054,5.707 28.087,6.690 26.971,7.477 C26.981,7.715 26.987,7.955 26.987,8.195 C26.987,15.562 21.445,24.000 10.939,24.000 C7.715,24.000 4.507,23.133 1.982,21.551 C2.428,21.605 2.883,21.631 3.343,21.631 C6.019,21.631 8.482,20.740 10.439,19.242 C7.937,19.199 5.827,17.586 5.103,15.373 C5.450,15.437 5.810,15.473 6.178,15.473 C6.696,15.473 7.203,15.406 7.681,15.277 C5.068,14.768 3.100,12.514 3.100,9.813 C3.100,9.787 3.100,9.764 3.100,9.740 C3.871,10.158 4.750,10.410 5.687,10.440 C4.154,9.437 3.147,7.734 3.147,5.799 C3.147,4.777 3.428,3.818 3.919,2.998 C6.735,6.367 10.945,8.588 15.693,8.822 C15.594,8.414 15.543,7.984 15.543,7.553 C15.543,4.473 17.721,2.000 20.877,2.000 M29.820,4.590 L29.825,4.590 M20.877,-0.000 C17.033,-0.000 14.060,2.753 13.614,6.552 C10.425,5.905 7.524,4.204 5.440,1.711 C5.061,1.257 4.503,0.998 3.919,0.998 C3.867,0.998 3.815,1.000 3.763,1.004 C3.123,1.055 2.547,1.413 2.216,1.966 C1.525,3.122 1.159,4.447 1.159,5.799 C1.159,6.700 1.321,7.579 1.625,8.400 C1.300,8.762 1.113,9.238 1.113,9.740 L1.113,9.813 C1.113,11.772 1.882,13.589 3.160,14.952 C3.087,15.294 3.103,15.655 3.215,15.998 C3.657,17.348 4.459,18.510 5.499,19.396 C4.800,19.552 4.079,19.631 3.343,19.631 C2.954,19.631 2.577,19.609 2.222,19.565 C2.141,19.556 2.061,19.551 1.981,19.551 C1.148,19.551 0.391,20.078 0.108,20.886 C-0.202,21.770 0.140,22.753 0.932,23.249 C3.764,25.023 7.318,26.000 10.939,26.000 C17.778,26.000 22.025,22.843 24.383,20.195 C27.243,16.984 28.907,12.718 28.972,8.455 C29.899,7.682 30.717,6.790 31.410,5.792 C31.661,5.458 31.810,5.041 31.810,4.590 C31.810,3.909 31.473,3.308 30.958,2.946 C31.181,2.176 30.925,1.342 30.303,0.833 C29.940,0.537 29.496,0.386 29.049,0.386 C28.708,0.386 28.365,0.474 28.056,0.654 C27.391,1.040 26.680,1.344 25.931,1.562 C24.555,0.592 22.688,-0.000 20.877,-0.000 L20.877,-0.000 Z"></path>{" "}
+                        </g>
+                      </svg>
+                      <a
+                        href={"https://twitter.com/" + profileData.twitterLink}
+                      >
+                        {profileData.twitterLink}
+                      </a>
+                    </li>
+                    <li>
+                      <svg
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                        <g
+                          id="SVGRepo_tracerCarrier"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        ></g>
+                        <g id="SVGRepo_iconCarrier">
+                          {" "}
+                          <path
+                            d="M12.8159 20.6077C16.8509 18.5502 20 15.1429 20 11C20 6.58172 16.4183 3 12 3C7.58172 3 4 6.58172 4 11C4 15.1429 7.14909 18.5502 11.1841 20.6077C11.6968 20.8691 12.3032 20.8691 12.8159 20.6077Z"
+                            stroke="#5fd3f3"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></path>{" "}
+                          <path
+                            d="M15 11C15 12.6569 13.6569 14 12 14C10.3431 14 9 12.6569 9 11C9 9.34315 10.3431 8 12 8C13.6569 8 15 9.34315 15 11Z"
+                            stroke="#5fd3f3"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></path>
+                        </g>
+                      </svg>
+                      <p style={{ marginLeft: "7px" }}>{profileData.country}</p>
+                    </li>
+                  </ul>
+                </YourOthers>
+                <YourDes>
+                  <span>About</span>
+                  <p>{profileData.description}</p>
+                </YourDes>
+              </YourDetail>
+            </div>
+          ))}
+        </BuyerContainer>
       )}
     </Wrapper>
   );
@@ -906,9 +1104,6 @@ const Container = styled.div`
     grid-template-columns: 5% auto;
     width: 100%;
   }
-  @media (max-width: 930px) {
-    padding-top: 70px;
-  }
   .noShowProfile {
     @media (max-width: 995px) {
       display: none;
@@ -940,6 +1135,18 @@ const Container = styled.div`
     @media (max-width: 995px) {
       display: flex;
     }
+  }
+`;
+
+const BuyerContainer = styled.div`
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 20px;
+  width: 98%;
+  max-width: 1147px;
+  margin: 0 auto;
+  img {
+    width: 70%;
   }
 `;
 

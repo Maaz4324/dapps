@@ -305,7 +305,6 @@ const Search = styled.section`
   border: 0.6px solid var(--gray);
   border-radius: 10px;
   @media (max-width: 930px) {
-    /* width: 70%; */
     margin-top: 6px;
     background: transparent;
     backdrop-filter: blur(10px);

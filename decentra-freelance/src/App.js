@@ -14,12 +14,28 @@ import SellerProfile from "./pages/SellerProfile";
 import Chat from "./pages/Chat";
 import Order from "./pages/Order";
 import Gig from "./pages/Gig";
+import Buyer from "./pages/Buyer";
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
+
+const styleAlert = {
+  width: "70%",
+  margin: "0 auto",
+  marginBottom: "30px",
+  position: "fixed",
+  top: "80px",
+  left: "15%",
+  zIndex: 99999,
+  backgroundColor: "#000000",
+  color: "white",
+};
 
 function App() {
   const activeChainId = ChainId.Mainnet;
   const [searchData, setSearchData] = useState("");
   const [sellerData, setSellerData] = useState("");
   const [changeSearch, setChangeSearch] = useState("");
+  const [showAlert, setShowAlert] = useState([]);
 
   useEffect(() => {
     setChangeSearch(localStorage.getItem("searchReq"));
@@ -29,6 +45,23 @@ function App() {
   return (
     <Router>
       <Wrapper>
+        {showAlert.length != 0 &&
+          showAlert.map((alertData, id) =>
+            alertData.isNotMsg == false ? (
+              <div key={id}>
+                {" "}
+                <Stack sx={styleAlert} spacing={2}>
+                  {alertData.isErr == true ? (
+                    <Alert severity="error">{alertData.msg}</Alert>
+                  ) : (
+                    <Alert severity="success">{alertData.msg}</Alert>
+                  )}
+                </Stack>
+              </div>
+            ) : (
+              <div></div>
+            )
+          )}
         <Navbar searchState={setSearchData} />
         <ScrollToTop />
         <Routes>
@@ -80,10 +113,15 @@ function App() {
           />
           <Route
             exact
+            path="/companies"
+            element={<Buyer sellerState={setSellerData} />}
+          />
+          <Route
+            exact
             path="/selling"
             element={
               <ThirdwebProvider activeChain={activeChainId}>
-                <Selling />
+                <Selling setDisplayAlert={setShowAlert} />
               </ThirdwebProvider>
             }
           />

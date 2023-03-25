@@ -9,7 +9,7 @@ import { TagsInput } from "react-tag-input-component";
 import Loading from "../component/Loading";
 import { useNavigate } from "react-router-dom";
 
-function Selling() {
+function Selling({ setDisplayAlert }) {
   const storage = new ThirdwebStorage();
   const [name, setName] = useState();
   const [profileTitle, setProfileTitle] = useState();
@@ -99,6 +99,20 @@ function Selling() {
     setFixedPrice(gigFormItem[0].fixedPrice);
     setGigBullPrice(gigFormItem[0].gigBullPrice);
     setGigCategory(gigFormItem[0].gigCategory);
+  }
+
+  function handleBuyerEditProfile() {
+    setUserLogin(false);
+    setEditButton(true);
+    setName(profileFormItem[0].name);
+    setProfileTitle(profileFormItem[0].profileTitle);
+    setImg(profileFormItem[0].image);
+    setCountry(profileFormItem[0].country);
+    setDescription(profileFormItem[0].description);
+    setUrl(profileFormItem[0].urlS);
+    setTwitterLink(profileFormItem[0].twitterLink);
+    setEmailAdd(profileFormItem[0].emailAdd);
+    setPhoneNo(profileFormItem[0].phoneNo);
   }
 
   async function loadBuyer() {
@@ -358,13 +372,39 @@ function Selling() {
   }
 
   function messageToWaitForMM(reason) {
+    setTimeout(() => {
+      setDisplayAlert([
+        {
+          isNotMsg: true,
+        },
+      ]);
+    }, 5000);
+    setDisplayAlert([
+      {
+        isNotMsg: false,
+        msg: reason,
+        isErr: false,
+      },
+    ]);
     navigate("/");
-    alert(reason);
   }
 
-  function displayError(msg) {
+  function displayError(errMsg) {
+    setTimeout(() => {
+      setDisplayAlert([
+        {
+          isNotMsg: true,
+        },
+      ]);
+    }, 5000);
+    setDisplayAlert([
+      {
+        isNotMsg: false,
+        msg: "We're facing some problem creating/saving your profile. Please try again.",
+        isErr: true,
+      },
+    ]);
     setLoading(false);
-    alert(msg);
   }
 
   function makeAccount() {
@@ -394,7 +434,7 @@ function Selling() {
           "Your profile will be updated after the metamask transaction is completed"
         )
       )
-      .catch((reason) => displayError("Problem " + reason));
+      .catch((reason) => displayError(reason));
   }
 
   function saveBuyerChanges() {
@@ -1374,7 +1414,7 @@ function Selling() {
                               </svg>
                               <svg
                                 title="Edit profile"
-                                onClick={handleEditProfile}
+                                onClick={handleBuyerEditProfile}
                                 viewBox="0 0 24 24"
                                 fill="#1d1d21"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -2114,9 +2154,6 @@ const Wrapper = styled.div`
   color: white;
   padding-top: 72px;
   background: var(--black);
-  @media (max-width: 930px) {
-    padding-top: 60px;
-  }
 `;
 
 const Container = styled.div`
@@ -2172,9 +2209,7 @@ const ProfileContent = styled.div`
     grid-template-columns: 5% auto;
     width: 100%;
   }
-  @media (max-width: 930px) {
-    padding-top: 60px;
-  }
+
   .noShowProfile {
     @media (max-width: 995px) {
       display: none;

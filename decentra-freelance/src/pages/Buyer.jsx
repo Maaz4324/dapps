@@ -6,10 +6,9 @@ import SkillSwap from "../artifacts/contracts/SkillSwap.sol/SkillSwap.json";
 import { useNavigate } from "react-router-dom";
 import { categoryData } from "../assets/category";
 
-function Gig({ sellerState }) {
+function Buyer({ sellerState }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [listCategory, setListCategory] = useState([]);
   const [listGig, setListGig] = useState([]);
 
   function RenderSeller(e, to) {
@@ -32,25 +31,20 @@ function Gig({ sellerState }) {
 
       const skillswap = new ethers.Contract(contractAddress, abi, signer);
 
-      const noOfSeller = await skillswap.noOfSellers();
-      let categoryArr = [];
+      const noOfBuyers = await skillswap.noOfBuyers();
       let gigsArr = [];
-      for (let i = 1; i <= noOfSeller.toString(); i++) {
-        const user = await skillswap.sellerProfile(i);
+      for (let i = 1; i <= noOfBuyers.toString(); i++) {
+        const user = await skillswap.buyerProfile(i);
         const response = await fetch(
           "https://gateway.ipfscdn.io/ipfs/" + user.uri + "/0"
         );
         const metadata = await response.json();
-        const categoryWords = metadata.gig.gigCategory;
-        categoryArr.push(categoryWords);
         let result = {
-          data: metadata.gig,
+          data: metadata.profile,
           address: user.account,
-          userName: metadata.profile.name,
         };
         gigsArr.push(result);
       }
-      setListCategory(categoryArr);
       setListGig(gigsArr);
 
       setLoading(false);
@@ -61,76 +55,50 @@ function Gig({ sellerState }) {
   return (
     <Wrapper>
       <Container>
-        <Head>All Web3 Freelancers Are Listed here!</Head>
+        <Head>All Web3 Companies Are Listed here!</Head>
         <Text>
           SkillSwap is fully focused on NFTs. Start your NFT Web3 freelancing
           journey here, or hire someone to help you build the future of your NFT
           Web3 startup.
         </Text>
-        <CategoryRow>
-          <ul>
-            {listCategory
-              .filter((item, index) => listCategory.indexOf(item) === index)
-              .map((gig, key) => (
-                <a key={key} href={"#" + gig}>
-                  <li>{gig}</li>
-                </a>
-              ))}
-          </ul>
-        </CategoryRow>
         {loading ? (
           <Loading />
         ) : (
           <div>
-            {listCategory
-              .filter((item, index) => listCategory.indexOf(item) === index)
-              .map((gig, idx) => (
-                <GigSection key={idx}>
-                  <GigHead>
-                    <h3>{gig}</h3>
-                    {categoryData.map((c, no) => (
-                      <div key={no}>
-                        {c.head.toLowerCase() == gig.toLowerCase() && (
-                          <Des>{c.text}</Des>
-                        )}
-                      </div>
-                    ))}
-                  </GigHead>
-                  <Box>
-                    {listGig.map(
-                      (value, id) =>
-                        value.data.gigCategory == gig && (
-                          // <CardContainer id={gig}>
-                          <Card
-                            key={id}
-                            onClick={(e) => RenderSeller(e, value.address)}
-                          >
-                            <div
-                              style={{
-                                backgroundImage: `url(https://gateway.ipfscdn.io/ipfs/${value.data.gigImg})`,
-                                backgroundPosition: "center",
-                                backgroundSize: "cover",
-                                backgroundRepeat: "no-repeat",
-                                width: "100%",
-                                height: "30vh",
-                              }}
-                            ></div>
-                            <CardText>
-                              <h5>{value.userName}</h5>
-                              <h4>{value.data.gigHead}</h4>
-                              <Line />
+            <GigSection>
+              <Box>
+                {listGig.map(
+                  (value, id) => (
+                    // <CardContainer id={gig}>
+                    <Card
+                      key={id}
+                      onClick={(e) => RenderSeller(e, value.address)}
+                    >
+                      <div
+                        style={{
+                          backgroundImage: `url(https://gateway.ipfscdn.io/ipfs/${value.data.gigImg})`,
+                          backgroundPosition: "center",
+                          backgroundSize: "cover",
+                          backgroundRepeat: "no-repeat",
+                          width: "100%",
+                          height: "30vh",
+                        }}
+                      ></div>
+                      <CardText>
+                        <h5>{value.data.name}</h5>
+                        <h4>{value.data.profileTitle}</h4>
+                        {/* <Line />
                               <p>
                                 Fixed Price
                                 <span> ${value.data.fixedPrice}</span>
-                              </p>
-                            </CardText>
-                          </Card>
-                          // </CardContainer>
-                        )
-                    )}
-                  </Box>
-                </GigSection>
-              ))}
+                              </p> */}
+                      </CardText>
+                    </Card>
+                  )
+                  // </CardContainer>
+                )}
+              </Box>
+            </GigSection>
           </div>
         )}
       </Container>
@@ -138,7 +106,7 @@ function Gig({ sellerState }) {
   );
 }
 
-export default Gig;
+export default Buyer;
 
 const Wrapper = styled.section`
   min-height: 100vh;
@@ -208,10 +176,8 @@ const CategoryRow = styled.section`
   li {
     list-style: none;
     font-size: 14px;
-    /* padding: 20px; */
     cursor: pointer;
     &:hover {
-      /* background: var(--text); */
     }
     @media (max-width: 833px) {
       width: 100%;
@@ -249,30 +215,6 @@ const Des = styled.p`
   color: var(--darkText);
 `;
 
-const CardContainer = styled.section`
-  border: 2px solid red;
-  /* display: grid;
-  grid-template-columns: 33% 33% auto;
-  grid-gap: 20px;
-  @media (max-width: 930px) {
-    grid-template-columns: 50% auto;
-  }
-  @media (max-width: 590px) {
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    flex-wrap: wrap;
-    width: 100%;
-    min-width: 0;
-    align-items: stretch;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-  } */
-`;
-
 const Card = styled.section`
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   background: var(--darkBg);
@@ -300,13 +242,6 @@ const Card = styled.section`
     border-top-right-radius: 8px;
     border-top-left-radius: 8px;
   }
-  /* @media (max-width: 590px) {
-    width: 90%;
-    flex-basis: 90%;
-    flex-grow: 0;
-    flex-shrink: 0;
-    height: 100%;
-  } */
 `;
 
 const Head = styled.h1`
