@@ -194,7 +194,20 @@ function Selling({ setDisplayAlert }) {
               const ImgHash = `${resFile.data.IpfsHash}`;
               setGigImg(ImgHash);
             } catch (error) {
-              alert("Error sending file to IPFS");
+              setTimeout(() => {
+                setDisplayAlert([
+                  {
+                    isNotMsg: true,
+                  },
+                ]);
+              }, 5000);
+              setDisplayAlert([
+                {
+                  isNotMsg: false,
+                  msg: "Error sending file to IPFS",
+                  isErr: true,
+                },
+              ]);
             }
           } else if (
             file &&
@@ -218,12 +231,36 @@ function Selling({ setDisplayAlert }) {
               const ImgHash = `${resFile.data.IpfsHash}`;
               setImg(ImgHash);
             } catch (error) {
-              alert("Error sending file to IPFS");
+              setTimeout(() => {
+                setDisplayAlert([
+                  {
+                    isNotMsg: true,
+                  },
+                ]);
+              }, 5000);
+              setDisplayAlert([
+                {
+                  isNotMsg: false,
+                  msg: "Error sending file to IPFS",
+                  isErr: true,
+                },
+              ]);
             }
           } else {
-            alert(
-              "Please select a file with size below 2MB and with square dimensions"
-            );
+            setTimeout(() => {
+              setDisplayAlert([
+                {
+                  isNotMsg: true,
+                },
+              ]);
+            }, 5000);
+            setDisplayAlert([
+              {
+                isNotMsg: false,
+                msg: "Please select a file with size below 2MB and with square dimensions",
+                isErr: true,
+              },
+            ]);
           }
         }
         upLoadFormatedImg();
@@ -368,7 +405,20 @@ function Selling({ setDisplayAlert }) {
       "https://skillswap-c4225.web.app/seller/" +
         currentAcc.replace("0x", "").toLowerCase()
     );
-    alert("Link copied to clipboard");
+    setTimeout(() => {
+      setDisplayAlert([
+        {
+          isNotMsg: true,
+        },
+      ]);
+    }, 5000);
+    setDisplayAlert([
+      {
+        isNotMsg: false,
+        msg: "Link copied to clipboard",
+        isErr: false,
+      },
+    ]);
   }
 
   function messageToWaitForMM(reason) {

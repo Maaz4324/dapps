@@ -102,6 +102,7 @@ function App() {
             element={
               <SellerProfile
                 setSellerState={localStorage.getItem("sellerId")}
+                setDisplayAlert={setShowAlert}
               />
             }
           />

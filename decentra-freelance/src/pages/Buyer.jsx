@@ -76,7 +76,7 @@ function Buyer({ sellerState }) {
                     >
                       <div
                         style={{
-                          backgroundImage: `url(https://gateway.ipfscdn.io/ipfs/${value.data.gigImg})`,
+                          backgroundImage: `url(https://gateway.ipfscdn.io/ipfs/${value.data.image})`,
                           backgroundPosition: "center",
                           backgroundSize: "cover",
                           backgroundRepeat: "no-repeat",

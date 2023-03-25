@@ -23,7 +23,9 @@ function HeroSec() {
             NFT Web3 startup.
           </h5>
           <button onClick={() => navigate("/gigs")}>View Gigs</button>
-          <button onClick={() => navigate("/companies")}>View Founders</button>
+          <button onClick={() => navigate("/companies")} className="founderBtn">
+            View Founders
+          </button>
         </div>
       </Main>
       <Left>
@@ -75,12 +77,25 @@ const Wrapper = styled.section`
     padding-top: 30px;
   }
 
+  .founderBtn {
+    margin-left: 10px;
+    /* background-color: var(--primary);
+    border: 2px solid var(--primary);
+    color: white;
+    &:hover {
+      transition: all 0.3s;
+      background: transparent;
+      color: white;
+    } */
+  }
+
   button {
     z-index: 100;
     padding: 10px 40px;
     font-size: large;
     font-weight: 700;
     margin: 10px 0;
+    margin-right: 10px;
     border: 2px solid white;
     border-radius: 10px;
     background: transparent;

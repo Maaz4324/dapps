@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import { useNavigate } from "react-router-dom";
 import Loading from "../component/Loading";
 
-function SellerProfile({ setSellerState }) {
+function SellerProfile({ setSellerState, setDisplayAlert }) {
   const [displayProfile, setDisplayProfile] = useState([]);
   const [displayGig, setDisplayGig] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -68,7 +68,20 @@ function SellerProfile({ setSellerState }) {
       "https://skillswap-c4225.web.app/seller/" +
         setSellerState.replace("0x", "").toLowerCase()
     );
-    alert("Link copied to clipboard");
+    setTimeout(() => {
+      setDisplayAlert([
+        {
+          isNotMsg: true,
+        },
+      ]);
+    }, 5000);
+    setDisplayAlert([
+      {
+        isNotMsg: false,
+        msg: "Link copied to clipboard",
+        isErr: false,
+      },
+    ]);
   }
 
   function closeSidebar() {
@@ -86,16 +99,11 @@ function SellerProfile({ setSellerState }) {
     async function showAllUsers() {
       const sellerBool = await skillswap.isSeller(setSellerState);
       const buyerBool = await skillswap.isBuyer(setSellerState);
-      console.log(
-        "🚀 ~ file: SellerProfile.jsx:89 ~ showAllUsers ~ buyerBool:",
-        buyerBool
-      );
 
       if (sellerBool) {
         setIsSeller(true);
         loadSeller();
       } else if (buyerBool) {
-        console.log("buyer");
         setIsSeller(false);
         loadBuyer();
       }
@@ -918,7 +926,7 @@ function SellerProfile({ setSellerState }) {
               }}
             >
               <YourDetail>
-                <PPContainer>
+                <PPContainer className="buyerPic">
                   <img
                     src={`https://gateway.ipfscdn.io/ipfs/${profileData.image}`}
                     alt={profileData.name}
@@ -974,7 +982,12 @@ function SellerProfile({ setSellerState }) {
                     </p>
                   </div>
                   <div>
-                    <button onClick={goToChat}>Contact Buyer</button>
+                    <button
+                      onClick={goToChat}
+                      style={{ width: "30%", minWidth: "270px" }}
+                    >
+                      Contact Buyer
+                    </button>
                   </div>
                 </YourName>
                 <YourOthers>
@@ -1145,8 +1158,19 @@ const BuyerContainer = styled.div`
   width: 98%;
   max-width: 1147px;
   margin: 0 auto;
-  img {
-    width: 70%;
+
+  .buyerPic {
+    justify-content: start;
+    padding-left: 20px;
+    @media (max-width: 960px) {
+      padding-left: 0;
+    }
+    img {
+      width: 40%;
+      @media (max-width: 960px) {
+        width: 98%;
+      }
+    }
   }
 `;
 
