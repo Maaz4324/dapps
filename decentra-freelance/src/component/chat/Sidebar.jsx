@@ -21,13 +21,12 @@ function Sidebar({ idChange }) {
   useEffect(() => {
     try {
       async function getData() {
-        setLoading(true);
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
 
         const abi = SkillSwap.abi;
 
-        const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+        const contractAddress = "0x6274f30CA3dbB6fc97836FF7C0cA2FF0f3b523d5";
 
         const skillswap = new ethers.Contract(contractAddress, abi, signer);
 
@@ -45,42 +44,79 @@ function Sidebar({ idChange }) {
         onSnapshot(q, (querySnapshot) => {
           setReceiverAccs(querySnapshot.docs.map((doc) => doc.data().chatWith));
           async function loadChatProfile() {
+            setLoading(true);
             let listOfSellers = querySnapshot.docs.map(
               (doc) => doc.data().chatWith
             );
             let chatProfile = [];
             for (let i in listOfSellers) {
               const isSeller = await skillswap.isSeller(listOfSellers[i]);
+              const isBuyer = await skillswap.isBuyer(listOfSellers[i]);
               if (isSeller) {
                 const noOfSeller = await skillswap.noOfSellers();
 
                 for (let j = 1; j <= noOfSeller.toString(); j++) {
                   const user = await skillswap.sellerProfile(j);
+                  console.log(
+                    "🚀 ~ file: Sidebar.jsx:60 ~ loadChatProfile ~ user:",
+                    user.id.toString()
+                  );
                   if (user.account.toLowerCase() == "0x" + listOfSellers[i]) {
-                    const response = await fetch(user.uri);
+                    const response = await fetch(
+                      "https://gateway.ipfscdn.io/ipfs/" + user.uri + "/0"
+                    );
                     const metadata = await response.json();
                     let sellerObj = {
                       name: metadata.profile.name,
-                      img: metadata.profile.image,
+                      img:
+                        metadata.profile.image == undefined
+                          ? "img"
+                          : metadata.profile.image,
+                      address: listOfSellers[i],
+                    };
+                    console.log(
+                      "🚀 ~ file: Sidebar.jsx:92 ~ loadChatProfile ~  metadata.profile.image:",
+                      metadata.profile.image
+                    );
+                    chatProfile.push(sellerObj);
+                  }
+                }
+              }
+              if (isBuyer) {
+                const noOfBuyer = await skillswap.noOfBuyers();
+                for (let j = 1; j <= noOfBuyer.toString(); j++) {
+                  const user = await skillswap.buyerProfile(j);
+                  if (user.account.toLowerCase() == "0x" + listOfSellers[i]) {
+                    const response = await fetch(
+                      "https://gateway.ipfscdn.io/ipfs/" + user.uri + "/0"
+                    );
+                    const metadata = await response.json();
+                    let sellerObj = {
+                      name: metadata.profile.name,
+                      img:
+                        metadata.profile.image == undefined
+                          ? "img"
+                          : metadata.profile.image,
                       address: listOfSellers[i],
                     };
                     chatProfile.push(sellerObj);
                   }
                 }
-              } else if (!isSeller) {
-                let buyerObj = {
+              }
+              if (!isSeller && !isBuyer) {
+                let sellerObj = {
                   name: listOfSellers[i],
                   img: "img",
                   address: listOfSellers[i],
                 };
-                chatProfile.push(buyerObj);
+                chatProfile.push(sellerObj);
               }
             }
             setMsgAccs(chatProfile);
+            setLoading(false);
           }
           loadChatProfile();
         });
-        setLoading(false);
       }
 
       getData();
@@ -103,10 +139,11 @@ function Sidebar({ idChange }) {
                   <Img>
                     {data.img == "img" ? (
                       <svg
+                        width="64px"
+                        height="64px"
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        stroke="#000000"
                       >
                         <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                         <g
@@ -115,23 +152,12 @@ function Sidebar({ idChange }) {
                           strokeLinejoin="round"
                         ></g>
                         <g id="SVGRepo_iconCarrier">
-                          {" "}
                           <path
-                            d="M3 12C3 4.5885 4.5885 3 12 3C19.4115 3 21 4.5885 21 12C21 19.4115 19.4115 21 12 21C4.5885 21 3 19.4115 3 12Z"
-                            stroke="#ffffff"
-                            strokeWidth="2"
-                          ></path>{" "}
-                          <path
-                            d="M15 10C15 11.6569 13.6569 13 12 13C10.3431 13 9 11.6569 9 10C9 8.34315 10.3431 7 12 7C13.6569 7 15 8.34315 15 10Z"
-                            stroke="#ffffff"
-                            strokeWidth="2"
-                          ></path>{" "}
-                          <path
-                            d="M6 19C6.63819 16.6928 8.27998 16 12 16C15.72 16 17.3618 16.6425 18 18.9497"
-                            stroke="#ffffff"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                          ></path>{" "}
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M16.5 7.063C16.5 10.258 14.57 13 12 13c-2.572 0-4.5-2.742-4.5-5.938C7.5 3.868 9.16 2 12 2s4.5 1.867 4.5 5.063zM4.102 20.142C4.487 20.6 6.145 22 12 22c5.855 0 7.512-1.4 7.898-1.857a.416.416 0 0 0 .09-.317C19.9 18.944 19.106 15 12 15s-7.9 3.944-7.989 4.826a.416.416 0 0 0 .091.317z"
+                            fill="rgba(255, 255, 255, 0.551)"
+                          ></path>
                         </g>
                       </svg>
                     ) : (
@@ -212,7 +238,7 @@ const User = styled.div`
 `;
 
 const Img = styled.div`
-  width: 15%;
+  width: 40px;
 `;
 
 const ProfilePic = styled.img`

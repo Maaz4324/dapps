@@ -13,7 +13,7 @@ function Buyer({ sellerState }) {
 
   function RenderSeller(e, to) {
     e.preventDefault();
-    navigate("/seller/" + to.slice(2).toLowerCase());
+    navigate("/contractor/" + to.slice(2).toLowerCase());
     sellerState(to);
     localStorage.setItem("sellerId", to.toLowerCase());
   }
@@ -27,7 +27,7 @@ function Buyer({ sellerState }) {
 
       const abi = SkillSwap.abi;
 
-      const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+      const contractAddress = "0x6274f30CA3dbB6fc97836FF7C0cA2FF0f3b523d5";
 
       const skillswap = new ethers.Contract(contractAddress, abi, signer);
 
@@ -55,7 +55,7 @@ function Buyer({ sellerState }) {
   return (
     <Wrapper>
       <Container>
-        <Head>All Web3 Companies Are Listed here!</Head>
+        <Head>All Web3 Companies & Contractors Are Listed here!</Head>
         <Text>
           SkillSwap is fully focused on NFTs. Start your NFT Web3 freelancing
           journey here, or hire someone to help you build the future of your NFT
@@ -67,36 +67,23 @@ function Buyer({ sellerState }) {
           <div>
             <GigSection>
               <Box>
-                {listGig.map(
-                  (value, id) => (
-                    // <CardContainer id={gig}>
-                    <Card
-                      key={id}
-                      onClick={(e) => RenderSeller(e, value.address)}
-                    >
-                      <div
-                        style={{
-                          backgroundImage: `url(https://gateway.ipfscdn.io/ipfs/${value.data.image})`,
-                          backgroundPosition: "center",
-                          backgroundSize: "cover",
-                          backgroundRepeat: "no-repeat",
-                          width: "100%",
-                          height: "30vh",
-                        }}
-                      ></div>
-                      <CardText>
-                        <h5>{value.data.name}</h5>
-                        <h4>{value.data.profileTitle}</h4>
-                        {/* <Line />
-                              <p>
-                                Fixed Price
-                                <span> ${value.data.fixedPrice}</span>
-                              </p> */}
-                      </CardText>
-                    </Card>
-                  )
-                  // </CardContainer>
-                )}
+                {listGig.map((value, id) => (
+                  <Card
+                    key={id}
+                    onClick={(e) => RenderSeller(e, value.address)}
+                  >
+                    <PicContainer>
+                      <img
+                        src={`https://gateway.ipfscdn.io/ipfs/${value.data.image}`}
+                        alt={value.data.name}
+                      />
+                    </PicContainer>
+                    <CardText>
+                      <h5>{value.data.name}</h5>
+                      <h4>{value.data.profileTitle}</h4>
+                    </CardText>
+                  </Card>
+                ))}
               </Box>
             </GigSection>
           </div>
@@ -145,67 +132,11 @@ const Box = styled.section`
   }
 `;
 
-const GigHead = styled.section``;
-
-const CategoryRow = styled.section`
-  margin-top: 20px;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  .toGigList {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  ul {
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    flex-wrap: wrap;
-    @media (max-width: 833px) {
-      width: 100%;
-      min-width: 0;
-      align-items: stretch;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      overflow-y: hidden;
-    }
-  }
-  li {
-    list-style: none;
-    font-size: 14px;
-    cursor: pointer;
-    &:hover {
-    }
-    @media (max-width: 833px) {
-      width: 100%;
-      border: 0;
-      flex-basis: 33.333%;
-      flex-grow: 0;
-      flex-shrink: 0;
-      white-space: nowrap;
-    }
-  }
-
-  a {
-    color: white;
-    padding: 10px;
-    font-size: 12px;
-    font-weight: 700;
-    margin: 10px;
-    border: 1px solid white;
-    border-radius: 10px;
-    background: transparent;
-    color: white;
-    cursor: pointer;
-    text-decoration: none;
-    &:hover {
-      transition: all 0.3s;
-      background-color: white;
-      color: black;
-    }
+const PicContainer = styled.section`
+  img {
+    width: 98%;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
   }
 `;
 

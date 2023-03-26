@@ -68,6 +68,7 @@ contract SkillSwap{
 
     function placeOrder(address _seller, uint256 _amount, uint256 _duration) public payable{
         require(isSeller[_seller], "not a seller");
+        require(isBuyer[msg.sender], "not a buyer");
         require(deal[_seller][msg.sender].inProgress == false, "in process");
         require(_seller != msg.sender, "Cannot order yourself");
         require(msg.value == _amount+_amount*1/10, "set the right amount");
@@ -110,6 +111,5 @@ contract SkillSwap{
         payable(owner).transfer(totalCommision);
         totalCommision=0;
     }
-
 
 }

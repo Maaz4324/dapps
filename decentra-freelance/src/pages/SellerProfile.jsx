@@ -18,7 +18,7 @@ function SellerProfile({ setSellerState, setDisplayAlert }) {
 
   const abi = SkillSwap.abi;
 
-  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  const contractAddress = "0x6274f30CA3dbB6fc97836FF7C0cA2FF0f3b523d5";
 
   const skillswap = new ethers.Contract(contractAddress, abi, signer);
 
@@ -66,6 +66,26 @@ function SellerProfile({ setSellerState, setDisplayAlert }) {
   function copyLink() {
     navigator.clipboard.writeText(
       "https://skillswap-c4225.web.app/seller/" +
+        setSellerState.replace("0x", "").toLowerCase()
+    );
+    setTimeout(() => {
+      setDisplayAlert([
+        {
+          isNotMsg: true,
+        },
+      ]);
+    }, 5000);
+    setDisplayAlert([
+      {
+        isNotMsg: false,
+        msg: "Link copied to clipboard",
+        isErr: false,
+      },
+    ]);
+  }
+  function copyBuyerLink() {
+    navigator.clipboard.writeText(
+      "https://skillswap-c4225.web.app/contractor/" +
         setSellerState.replace("0x", "").toLowerCase()
     );
     setTimeout(() => {
@@ -863,29 +883,31 @@ function SellerProfile({ setSellerState, setDisplayAlert }) {
                 </h4>
                 <br />
                 <br />
-                {gigData.weeklyPrice != undefined && (
-                  <div>
-                    <span>Fixed Weekly Payment:</span>
-                    <h4>
-                      <span style={{ color: "#5fd3f3" }}>$</span>{" "}
-                      {gigData.weeklyPrice}
-                    </h4>
-                    <br />
-                    <br />
-                  </div>
-                )}
-                {gigData.monthlyPrice != undefined && (
-                  <div>
-                    <span>Fixed Monthly Payment:</span>
-                    <h4>
-                      <span style={{ color: "#5fd3f3" }}>$</span>{" "}
-                      {gigData.monthlyPrice}
-                    </h4>
-                    <br />
-                    <br />
-                  </div>
-                )}
-                {gigData.gigPrice != undefined && (
+                {gigData.weeklyPrice != undefined &&
+                  gigData.weeklyPrice != "" && (
+                    <div>
+                      <span>Fixed Weekly Payment:</span>
+                      <h4>
+                        <span style={{ color: "#5fd3f3" }}>$</span>{" "}
+                        {gigData.weeklyPrice}
+                      </h4>
+                      <br />
+                      <br />
+                    </div>
+                  )}
+                {gigData.monthlyPrice != undefined &&
+                  gigData.monthlyPrice != "" && (
+                    <div>
+                      <span>Fixed Monthly Payment:</span>
+                      <h4>
+                        <span style={{ color: "#5fd3f3" }}>$</span>{" "}
+                        {gigData.monthlyPrice}
+                      </h4>
+                      <br />
+                      <br />
+                    </div>
+                  )}
+                {gigData.gigPrice != undefined && gigData.gigPrice != "" && (
                   <div>
                     <span>Bear Market Price:</span>
                     <h4>
@@ -896,15 +918,16 @@ function SellerProfile({ setSellerState, setDisplayAlert }) {
                     <br />
                   </div>
                 )}
-                {gigData.gigBullPrice != undefined && (
-                  <div>
-                    <span>Bull Market Price:</span>
-                    <h4>
-                      <span style={{ color: "#5fd3f3" }}>$</span>{" "}
-                      {gigData.gigBullPrice}
-                    </h4>
-                  </div>
-                )}
+                {gigData.gigBullPrice != undefined &&
+                  gigData.gigBullPrice != "" && (
+                    <div>
+                      <span>Bull Market Price:</span>
+                      <h4>
+                        <span style={{ color: "#5fd3f3" }}>$</span>{" "}
+                        {gigData.gigBullPrice}
+                      </h4>
+                    </div>
+                  )}
               </Offer>
               <ServiceDes>
                 <span>Service Description: </span>
@@ -925,14 +948,14 @@ function SellerProfile({ setSellerState, setDisplayAlert }) {
                 gridTemplateColumns: "auto",
               }}
             >
-              <YourDetail>
+              <BuyerDetail>
                 <PPContainer className="buyerPic">
                   <img
                     src={`https://gateway.ipfscdn.io/ipfs/${profileData.image}`}
                     alt={profileData.name}
                   />
                 </PPContainer>
-                <YourName>
+                <YourName className="buyerName">
                   <div>
                     <h3>{profileData.name}</h3>
                     <div
@@ -950,7 +973,7 @@ function SellerProfile({ setSellerState, setDisplayAlert }) {
                         fill="#5fd3f3"
                         xmlns="http://www.w3.org/2000/svg"
                         style={{ cursor: "pointer" }}
-                        onClick={copyLink}
+                        onClick={copyBuyerLink}
                       >
                         <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                         <g
@@ -981,102 +1004,182 @@ function SellerProfile({ setSellerState, setDisplayAlert }) {
                       {profileData.profileTitle}
                     </p>
                   </div>
-                  <div>
-                    <button
-                      onClick={goToChat}
-                      style={{ width: "30%", minWidth: "270px" }}
-                    >
-                      Contact Buyer
-                    </button>
-                  </div>
                 </YourName>
-                <YourOthers>
+                <YourOthers className="buyerOthers">
                   <ul>
-                    <li>
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="#5fd3f3"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                        <g
-                          id="SVGRepo_tracerCarrier"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        ></g>
-                        <g id="SVGRepo_iconCarrier">
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M10.975 14.51a1.05 1.05 0 0 0 0-1.485 2.95 2.95 0 0 1 0-4.172l3.536-3.535a2.95 2.95 0 1 1 4.172 4.172l-1.093 1.092a1.05 1.05 0 0 0 1.485 1.485l1.093-1.092a5.05 5.05 0 0 0-7.142-7.142L9.49 7.368a5.05 5.05 0 0 0 0 7.142c.41.41 1.075.41 1.485 0zm2.05-5.02a1.05 1.05 0 0 0 0 1.485 2.95 2.95 0 0 1 0 4.172l-3.5 3.5a2.95 2.95 0 1 1-4.171-4.172l1.025-1.025a1.05 1.05 0 0 0-1.485-1.485L3.87 12.99a5.05 5.05 0 0 0 7.142 7.142l3.5-3.5a5.05 5.05 0 0 0 0-7.142 1.05 1.05 0 0 0-1.485 0z"
+                    {profileData.urlS != undefined &&
+                      profileData.urlS != "" && (
+                        <li>
+                          <svg
+                            viewBox="0 0 24 24"
                             fill="#5fd3f3"
-                          ></path>
-                        </g>
-                      </svg>
-                      <a href={profileData.urlS}>Website</a>
-                    </li>
-                    <li>
-                      <svg
-                        fill="#5fd3f3"
-                        xmlns="http://www.w3.org/2000/svg"
-                        preserveAspectRatio="xMidYMid"
-                        viewBox="0 0 31.812 26"
-                      >
-                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                        <g
-                          id="SVGRepo_tracerCarrier"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        ></g>
-                        <g id="SVGRepo_iconCarrier">
-                          {" "}
-                          <path d="M20.877,2.000 C22.519,2.000 24.382,2.652 25.426,3.738 C26.724,3.486 27.949,3.025 29.050,2.386 C28.625,3.687 27.718,4.779 26.540,5.469 C27.693,5.332 28.797,5.035 29.820,4.590 C29.054,5.707 28.087,6.690 26.971,7.477 C26.981,7.715 26.987,7.955 26.987,8.195 C26.987,15.562 21.445,24.000 10.939,24.000 C7.715,24.000 4.507,23.133 1.982,21.551 C2.428,21.605 2.883,21.631 3.343,21.631 C6.019,21.631 8.482,20.740 10.439,19.242 C7.937,19.199 5.827,17.586 5.103,15.373 C5.450,15.437 5.810,15.473 6.178,15.473 C6.696,15.473 7.203,15.406 7.681,15.277 C5.068,14.768 3.100,12.514 3.100,9.813 C3.100,9.787 3.100,9.764 3.100,9.740 C3.871,10.158 4.750,10.410 5.687,10.440 C4.154,9.437 3.147,7.734 3.147,5.799 C3.147,4.777 3.428,3.818 3.919,2.998 C6.735,6.367 10.945,8.588 15.693,8.822 C15.594,8.414 15.543,7.984 15.543,7.553 C15.543,4.473 17.721,2.000 20.877,2.000 M29.820,4.590 L29.825,4.590 M20.877,-0.000 C17.033,-0.000 14.060,2.753 13.614,6.552 C10.425,5.905 7.524,4.204 5.440,1.711 C5.061,1.257 4.503,0.998 3.919,0.998 C3.867,0.998 3.815,1.000 3.763,1.004 C3.123,1.055 2.547,1.413 2.216,1.966 C1.525,3.122 1.159,4.447 1.159,5.799 C1.159,6.700 1.321,7.579 1.625,8.400 C1.300,8.762 1.113,9.238 1.113,9.740 L1.113,9.813 C1.113,11.772 1.882,13.589 3.160,14.952 C3.087,15.294 3.103,15.655 3.215,15.998 C3.657,17.348 4.459,18.510 5.499,19.396 C4.800,19.552 4.079,19.631 3.343,19.631 C2.954,19.631 2.577,19.609 2.222,19.565 C2.141,19.556 2.061,19.551 1.981,19.551 C1.148,19.551 0.391,20.078 0.108,20.886 C-0.202,21.770 0.140,22.753 0.932,23.249 C3.764,25.023 7.318,26.000 10.939,26.000 C17.778,26.000 22.025,22.843 24.383,20.195 C27.243,16.984 28.907,12.718 28.972,8.455 C29.899,7.682 30.717,6.790 31.410,5.792 C31.661,5.458 31.810,5.041 31.810,4.590 C31.810,3.909 31.473,3.308 30.958,2.946 C31.181,2.176 30.925,1.342 30.303,0.833 C29.940,0.537 29.496,0.386 29.049,0.386 C28.708,0.386 28.365,0.474 28.056,0.654 C27.391,1.040 26.680,1.344 25.931,1.562 C24.555,0.592 22.688,-0.000 20.877,-0.000 L20.877,-0.000 Z"></path>{" "}
-                        </g>
-                      </svg>
-                      <a
-                        href={"https://twitter.com/" + profileData.twitterLink}
-                      >
-                        {profileData.twitterLink}
-                      </a>
-                    </li>
-                    <li>
-                      <svg
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                        <g
-                          id="SVGRepo_tracerCarrier"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        ></g>
-                        <g id="SVGRepo_iconCarrier">
-                          {" "}
-                          <path
-                            d="M12.8159 20.6077C16.8509 18.5502 20 15.1429 20 11C20 6.58172 16.4183 3 12 3C7.58172 3 4 6.58172 4 11C4 15.1429 7.14909 18.5502 11.1841 20.6077C11.6968 20.8691 12.3032 20.8691 12.8159 20.6077Z"
-                            stroke="#5fd3f3"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          ></path>{" "}
-                          <path
-                            d="M15 11C15 12.6569 13.6569 14 12 14C10.3431 14 9 12.6569 9 11C9 9.34315 10.3431 8 12 8C13.6569 8 15 9.34315 15 11Z"
-                            stroke="#5fd3f3"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          ></path>
-                        </g>
-                      </svg>
-                      <p style={{ marginLeft: "7px" }}>{profileData.country}</p>
-                    </li>
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                            <g
+                              id="SVGRepo_tracerCarrier"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                              <path
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M10.975 14.51a1.05 1.05 0 0 0 0-1.485 2.95 2.95 0 0 1 0-4.172l3.536-3.535a2.95 2.95 0 1 1 4.172 4.172l-1.093 1.092a1.05 1.05 0 0 0 1.485 1.485l1.093-1.092a5.05 5.05 0 0 0-7.142-7.142L9.49 7.368a5.05 5.05 0 0 0 0 7.142c.41.41 1.075.41 1.485 0zm2.05-5.02a1.05 1.05 0 0 0 0 1.485 2.95 2.95 0 0 1 0 4.172l-3.5 3.5a2.95 2.95 0 1 1-4.171-4.172l1.025-1.025a1.05 1.05 0 0 0-1.485-1.485L3.87 12.99a5.05 5.05 0 0 0 7.142 7.142l3.5-3.5a5.05 5.05 0 0 0 0-7.142 1.05 1.05 0 0 0-1.485 0z"
+                                fill="#5fd3f3"
+                              ></path>
+                            </g>
+                          </svg>
+                          <a href={profileData.urlS}>Website</a>
+                        </li>
+                      )}
+                    {profileData.twitterLink != undefined &&
+                      profileData.twitterLink != "" && (
+                        <li>
+                          <svg
+                            fill="#5fd3f3"
+                            xmlns="http://www.w3.org/2000/svg"
+                            preserveAspectRatio="xMidYMid"
+                            viewBox="0 0 31.812 26"
+                          >
+                            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                            <g
+                              id="SVGRepo_tracerCarrier"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                              {" "}
+                              <path d="M20.877,2.000 C22.519,2.000 24.382,2.652 25.426,3.738 C26.724,3.486 27.949,3.025 29.050,2.386 C28.625,3.687 27.718,4.779 26.540,5.469 C27.693,5.332 28.797,5.035 29.820,4.590 C29.054,5.707 28.087,6.690 26.971,7.477 C26.981,7.715 26.987,7.955 26.987,8.195 C26.987,15.562 21.445,24.000 10.939,24.000 C7.715,24.000 4.507,23.133 1.982,21.551 C2.428,21.605 2.883,21.631 3.343,21.631 C6.019,21.631 8.482,20.740 10.439,19.242 C7.937,19.199 5.827,17.586 5.103,15.373 C5.450,15.437 5.810,15.473 6.178,15.473 C6.696,15.473 7.203,15.406 7.681,15.277 C5.068,14.768 3.100,12.514 3.100,9.813 C3.100,9.787 3.100,9.764 3.100,9.740 C3.871,10.158 4.750,10.410 5.687,10.440 C4.154,9.437 3.147,7.734 3.147,5.799 C3.147,4.777 3.428,3.818 3.919,2.998 C6.735,6.367 10.945,8.588 15.693,8.822 C15.594,8.414 15.543,7.984 15.543,7.553 C15.543,4.473 17.721,2.000 20.877,2.000 M29.820,4.590 L29.825,4.590 M20.877,-0.000 C17.033,-0.000 14.060,2.753 13.614,6.552 C10.425,5.905 7.524,4.204 5.440,1.711 C5.061,1.257 4.503,0.998 3.919,0.998 C3.867,0.998 3.815,1.000 3.763,1.004 C3.123,1.055 2.547,1.413 2.216,1.966 C1.525,3.122 1.159,4.447 1.159,5.799 C1.159,6.700 1.321,7.579 1.625,8.400 C1.300,8.762 1.113,9.238 1.113,9.740 L1.113,9.813 C1.113,11.772 1.882,13.589 3.160,14.952 C3.087,15.294 3.103,15.655 3.215,15.998 C3.657,17.348 4.459,18.510 5.499,19.396 C4.800,19.552 4.079,19.631 3.343,19.631 C2.954,19.631 2.577,19.609 2.222,19.565 C2.141,19.556 2.061,19.551 1.981,19.551 C1.148,19.551 0.391,20.078 0.108,20.886 C-0.202,21.770 0.140,22.753 0.932,23.249 C3.764,25.023 7.318,26.000 10.939,26.000 C17.778,26.000 22.025,22.843 24.383,20.195 C27.243,16.984 28.907,12.718 28.972,8.455 C29.899,7.682 30.717,6.790 31.410,5.792 C31.661,5.458 31.810,5.041 31.810,4.590 C31.810,3.909 31.473,3.308 30.958,2.946 C31.181,2.176 30.925,1.342 30.303,0.833 C29.940,0.537 29.496,0.386 29.049,0.386 C28.708,0.386 28.365,0.474 28.056,0.654 C27.391,1.040 26.680,1.344 25.931,1.562 C24.555,0.592 22.688,-0.000 20.877,-0.000 L20.877,-0.000 Z"></path>{" "}
+                            </g>
+                          </svg>
+                          <a
+                            href={
+                              "https://twitter.com/" + profileData.twitterLink
+                            }
+                          >
+                            {profileData.twitterLink}
+                          </a>
+                        </li>
+                      )}
+                    {profileData.country != undefined &&
+                      profileData.country != "" && (
+                        <li>
+                          <svg
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                            <g
+                              id="SVGRepo_tracerCarrier"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                              {" "}
+                              <path
+                                d="M12.8159 20.6077C16.8509 18.5502 20 15.1429 20 11C20 6.58172 16.4183 3 12 3C7.58172 3 4 6.58172 4 11C4 15.1429 7.14909 18.5502 11.1841 20.6077C11.6968 20.8691 12.3032 20.8691 12.8159 20.6077Z"
+                                stroke="#5fd3f3"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              ></path>{" "}
+                              <path
+                                d="M15 11C15 12.6569 13.6569 14 12 14C10.3431 14 9 12.6569 9 11C9 9.34315 10.3431 8 12 8C13.6569 8 15 9.34315 15 11Z"
+                                stroke="#5fd3f3"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              ></path>
+                            </g>
+                          </svg>
+                          <p style={{ marginLeft: "7px" }}>
+                            {profileData.country}
+                          </p>
+                        </li>
+                      )}
+                    {profileData.emailAdd != undefined &&
+                      profileData.emailAdd != "" && (
+                        <li>
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                            <g
+                              id="SVGRepo_tracerCarrier"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                              {" "}
+                              <path
+                                d="M4 7.00005L10.2 11.65C11.2667 12.45 12.7333 12.45 13.8 11.65L20 7"
+                                stroke="#5fd3f3"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              ></path>{" "}
+                              <rect
+                                x="3"
+                                y="5"
+                                width="18"
+                                height="14"
+                                rx="2"
+                                stroke="#5fd3f3"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                              ></rect>{" "}
+                            </g>
+                          </svg>
+
+                          <p style={{ marginLeft: "7px" }}>
+                            {profileData.emailAdd}
+                          </p>
+                        </li>
+                      )}
+                    {profileData.phoneNo != undefined &&
+                      profileData.phoneNo != "" && (
+                        <li>
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                            <g
+                              id="SVGRepo_tracerCarrier"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                              {" "}
+                              <g id="Communication / Phone">
+                                {" "}
+                                <path
+                                  id="Vector"
+                                  d="M9.50246 4.25722C9.19873 3.4979 8.46332 3 7.64551 3H4.89474C3.8483 3 3 3.8481 3 4.89453C3 13.7892 10.2108 21 19.1055 21C20.1519 21 21 20.1516 21 19.1052L21.0005 16.354C21.0005 15.5361 20.5027 14.8009 19.7434 14.4971L17.1069 13.4429C16.4249 13.1701 15.6483 13.2929 15.0839 13.7632L14.4035 14.3307C13.6089 14.9929 12.4396 14.9402 11.7082 14.2088L9.79222 12.2911C9.06079 11.5596 9.00673 10.3913 9.66895 9.59668L10.2363 8.9163C10.7066 8.35195 10.8305 7.57516 10.5577 6.89309L9.50246 4.25722Z"
+                                  stroke="#5fd3f3"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                ></path>{" "}
+                              </g>{" "}
+                            </g>
+                          </svg>
+                          <p style={{ marginLeft: "7px" }}>
+                            {profileData.phoneNo}
+                          </p>
+                        </li>
+                      )}
                   </ul>
                 </YourOthers>
-                <YourDes>
+                <YourDes className="buyerDes">
                   <span>About</span>
                   <p>{profileData.description}</p>
                 </YourDes>
-              </YourDetail>
+              </BuyerDetail>
             </div>
           ))}
         </BuyerContainer>
@@ -1152,26 +1255,14 @@ const Container = styled.div`
 `;
 
 const BuyerContainer = styled.div`
-  display: grid;
-  grid-template-columns: auto;
-  grid-gap: 20px;
   width: 98%;
   max-width: 1147px;
   margin: 0 auto;
-
-  .buyerPic {
-    justify-content: start;
-    padding-left: 20px;
-    @media (max-width: 960px) {
-      padding-left: 0;
-    }
-    img {
-      width: 40%;
-      @media (max-width: 960px) {
-        width: 98%;
-      }
-    }
-  }
+  border: 2px solid red;
+  background: var(--darkBg);
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  padding: 10px;
 `;
 
 const GigContent = styled.div`
@@ -1261,6 +1352,76 @@ const YourDetail = styled.div`
   padding: 10px;
   transition: width 0.3s ease;
   width: 98%;
+`;
+
+const BuyerDetail = styled.div`
+  transition: width 0.3s ease;
+  width: 98%;
+  max-width: 647px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto auto;
+  grid-gap: 20px;
+  @media (max-width: 970px) {
+    grid-template-columns: auto;
+    grid-template-rows: auto auto auto auto;
+  }
+  .buyerPic {
+    grid-column: 1/2;
+    grid-row: 1/2;
+    justify-content: start;
+    padding-left: 20px;
+    @media (max-width: 960px) {
+      padding-left: 0;
+    }
+    @media (max-width: 970px) {
+      grid-column: 1/2;
+      grid-row: 1/2;
+    }
+    img {
+      width: 100%;
+      @media (max-width: 960px) {
+        width: 98%;
+      }
+    }
+  }
+  .buyerName {
+    grid-column: 1/3;
+    grid-row: 2/3;
+    /* border: 2px solid red; */
+    padding-top: 0;
+    padding-bottom: 0;
+    @media (max-width: 970px) {
+      grid-column: 1/2;
+      grid-row: 2/3;
+    }
+  }
+  .buyerDes {
+    grid-column: 1/3;
+    grid-row: 3/4;
+    margin: 0;
+    border: 1px solid var(--line);
+    padding-top: 0;
+    padding-bottom: 0;
+    padding: 10px;
+    @media (max-width: 970px) {
+      grid-column: 1/2;
+      grid-row: 4/5;
+    }
+  }
+  .buyerOthers {
+    /* border: 2px solid red; */
+    grid-column: 2/3;
+    grid-row: 1/2;
+    align-self: center;
+    border: 0;
+    @media (max-width: 970px) {
+      grid-column: 1/2;
+      grid-row: 3/4;
+      border-top: 1px solid var(--line);
+    }
+  }
 `;
 
 const PPContainer = styled.div`
@@ -1371,10 +1532,6 @@ const YourOthers = styled.div`
   svg {
     width: 20px;
     height: 20px;
-    @media (max-width: 770px) {
-      width: 30px;
-      height: 30px;
-    }
   }
   @media (max-width: 970px) {
     grid-row: 2/3;

@@ -19,7 +19,7 @@ function SellerCount() {
 
         const abi = SkillSwap.abi;
 
-        const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+        const contractAddress = "0x6274f30CA3dbB6fc97836FF7C0cA2FF0f3b523d5";
 
         const skillswap = new ethers.Contract(contractAddress, abi, signer);
         const balance = await provider.getBalance(contractAddress);

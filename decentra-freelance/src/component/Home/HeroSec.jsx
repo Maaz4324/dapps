@@ -24,7 +24,7 @@ function HeroSec() {
           </h5>
           <button onClick={() => navigate("/gigs")}>View Gigs</button>
           <button onClick={() => navigate("/companies")} className="founderBtn">
-            View Founders
+            View Contractors
           </button>
         </div>
       </Main>

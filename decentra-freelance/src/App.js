@@ -17,6 +17,7 @@ import Gig from "./pages/Gig";
 import Buyer from "./pages/Buyer";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
+import TOC from "./pages/TOC";
 
 const styleAlert = {
   width: "70%",
@@ -106,6 +107,20 @@ function App() {
               />
             }
           />
+          <Route
+            exact
+            path={
+              localStorage.getItem("sellerId") == undefined
+                ? ""
+                : "/contractor/" + localStorage.getItem("sellerId").slice(2)
+            }
+            element={
+              <SellerProfile
+                setSellerState={localStorage.getItem("sellerId")}
+                setDisplayAlert={setShowAlert}
+              />
+            }
+          />
           <Route exact path="/order" element={<Order />} />
           <Route
             exact
@@ -117,6 +132,8 @@ function App() {
             path="/companies"
             element={<Buyer sellerState={setSellerData} />}
           />
+          <Route exact path="/toc" element={<TOC />} />
+
           <Route
             exact
             path="/selling"

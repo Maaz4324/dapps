@@ -8,7 +8,8 @@ function Foot() {
         <div>
           <p>
             <span>
-              © SkillSwap: 2023 The Shockjumps DAO. All rights reserved.
+              © SkillSwap: 2023 The Nightwalkers DAO. All rights reserved.{" "}
+              <a href="/toc">TOC</a>
             </span>
           </p>
         </div>
@@ -66,6 +67,9 @@ const Container = styled.section`
     @media (max-width: 730px) {
       width: 28px;
     }
+  }
+  a {
+    color: var(--link);
   }
   span {
     font-size: 14px;
